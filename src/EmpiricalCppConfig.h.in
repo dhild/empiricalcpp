@@ -1,0 +1,2 @@
+#define EmpiricalCpp_VERSION_MAJOR @EmpiricalCpp_VERSION_MAJOR@
+#define EmpiricalCpp_VERSION_MINOR @EmpiricalCpp_VERSION_MINOR@

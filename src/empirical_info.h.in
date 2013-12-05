@@ -1,0 +1,10 @@
+#ifndef HEADER_EMPIRICAL_INFO_H_INCLUDED
+#define HEADER_EMPIRICAL_INFO_H_INCLUDED
+
+#cmakedefine VERSION_MAJOR @EmpiricalCpp_VERSION_MAJOR@
+#cmakedefine VERSION_MINOR @EmpiricalCpp_VERSION_MINOR@
+#cmakedefine VERSION_TYPE "@EmpiricalCpp_VERSION_TYPE@"
+#cmakedefine VERSION_BUILD "@EmpiricalCpp_VERSION_BUILD@"
+#cmakedefine VERSION_STRING @EmpiricalCpp_VERSION_STRING@
+
+#endif // HEADER_EMPIRICAL_INFO_H_INCLUDED
