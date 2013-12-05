@@ -1,4 +1,4 @@
-#include <unittest++/UnitTest++.h>
+#include "test.h"
 
 TEST(placeholder_test) {
   CHECK(true);

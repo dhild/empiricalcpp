@@ -1,11 +1,9 @@
-#include <stddef.h>
-#include <stdlib.h>
-#include <math.h>
+#include <cstdlib>
 #include "quadrature.h"
 
-using namespace quadrature;
+using namespace empirical;
 
-Quadrature::Quadrature(IntegerType length) : length(length) {
+Quadrature::Quadrature(IntegerType length, ScalarType a, ScalarType b) : length(length), a(a), b(b) {
   allocate();
 }
 
@@ -13,19 +11,52 @@ Quadrature::~Quadrature() {
   deallocate();
 }
 
-void Quadrature::update(IntegerType length) {
+void Quadrature::update(const IntegerType length) {
+  this->update(length, this->a, this->b);
+}
+
+void Quadrature::update(const ScalarType a, const ScalarType b) {
+  this->update(this->length, a, b);
+}
+
+void Quadrature::update(const IntegerType length, const ScalarType a, const ScalarType b) {
+  this->length = length;
+  this->a = a;
+  this->b = b;
   deallocate();
   allocate();
+  recalc();
 }
 
 void Quadrature::allocate() {
-  this->nodes = (ScalarType*) malloc(length * sizeof(ScalarType));
-  this->weights = (ScalarType*) malloc(length * sizeof(ScalarType));
+  this->nodes = new ScalarType[length];
+  this->weights = new ScalarType[length];
 }
 
 void Quadrature::deallocate() {
-  free(this->nodes);
-  free(this->weights);
+  delete this->nodes;
+  delete this->weights;
 }
 
-Linear::Linear(IntegerType length) : Quadrature(length) {}
+ScalarType Quadrature::integrate(const FunctionType f) {
+  ScalarType sum = 0;
+
+  for (int i = 0; i < this->length; i++) {
+    sum += f(this->nodes[i]) * this->weights[i];
+  }
+
+  return sum;
+}
+
+Linear::Linear(const IntegerType length, const ScalarType a, const ScalarType b) : Quadrature(length, a, b) {
+  recalc();
+}
+
+void Linear::recalc() {
+  const ScalarType delta = (b - a) / (length - 1);
+
+  for (int i = 0; i < this->length; i++) {
+    this->nodes[i] = a + i * delta;
+    this->weights[i] = delta;
+  }
+}
