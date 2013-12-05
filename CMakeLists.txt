@@ -1,11 +1,11 @@
 cmake_minimum_required (VERSION 2.6)
 project (EmpiricalCpp)
 
-set (EmpiricalCpp_VERSION_MAJOR 1)
-set (EmpiricalCpp_VERSION_MINOR 0)
-set (EmpiricalCpp_VERSION_TYPE SNAPSHOT)
-set (EmpiricalCpp_VERSION_BUILD DEV)
-set (EmpiricalCpp_VERSION_STRING "${EmpiricalCpp_VERSION_MAJOR}.${EmpiricalCpp_VERSION_MINOR}.${EmpiricalCpp_VERSION_TYPE}-${EmpiricalCpp_VERSION_BUILD}")
+set (PROJECT_VERSION_MAJOR 1)
+set (PROJECT_VERSION_MINOR 0)
+set (PROJECT_VERSION_TYPE SNAPSHOT)
+set (PROJECT_VERSION_BUILD DEV)
+set (PROJECT_VERSION_STRING "${EmpiricalCpp_VERSION_MAJOR}.${EmpiricalCpp_VERSION_MINOR}.${EmpiricalCpp_VERSION_TYPE}-${EmpiricalCpp_VERSION_BUILD}")
 
 set (CMAKE_VERBOSE_MAKEFILE 1) # Use 1 for debugging, 0 for release
 
