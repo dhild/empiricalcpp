@@ -7,4 +7,10 @@
 #cmakedefine VERSION_BUILD "@PROJECT_VERSION_BUILD@"
 #cmakedefine VERSION_STRING @PROJECT_VERSION_STRING@
 
+namespace quadrature {
+  typedef double ScalarType;
+  typedef signed long IntegerType;
+  typedef unsigned long UIntegerType;
+}
+
 #endif // HEADER_CONFIG_H_INCLUDED

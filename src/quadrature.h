@@ -8,30 +8,32 @@
 #ifndef QUADRATURE_H
 #define	QUADRATURE_H
 
+#include "config.h"
+
 namespace quadrature {
 
-    class Quadrature {
-    protected:
-        long length;
-        double* nodes;
-        double* weights;
-        
-        Quadrature(long length);
-        
-    public:
-        virtual ~Quadrature();
+  class Quadrature {
+  protected:
+    IntegerType length;
+    ScalarType* nodes;
+    ScalarType* weights;
+    
+    Quadrature(IntegerType length);
+    
+  public:
+    virtual ~Quadrature();
+    
+    virtual void update(IntegerType length);
 
-        long getLength();
-        double* getNodes();
-        double* getWeights();
-        
-        virtual void update(long length);
-    };
+  private:
+    void allocate();
+    void deallocate();
+  };
 
-    class Linear : Quadrature {
-    public:
-        Linear(long length);
-    };
+  class Linear : Quadrature {
+  public:
+    Linear(IntegerType length);
+  };
 
 }
 

@@ -1,7 +1,6 @@
-empirical/nbproject/private/
-thirdparty/*.bz2
-thirdparty/*.zip
 *~
 *CMakeCache.txt
 *CMakeFiles/
 cmake_install.cmake
+bin/
+docs/
