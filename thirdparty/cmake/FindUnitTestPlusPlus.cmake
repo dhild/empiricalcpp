@@ -6,7 +6,7 @@
 FIND_PATH(UnitTestPlusPlus_INCLUDE_DIR NAMES unittest++/UnitTest++.h)
 MARK_AS_ADVANCED(UnitTestPlusPlus_INCLUDE_DIR)
 
-FIND_LIBRARY(UnitTestPlusPlus_LIBRARY NAMES UnitTest++)
+FIND_LIBRARY(UnitTestPlusPlus_LIBRARY NAMES UnitTest++ unittest++ libunittest++)
 MARK_AS_ADVANCED(UnitTestPlusPlus_LIBRARY)
 
 INCLUDE(FindPackageHandleStandardArgs)
