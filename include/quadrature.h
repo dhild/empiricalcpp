@@ -8,43 +8,55 @@
 #ifndef QUADRATURE_H
 #define	QUADRATURE_H
 
-#include "config.h"
+#include <Eigen/Dense>
 
 namespace empirical {
 
   class Quadrature {
   protected:
-    IntegerType length;
-    ScalarType a;
-    ScalarType b;
-    ScalarType* nodes;
-    ScalarType* weights;
+    unsigned long N;
+    double a;
+    double b;
+    Eigen::ArrayXd x;
+    Eigen::ArrayXd w;
     
-    Quadrature(const IntegerType length, const ScalarType a, const ScalarType b);
+    Quadrature(const unsigned long N, const double a, const double b);
 
     virtual void recalc() = 0;
     
   public:
-    virtual ~Quadrature() = 0;
+    virtual ~Quadrature();
 
-    virtual void update(const IntegerType length);
-    virtual void update(const ScalarType a, const ScalarType b);
-    virtual void update(const IntegerType length, const ScalarType a, const ScalarType b);
+    virtual void update(const unsigned long N);
+    virtual void update(const double a, const double b);
+    virtual void update(const unsigned long N, const double a, const double b);
 
-    IntegerType getLength() { return this->length; }
-    ScalarType getA() { return this->a; }
-    ScalarType getB() { return this->b; }
+    unsigned long getN() const { return this->N; }
+    double getA() const { return this->a; }
+    double getB() const { return this->b; }
 
-    virtual ScalarType integrate(const FunctionType f);
-
-  private:
-    void allocate();
-    void deallocate();
+    virtual double integrate(double (*f)(const double)) const;
   };
 
-  class Linear : public Quadrature {
+  class PeriodicTrapezoid : public Quadrature {
   public:
-    Linear(const IntegerType length, const ScalarType a = -1, const ScalarType b = 1);
+    PeriodicTrapezoid(const unsigned long N, const double a = -1, const double b = 1);
+
+  protected:
+    virtual void recalc();
+  };
+
+  class TrapezoidQuadrature : public Quadrature {
+  public:
+    TrapezoidQuadrature(const unsigned long N, const double a = -1, const double b = 1);
+
+  protected:
+    virtual void recalc();
+  };
+
+  class LegendreGaussLobatto : public Quadrature {
+  public:
+    LegendreGaussLobatto(const unsigned long N, const double a = -1, const double b = 1);
 
   protected:
     virtual void recalc();

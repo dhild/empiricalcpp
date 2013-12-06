@@ -7,12 +7,14 @@
 #cmakedefine VERSION_BUILD "@PROJECT_VERSION_BUILD@"
 #cmakedefine VERSION_STRING @PROJECT_VERSION_STRING@
 
-namespace empirical {
-  typedef double ScalarType;
-  typedef signed long IntegerType;
-  typedef unsigned long UIntegerType;
+#include <cmath>
 
-  typedef ScalarType (*FunctionType)(ScalarType);
+namespace empirical {
+
+  typedef double_t (*FunctionType)(const double_t);
+
+  const long double PI = 3.141592653589793238L;
+
 }
 
 #endif // HEADER_CONFIG_H_INCLUDED
