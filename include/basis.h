@@ -1,38 +1,46 @@
 #ifndef EMPIRICAL_BASIS_H
 #define EMPIRICAL_BASIS_H
 
+#include <complex>
 #include <Eigen/Dense>
+#include "quadrature.h"
 
 namespace empirical {
+
+  typedef std::complex<double> cdouble;
   
   class Basis {
   protected:
-    unsigned long N;
-    bool realOnly;
+    Quadrature& q;
 
-    Eigen::ArrayXXd q;
-
-    Basis(const unsigned long N, const bool realOnly);
+    Basis(Quadrature& quadrature);
     Basis(const Basis& b);
-
-    virtual updateQ() = 0;
 
   public:
     virtual ~Basis() = 0;
 
-    unsigned long getN() const { return N; }
-    bool isRealOnly() const { return realOnly; }
+    unsigned long size() const;
 
-    void updateN(const unsigned long N) {
-      this->N = N;
-      updateQ();
-    }
-  }
+    virtual cdouble evaluate(const double k, const double px, const double py, const double qx, const double qy) const = 0;
+
+    Eigen::Matrix<cdouble, Eigen::Dynamic, Eigen::Dynamic> getMatrix(const double k, const Quadrature& points) const;
+  };
 
   class MFSBasis : public Basis {
+  private:
+    cdouble hankel1(const double v, const cdouble z) const;
+    cdouble evaluateHankel(const double v, const double z) const;
+
+  protected:
+    MFSBasis(const MFSBasis& basis);
+
   public:
-    MFSBasis(const unsigned long N
-  }
+    MFSBasis(Quadrature& quadrature);
+
+    virtual ~MFSBasis();
+
+    virtual cdouble evaluate(const double k, const double px, const double py, const double qx, const double qy) const;
+  };
 
 }
 

@@ -31,9 +31,12 @@ namespace empirical {
     virtual void update(const double a, const double b);
     virtual void update(const unsigned long N, const double a, const double b);
 
-    unsigned long getN() const { return this->N; }
-    double getA() const { return this->a; }
-    double getB() const { return this->b; }
+    unsigned long getN() const { return N; }
+    double getA() const { return a; }
+    double getB() const { return b; }
+
+    const Eigen::ArrayXd getPoints() const { return x; }
+    const Eigen::ArrayXd getWeights() const { return w; }
 
     virtual double integrate(double (*f)(const double)) const;
   };
