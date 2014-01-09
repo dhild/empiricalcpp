@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   quadrature.h
  * Author: D. Ryan Hild <d.ryan.hild@gmail.com>
  *
@@ -12,58 +12,119 @@
 
 namespace empirical {
 
-  class Quadrature {
-  protected:
-    unsigned long N;
-    double a;
-    double b;
-    Eigen::ArrayXd x;
-    Eigen::ArrayXd w;
-    
-    Quadrature(const unsigned long N, const double a, const double b);
+    template<typename Scalar> class Quadrature {
+    protected:
+        int N;
+        Scalar a;
+        Scalar b;
+        Eigen::Array<Scalar, Eigen::Dynamic, 1> x;
+        Eigen::Array<Scalar, Eigen::Dynamic, 1> w;
 
-    virtual void recalc() = 0;
-    
-  public:
-    virtual ~Quadrature();
+        Quadrature(const int N, const Scalar a, const Scalar b)
+                : N(N), a(a), b(b), x(), w() {
+            x.resize(N);
+            w.resize(N);
+        }
 
-    virtual void update(const unsigned long N);
-    virtual void update(const double a, const double b);
-    virtual void update(const unsigned long N, const double a, const double b);
+        void recalc();
 
-    unsigned long getN() const { return N; }
-    double getA() const { return a; }
-    double getB() const { return b; }
+    public:
+        void update(const int N, const Scalar a, const Scalar b) {
+            this->N = N;
+            this->a = a;
+            this->b = b;
+            x.resize(N);
+            w.resize(N);
+            recalc();
+        }
+        void update(const int N) {
+            update(N, a, b);
+        }
+        void update(const Scalar a, const Scalar b) {
+            update(N, a, b);
+        }
 
-    const Eigen::ArrayXd getPoints() const { return x; }
-    const Eigen::ArrayXd getWeights() const { return w; }
+        int getN() const {
+            return N;
+        }
+        Scalar getA() const {
+            return a;
+        }
+        Scalar getB() const {
+            return b;
+        }
 
-    virtual double integrate(double (*f)(const double)) const;
-  };
+        const Eigen::Array<Scalar, Eigen::Dynamic, 1> getPoints() const {
+            return x;
+        }
+        const Eigen::Array<Scalar, Eigen::Dynamic, 1> getWeights() const {
+            return w;
+        }
 
-  class PeriodicTrapezoid : public Quadrature {
-  public:
-    PeriodicTrapezoid(const unsigned long N, const double a = -1, const double b = 1);
+        Scalar integrate(Scalar (*f)(const Scalar)) const {
+            Scalar sum = 0;
 
-  protected:
-    virtual void recalc();
-  };
+            for (int i = 0; i < N; i++) {
+                sum += f(x(i)) * w(i);
+            }
 
-  class TrapezoidQuadrature : public Quadrature {
-  public:
-    TrapezoidQuadrature(const unsigned long N, const double a = -1, const double b = 1);
+            return sum;
+        }
+    };
 
-  protected:
-    virtual void recalc();
-  };
+    template<typename Scalar> class PeriodicTrapezoid: public Quadrature<Scalar> {
+    public:
+        PeriodicTrapezoid(const int N, const Scalar a = -1, const Scalar b = 1)
+                : Quadrature<Scalar>(N, a, b) {
+        }
 
-  class LegendreGaussLobatto : public Quadrature {
-  public:
-    LegendreGaussLobatto(const unsigned long N, const double a = -1, const double b = 1);
+    protected:
+        void recalc() {
+            Scalar dist = this->b - this->a;
+            Scalar shift = dist / (2 * this->N);
 
-  protected:
-    virtual void recalc();
-  };
+            Scalar x0 = this->a + shift;
+            Scalar x1 = this->b - shift;
+
+            Scalar delta = (x1 - x0) / Scalar(this->N - 1);
+
+            for (int i = 0; i < this->N; i++) {
+                this->x(i) = x0 + i * delta;
+                this->w(i) = delta;
+            }
+        }
+    };
+
+    template<typename Scalar> class TrapezoidQuadrature: public Quadrature<Scalar> {
+    public:
+        TrapezoidQuadrature(const int N, const Scalar a = -1, const Scalar b = 1)
+                : Quadrature<Scalar>(N, a, b) {
+        }
+
+    protected:
+        void recalc(){
+            Scalar dist = this->b - this->a;
+            Scalar delta = dist / (this->N - 1);
+
+            for (int i = 0; i < this->N; i++) {
+                this->x(i) = this->a + i * delta;
+                this->w(i) = delta;
+            }
+
+            this->w(0) *= 0.5;
+            this->w(this->N - 1) *= 0.5;
+        }
+    };
+
+    template<typename Scalar> class LegendreGaussLobatto: public Quadrature<Scalar> {
+    public:
+        LegendreGaussLobatto(const int N, const Scalar a = -1, const Scalar b = 1)
+                : Quadrature<Scalar>(N, a, b) {
+        }
+
+    protected:
+        void recalc();
+    };
 
 }
 

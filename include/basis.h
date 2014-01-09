@@ -7,40 +7,40 @@
 
 namespace empirical {
 
-  typedef std::complex<double> cdouble;
-  
-  class Basis {
-  protected:
-    Quadrature& q;
+    template<typename Scalar>
+    class MFSBasis2D {
+    private:
+        Eigen::Array<Scalar, Eigen::Dynamic, 2> q;
 
-    Basis(Quadrature& quadrature);
-    Basis(const Basis& b);
+    public:
+        MFSBasis2D(Eigen::Array<Scalar, Eigen::Dynamic, 2>& chargePoints)
+                : q(chargePoints) {
+        }
 
-  public:
-    virtual ~Basis() = 0;
+        /** Gets the result of applying this basis function to the given coordinates. */
+        template<typename evalScalar>
+        std::complex<evalScalar> operator()(const evalScalar x, const evalScalar y) const;
 
-    unsigned long size() const;
+        /** Gets the result of applying this basis function to the given coordinates. */
 
-    virtual cdouble evaluate(const double k, const double px, const double py, const double qx, const double qy) const = 0;
+        template<typename evalScalar>
+        std::complex<evalScalar> operator()(const Eigen::Array<evalScalar, Eigen::Dynamic, 2> xy) const;
 
-    Eigen::Matrix<cdouble, Eigen::Dynamic, Eigen::Dynamic> getMatrix(const double k, const Quadrature& points) const;
-  };
+        /** For this operator, the matrix values are interpreted as points in the z plane.
+         *
+         * z = x + iy
+         */
+        template<typename cScalar>
+        Eigen::Matrix<std::complex<cScalar>, Eigen::Dynamic, Eigen::Dynamic> operator()(
+                const Eigen::Matrix<std::complex<cScalar>, Eigen::Dynamic, Eigen::Dynamic> complexPoints) const;
 
-  class MFSBasis : public Basis {
-  private:
-    cdouble hankel1(const double v, const cdouble z) const;
-    cdouble evaluateHankel(const double v, const double z) const;
+    private:
+        MFSBasis2D(const MFSBasis2D& basis);
 
-  protected:
-    MFSBasis(const MFSBasis& basis);
+    };
 
-  public:
-    MFSBasis(Quadrature& quadrature);
-
-    virtual ~MFSBasis();
-
-    virtual cdouble evaluate(const double k, const double px, const double py, const double qx, const double qy) const;
-  };
+    template<typename Scalar>
+    std::complex<Scalar> hankel1(const std::complex<Scalar> v, const Scalar z);
 
 }
 
