@@ -15,7 +15,7 @@ namespace empirical {
         Eigen::Array<Scalar, Eigen::Dynamic, 1> w;
 
         Quadrature(const int N, const Scalar a, const Scalar b)
-                : x(), w() {
+                : x(N), w(N) {
             update(N, a, b);
         }
 
@@ -49,15 +49,7 @@ namespace empirical {
             return w;
         }
 
-        Scalar integrate(Scalar (*f)(const Scalar)) const {
-            Scalar sum = 0;
-
-            for (int i = 0; i < N; i++) {
-                sum += f(x(i)) * w(i);
-            }
-
-            return sum;
-        }
+        Scalar integrate(const Scalar (*f)(const Scalar)) const;
     };
 
     class LegendreGaussLobatto: public Quadrature {

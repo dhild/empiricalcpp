@@ -5,15 +5,15 @@
 using namespace Eigen;
 using namespace empirical;
 
-Scalar one(const Scalar x) {
+const Scalar one(const Scalar x) {
     return x;
 }
 
-Scalar function(const Scalar x) {
+const Scalar function(const Scalar x) {
     return x * sin(30 * x) + cos(5 * x);
 }
 
-Scalar function_integral(const Scalar x) {
+const Scalar function_integral(const Scalar x) {
     return (-(1.0 / 30.0) * x * cos(30 * x) + //
             (1.0 / 5.0) * sin(5 * x) + //
             (1.0 / 900.0) * sin(30 * x));
@@ -94,4 +94,4 @@ void test_integration(Quadrature& q, const Scalar zeroEps, const Scalar intEps) 
 
 TEST_QUADRATURE(PeriodicTrapezoid, 1e-10, 1e-4);
 TEST_QUADRATURE(TrapezoidQuadrature, 1e-10, 1e-3);
-TEST_QUADRATURE(LegendreGaussLobatto, 1e-10, 1e-9);
+TEST_QUADRATURE(LegendreGaussLobatto, 1e-16, 1e-15);

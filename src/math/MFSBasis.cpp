@@ -7,6 +7,15 @@ using namespace empirical;
 using namespace Eigen;
 using namespace std;
 
+MFSBasis2D::MFSBasis2D(Array<Scalar, Dynamic, 2>& chargePoints)
+        : q(chargePoints.rows()) {
+    q = (chargePoints.cast<cScalar>().col(0) + 1j * chargePoints.cast<cScalar>().col(1));
+}
+
+MFSBasis2D::MFSBasis2D(Array<cScalar, Dynamic, 1>& chargePoints)
+        : q(chargePoints) {
+}
+
 cScalar evaluateBasis(const Scalar k, const Scalar r) {
     if (k == 0) {
         return -log(r) / (2.0 * PI);
@@ -15,44 +24,57 @@ cScalar evaluateBasis(const Scalar k, const Scalar r) {
     return cScalar(0.25j) * boost::math::cyl_hankel_1(0, k * r);
 }
 
-cScalar MFSBasis2D::operator()(const Scalar x, const Scalar y) const {
-    return
+class BasisEvaluator {
+private:
+    const Scalar k;
+
+public:
+    BasisEvaluator(const Scalar& kValue)
+            : k(kValue) {
+    }
+
+    const cScalar operator()(const cScalar& x) const {
+        return evaluateBasis(k, abs(x));
+    }
+};
+
+class CombinedBasisEvaluator {
+private:
+    const BasisEvaluator basis;
+    const Array<cScalar, Dynamic, 1>& q;
+
+public:
+    CombinedBasisEvaluator(const Scalar& k, const Array<cScalar, Dynamic, 1>& chargePoints)
+            : basis(k), q(chargePoints) {
+    }
+
+    const cScalar operator()(const cScalar& x) const {
+        return (q - x).unaryExpr(basis).sum();
+    }
+};
+
+const cScalar MFSBasis2D::operator()(const Scalar& k, const cScalar& z) const {
+    CombinedBasisEvaluator functor(k, q);
+
+    return functor(z);
 }
 
-/** Gets the result of applying this basis function to the given coordinates. */
-cScalar MFSBasis2D::operator()(const Eigen::Array<Scalar, Eigen::Dynamic, 2> xy) const {}
+const cScalar MFSBasis2D::operator()(const Scalar& k, const Scalar& x, const Scalar& y) const {
+    CombinedBasisEvaluator functor(k, q);
 
-/** For this operator, the matrix values are interpreted as points in the z plane.
- *
- * z = x + iy
- */
-Eigen::Matrix<cScalar, Eigen::Dynamic, Eigen::Dynamic> MFSBasis2D::operator()(
-        const Eigen::Matrix<cScalar, Eigen::Dynamic, Eigen::Dynamic> complexPoints) const {}
+    return functor(x + 1j * y);
+}
 
-//complex MFSBasis::evaluate(const double k, const double px, const double py, const double qx, const double qy) const {
-//    const double dx = px - qx;
-//    const double dy = py - qy;
-//    const double r = sqrt(dx * dx + dy * dy);
-//
-//    return evaluateHankel(k, r);
-//}
-//
-//Matrix<complex, Dynamic, Dynamic> Basis::getMatrix(const double k, const Quadrature& points) const {
-//    const unsigned long N = q.getN();
-//    const unsigned long M = points.getN();
-//
-//    Matrix < complex, Dynamic, Dynamic > matrix;
-//    matrix.resize(M, N);
-//
-//    for (int i = 0; i < M; i++) {
-//        const double px = points.getPoints()(i, 0);
-//        const double py = points.getPoints()(i, 1);
-//
-//        for (int j = 0; j < N; j++) {
-//            const double qx = q.getPoints()(j, 0);
-//            const double qy = q.getPoints()(j, 1);
-//
-//            matrix(i, j) = evaluate(k, px, py, qx, qy);
-//        }
-//    }
-//}
+const Matrix<cScalar, Dynamic, Dynamic> MFSBasis2D::operator()(const Scalar& k,
+        const Matrix<cScalar, Dynamic, Dynamic>& z) const {
+    CombinedBasisEvaluator functor(k, q);
+
+    return z.unaryExpr(functor);
+}
+
+const Array<cScalar, Dynamic, Dynamic> MFSBasis2D::operator()(const Scalar& k,
+        const Array<cScalar, Dynamic, Dynamic>& z) const {
+    CombinedBasisEvaluator functor(k, q);
+
+    return z.unaryExpr(functor);
+}

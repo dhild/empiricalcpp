@@ -8,25 +8,23 @@ namespace empirical {
 
     class MFSBasis2D {
     private:
-        Eigen::Array<Scalar, Eigen::Dynamic, 2> q;
+        Eigen::Array<cScalar, Eigen::Dynamic, 1> q;
 
     public:
-        MFSBasis2D(Eigen::Array<Scalar, Eigen::Dynamic, 2>& chargePoints)
-                : q(chargePoints) {
-        }
+        MFSBasis2D(Eigen::Array<Scalar, Eigen::Dynamic, 2>& chargePoints);
+        MFSBasis2D(Eigen::Array<cScalar, Eigen::Dynamic, 1>& chargePoints);
+
+        /** Gets the result of applying this basis function to the given complex coordinate. */
+        const cScalar operator()(const Scalar& k, const cScalar& z) const;
 
         /** Gets the result of applying this basis function to the given coordinates. */
-        cScalar operator()(const Scalar x, const Scalar y) const;
+        const cScalar operator()(const Scalar& k, const Scalar& x, const Scalar& y) const;
 
-        /** Gets the result of applying this basis function to the given coordinates. */
-        cScalar operator()(const Eigen::Array<Scalar, Eigen::Dynamic, 2> xy) const;
+        const Eigen::Matrix<cScalar, Eigen::Dynamic, Eigen::Dynamic> operator()(const Scalar& k,
+                const Eigen::Matrix<cScalar, Eigen::Dynamic, Eigen::Dynamic>& z) const;
 
-        /** For this operator, the matrix values are interpreted as points in the z plane.
-         *
-         * z = x + iy
-         */
-        Eigen::Matrix<cScalar, Eigen::Dynamic, Eigen::Dynamic> operator()(
-                const Eigen::Matrix<cScalar, Eigen::Dynamic, Eigen::Dynamic> complexPoints) const;
+        const Eigen::Array<cScalar, Eigen::Dynamic, Eigen::Dynamic> operator()(const Scalar& k,
+                const Eigen::Array<cScalar, Eigen::Dynamic, Eigen::Dynamic>& z) const;
 
     private:
         MFSBasis2D(const MFSBasis2D& basis);
