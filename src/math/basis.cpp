@@ -1,7 +1,6 @@
 #include <cmath>
 #include <complex>
 #include "basis.h"
-#include "config.h"
 
 using namespace empirical;
 using namespace Eigen;

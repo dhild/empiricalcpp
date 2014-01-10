@@ -3,7 +3,7 @@
 
 #include <complex>
 #include <Eigen/Dense>
-#include "quadrature.h"
+#include <Empirical/Quadrature>
 
 namespace empirical {
 

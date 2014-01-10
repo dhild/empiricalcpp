@@ -1,0 +1,21 @@
+#ifndef HEADER_CONFIG_H_INCLUDED
+#define HEADER_CONFIG_H_INCLUDED
+
+#define EMPIRICAL_VERSION_MAJOR @PROJECT_VERSION_MAJOR@
+#define EMPIRICAL_VERSION_MINOR @PROJECT_VERSION_MINOR@
+#define EMPIRICAL_VERSION_TYPE "@PROJECT_VERSION_TYPE@"
+#define EMPIRICAL_VERSION_BUILD "@PROJECT_VERSION_BUILD@"
+#define EMPIRICAL_VERSION_STRING "@PROJECT_VERSION_STRING@"
+
+#include <complex>
+
+namespace empirical {
+
+    typedef long double Scalar;
+    typedef std::complex<Scalar> cScalar;
+    
+    extern const Scalar PI;
+
+}
+
+#endif // HEADER_CONFIG_H_INCLUDED
