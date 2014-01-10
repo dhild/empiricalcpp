@@ -23,6 +23,10 @@ find_package(UnitTestPlusPlus REQUIRED)
 include_directories(${UnitTestPlusPlus_INCLUDE_DIRS})
 link_directories(${UnitTestPlusPlus_LIBRARY_DIRS})
 
+find_package(Boost 1.35 REQUIRED)
+include_directories(${Boost_INCLUDE_DIR})
+link_directories(${Boost_LIBRARY_DIRS})
+
 include_directories ("${MAINFOLDER}/thirdparty/include")
 include_directories ("${MAINFOLDER}/include")
 
