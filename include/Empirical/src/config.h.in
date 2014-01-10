@@ -11,9 +11,12 @@
 
 namespace empirical {
 
+    /** Scalar value type. Should support your desired precision. */
     typedef long double Scalar;
+    /** Complex scalar value type. Should support your desired precision and complex numbers. */
     typedef std::complex<Scalar> cScalar;
     
+    /** For convenience. */
     extern const Scalar PI;
 
 }
