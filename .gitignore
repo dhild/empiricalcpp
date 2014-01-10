@@ -8,3 +8,5 @@ docs/
 lib/
 .project
 .cproject
+.checkstyle
+.settings/
