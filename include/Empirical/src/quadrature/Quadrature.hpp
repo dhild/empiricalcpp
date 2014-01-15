@@ -51,7 +51,14 @@ namespace empirical {
 
         Scalar integrate(const Scalar (*f)(const Scalar)) const;
     };
-
+    
+    /** Type that should create a Quadrature object of the desired type.
+     * 
+     * This type of function should emulate the new operator; delete should
+     * always be called by the owner of the constructed object.
+     */
+    typedef Quadrature* (*quadratureFactory)(const int M, const Scalar& a, const Scalar& b);
+    
     class LegendreGaussLobatto: public Quadrature {
     public:
         LegendreGaussLobatto(const int N, const Scalar a = -1, const Scalar b = 1)

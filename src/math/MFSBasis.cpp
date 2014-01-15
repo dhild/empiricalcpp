@@ -9,7 +9,7 @@ using namespace std;
 
 MFSBasis2D::MFSBasis2D(Array<Scalar, Dynamic, 2>& chargePoints)
         : q(chargePoints.rows()) {
-    q = (chargePoints.cast<cScalar>().col(0) + 1j * chargePoints.cast<cScalar>().col(1));
+    q = (chargePoints.cast<cScalar>().col(0) + cScalar(0, 1) * chargePoints.cast<cScalar>().col(1));
 }
 
 MFSBasis2D::MFSBasis2D(Array<cScalar, Dynamic, 1>& chargePoints)
@@ -21,7 +21,7 @@ cScalar evaluateBasis(const Scalar k, const Scalar r) {
         return -log(r) / (2.0 * PI);
     }
 
-    return cScalar(0.25j) * boost::math::cyl_hankel_1(0, k * r);
+    return cScalar(0, 0.25) * boost::math::cyl_hankel_1(0, k * r);
 }
 
 class BasisEvaluator {
@@ -62,7 +62,7 @@ const cScalar MFSBasis2D::operator()(const Scalar& k, const cScalar& z) const {
 const cScalar MFSBasis2D::operator()(const Scalar& k, const Scalar& x, const Scalar& y) const {
     CombinedBasisEvaluator functor(k, q);
 
-    return functor(x + 1j * y);
+    return functor(cScalar(x, y));
 }
 
 const Matrix<cScalar, Dynamic, Dynamic> MFSBasis2D::operator()(const Scalar& k,
