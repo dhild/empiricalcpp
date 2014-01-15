@@ -15,25 +15,25 @@ BasicDomainSegment2D::~BasicDomainSegment2D() {
 }
 
 void BasicDomainSegment2D::updateNormals() {
-    Array<cScalar, Dynamic, 1>& zp = this->zPrime;
+    const Array<cScalar, Dynamic, 1>& zp = this->zPrime.getPoints();
     this->normals = zp.conjugate() / zp.abs();
 }
 
 void BasicDomainSegment2D::recalculateQuadratures(const int M) {
     this->z.update(M);
     this->zPrime.update(M);
-    this->normals->update(M);
+    this->normals.resize(M);
     updateNormals();
 }
 
-const ArrayBase<cScalar> BasicDomainSegment2D::getPoints() const {
+const Array<cScalar, Dynamic, 1>& BasicDomainSegment2D::getPoints() const {
     return this->z.getPoints();
 }
 
-const ArrayBase<cScalar> BasicDomainSegment2D::getFirstDerivative() const {
+const Array<cScalar, Dynamic, 1>& BasicDomainSegment2D::getFirstDerivative() const {
     return this->zPrime.getPoints();
 }
 
-const ArrayBase<cScalar> BasicDomainSegment2D::getNormals() const {
-    return this->normals.getPoints();
+const Array<cScalar, Dynamic, 1>& BasicDomainSegment2D::getNormals() const {
+    return this->normals;
 }

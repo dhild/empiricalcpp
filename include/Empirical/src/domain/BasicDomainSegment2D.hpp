@@ -12,20 +12,20 @@ namespace empirical {
         Quadrature& z;
         Quadrature& zPrime;
         Eigen::Array<cScalar, Eigen::Dynamic, 1> normals;
-        
+
         void updateNormals();
 
     public:
-        
+
         BasicDomainSegment2D(Quadrature& points, Quadrature& pointPrimes);
 
         virtual ~BasicDomainSegment2D();
 
         virtual void recalculateQuadratures(const int M);
 
-        virtual const Eigen::ArrayBase<cScalar> getNormals() const;
-        virtual const Eigen::ArrayBase<cScalar> getPoints() const;
-        virtual const Eigen::ArrayBase<cScalar> getFirstDerivative() const = 0;
+        virtual const Eigen::Array<cScalar, Eigen::Dynamic, 1>& getNormals() const;
+        virtual const Eigen::Array<cScalar, Eigen::Dynamic, 1>& getPoints() const;
+        virtual const Eigen::Array<cScalar, Eigen::Dynamic, 1>& getFirstDerivative() const = 0;
 
     };
 

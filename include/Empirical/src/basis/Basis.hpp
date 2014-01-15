@@ -1,19 +1,19 @@
-#ifndef EMPIRICAL_BASIS_MFSBASIS_HPP_
-#define EMPIRICAL_BASIS_MFSBASIS_HPP_
+#ifndef EIGEN_BASIS_BASIS_HPP_
+#define EIGEN_BASIS_BASIS_HPP_
 
 #include <Eigen/Dense>
 #include "Empirical/src/config.h"
-#include "Empirical/src/basis/Basis.hpp"
+#include "Empirical/src/quadrature/Quadrature.hpp"
 
 namespace empirical {
 
-    class MFSBasis2D : public Basis2D {
-    private:
-        Mesh1D q;
+    class Basis2D {
+    protected:
+        Basis2D();
 
     public:
-        MFSBasis2D(const Mesh1D& chargePoints);
 
+        /** Gets the result of applying this basis function to the given complex coordinate. */
         virtual cScalar operator()(const Scalar& k, const cScalar& z) const;
 
         virtual cScalar operator()(const Scalar& k, const Scalar& x, const Scalar& y) const;
@@ -25,13 +25,10 @@ namespace empirical {
 
         virtual void updateN(const int N);
 
-        virtual ~MFSBasis2D();
-
-    private:
-        MFSBasis2D(const MFSBasis2D& basis);
+        virtual ~Basis2D() = 0;
 
     };
 
 }
 
-#endif /* EMPIRICAL_BASIS_MFSBASIS_HPP_ */
+#endif /* EIGEN_BASIS_BASIS_HPP_ */

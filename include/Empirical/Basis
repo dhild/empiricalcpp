@@ -1,1 +1,2 @@
+#include "Empirical/src/basis/Basis.hpp"
 #include "Empirical/src/basis/MFSBasis.hpp"

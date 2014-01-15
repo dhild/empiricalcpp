@@ -6,13 +6,17 @@
 
 namespace empirical {
 
+    typedef Eigen::Matrix<Scalar, Eigen::Dynamic, 1> Points1D;
+    typedef Eigen::Matrix<cScalar, Eigen::Dynamic, 1> Mesh1D;
+    typedef Eigen::Matrix<cScalar, Eigen::Dynamic, Eigen::Dynamic> Mesh2D;
+
     class Quadrature {
     protected:
         int N;
         Scalar a;
         Scalar b;
-        Eigen::Array<Scalar, Eigen::Dynamic, 1> x;
-        Eigen::Array<Scalar, Eigen::Dynamic, 1> w;
+        Points1D x;
+        Points1D w;
 
         Quadrature(const int N, const Scalar a, const Scalar b)
                 : x(N), w(N) {
@@ -42,23 +46,23 @@ namespace empirical {
             return b;
         }
 
-        const Eigen::Array<Scalar, Eigen::Dynamic, 1> getPoints() const {
+        const Points1D getPoints() const {
             return x;
         }
-        const Eigen::Array<Scalar, Eigen::Dynamic, 1> getWeights() const {
+        const Points1D getWeights() const {
             return w;
         }
 
         Scalar integrate(const Scalar (*f)(const Scalar)) const;
     };
-    
+
     /** Type that should create a Quadrature object of the desired type.
-     * 
+     *
      * This type of function should emulate the new operator; delete should
      * always be called by the owner of the constructed object.
      */
     typedef Quadrature* (*quadratureFactory)(const int M, const Scalar& a, const Scalar& b);
-    
+
     class LegendreGaussLobatto: public Quadrature {
     public:
         LegendreGaussLobatto(const int N, const Scalar a = -1, const Scalar b = 1)
