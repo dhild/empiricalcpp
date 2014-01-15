@@ -10,3 +10,5 @@ lib/
 .cproject
 .checkstyle
 .settings/
+nbproject/
+*.kdev4
