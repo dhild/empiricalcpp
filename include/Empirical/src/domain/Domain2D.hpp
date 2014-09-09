@@ -2,12 +2,13 @@
 #define DOMAIN_HPP_
 
 #include <vector>
-#include <pair>
+#include <utility>
 #include "Empirical/src/config.h"
-#include "Empirical/src/basis/Basis.hpp"
-#include "Empirical/src/domain/DomainSegment2D.hpp"
 
 namespace empirical {
+
+    class DomainSegment2D;
+    class Basis2D;
 
     enum NormalDirection {
         UNCHANGED, REVERSED
@@ -17,8 +18,8 @@ namespace empirical {
     protected:
 
         /** Segments and their normal sense */
-        std::vector<std::pair<DomainSegment2D, NormalDirection> > segments;
-        std::vector<Basis2D> bases;
+        std::vector<std::pair<DomainSegment2D&, NormalDirection> > segments;
+        std::vector<Basis2D&> bases;
         bool isExterior;
         Scalar wavenumber;
         Scalar refractiveIndex;
@@ -26,7 +27,7 @@ namespace empirical {
     public:
 
         Domain2D();
-        
+
         virtual ~Domain2D();
 
         const bool isExterior() const {

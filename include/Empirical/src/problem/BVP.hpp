@@ -9,7 +9,7 @@ namespace empirical {
     class BVP2D : public Problem2D {
     protected:
 
-        Mesh1D rhs;
+        Vector2D rhs;
 
         virtual void fillQuadratureWeights();
         virtual void setupBasisDofs();

@@ -13,7 +13,7 @@ namespace empirical {
     class Problem2D {
     protected:
 
-        std::vector<Domain2D> domains;
+        std::vector<Domain2D&> domains;
         Scalar overallWavenumber;
 
         Eigen::Matrix<cScalar, Eigen::Dynamic, Eigen::Dynamic> A;
@@ -24,9 +24,9 @@ namespace empirical {
         virtual makeBCMatrix();
         virtual void linsolve(const Parameters& parameters);
 
-        virtual Mesh1D getPoints() const;
-        virtual Mesh1D getNormals() const;
-        virtual Mesh1D getWeights() const;
+        virtual Vector2D getPoints() const;
+        virtual Vector2D getNormals() const;
+        virtual Vector2D getWeights() const;
 
     public:
 
@@ -40,8 +40,22 @@ namespace empirical {
             return this->overallWavenumber;
         }
 
+        /** Calculates the solution at the given point.
+         *
+         * Solution points must lie in the exterior of all domains for this problem.
+         */
         virtual cScalar operator()(const cScalar& point) const;
-        virtual Mesh1D operator()(const Mesh1D& points) const;
+
+        /** Calculates the solution at the given set of points.
+         *
+         * Solution points must lie in the exterior of all domains for this problem.
+         */
+        virtual Vector2D operator()(const Vector2D& points) const;
+
+        /** Calculates the solution at the given set of points.
+         *
+         * Solution points must lie in the exterior of all domains for this problem.
+         */
         virtual Mesh2D operator()(const Mesh2D& points) const;
 
     };
