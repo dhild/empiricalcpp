@@ -3,13 +3,13 @@
 
 #include <functional>
 #include <Eigen/Dense>
-#include "Empirical/src/domain/segments.hpp"
+#include "Empirical/src/domain/DomainSegment2D.hpp"
 #include "Empirical/src/quadrature/Quadrature.hpp"
 #include "Empirical/src/config.h"
 
 namespace empirical {
 
-    class RadialSegment2D: public DomainSegment2D {
+    class RadialSegment2D : public DomainSegment2D {
     private:
 
         const std::function<cScalar(cScalar)>& z;
@@ -22,15 +22,20 @@ namespace empirical {
     public:
 
         RadialSegment2D(const std::function<cScalar(cScalar)>& z, const std::function<cScalar(cScalar)>& zPrime,
-                const int M);
+                        const int M);
 
         virtual ~RadialSegment2D();
 
         virtual void recalculateQuadratures(const int M);
 
-        virtual const Eigen::ArrayBase<cScalar> getNormals() const;
-        virtual const Eigen::ArrayBase<cScalar> getPoints() const;
-        virtual const Eigen::ArrayBase<cScalar> getFirstDerivative() const;
+        virtual int size() const = 0;
+        virtual const Mesh1D getNormals() const = 0;
+        virtual const Mesh1D getPoints() const = 0;
+        virtual const Mesh1D getPointDerivatives() const = 0;
+        virtual const Mesh1D getBoundaryCondition() const = 0;
+        virtual const Mesh1D getBoundaryConditionNormalDeriv() const = 0;
+        virtual const Mesh1D applyBoundaryCondition(const Mesh1D& points) const = 0;
+        virtual bool isBoundaryPositiveNormal() const = 0;
 
     };
 

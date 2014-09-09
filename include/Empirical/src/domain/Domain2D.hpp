@@ -4,10 +4,10 @@
 #include <vector>
 #include <utility>
 #include "Empirical/src/config.h"
+#include "Empirical/src/domain/DomainSegment2D.hpp"
 
 namespace empirical {
 
-    class DomainSegment2D;
     class Basis2D;
 
     enum NormalDirection {
@@ -33,9 +33,11 @@ namespace empirical {
         const bool isExterior() const {
             return this->isExterior;
         }
+
         const Scalar getWavenumber() const {
             return this->wavenumber;
         }
+
         const Scalar getRefractiveIndex() const {
             return this->refractiveIndex;
         }
