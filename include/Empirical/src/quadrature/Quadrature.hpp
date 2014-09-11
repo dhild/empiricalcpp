@@ -40,6 +40,11 @@ class TrapezoidQuadrature : public Quadrature {
  public:
   TrapezoidQuadrature(const int N);
 };
+
+class PeriodicTrapezoidQuadrature : public Quadrature {
+ public:
+  PeriodicTrapezoidQuadrature(const int N);
+};
 }
 
 #endif /* QUADRATURE_HPP_ */

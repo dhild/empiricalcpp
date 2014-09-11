@@ -4,40 +4,38 @@
 #include <functional>
 #include <Eigen/Dense>
 #include "Empirical/src/domain/DomainSegment2D.hpp"
-#include "Empirical/src/quadrature/Quadrature.hpp"
 #include "Empirical/src/config.h"
 
 namespace empirical {
 
-    class RadialSegment2D : public DomainSegment2D {
-    private:
+class Quadrature;
 
-        const std::function<cScalar(cScalar)>& z;
-        const std::function<cScalar(cScalar)>& zPrime;
+class RadialSegment2D : public DomainSegment2D {
+ private:
 
-        Quadrature* points;
-        Quadrature* pointPrimes;
-        Quadrature* normals;
+  const std::function<cScalar(cScalar)>& z;
+  const std::function<cScalar(cScalar)>& zPrime;
 
-    public:
+  Quadrature* t;
+  Mesh1D points;
+  Mesh1D pointPrimes;
 
-        RadialSegment2D(const std::function<cScalar(cScalar)>& z, const std::function<cScalar(cScalar)>& zPrime,
-                        const int M);
+  void recalculate(const int M);
 
-        virtual ~RadialSegment2D();
+ public:
 
-        virtual void recalculateQuadratures(const int M);
+  RadialSegment2D(const std::function<cScalar(cScalar)>& z,
+                  const std::function<cScalar(cScalar)>& zPrime,
+                  const int M);
 
-        virtual int size() const = 0;
-        virtual const Mesh1D getNormals() const = 0;
-        virtual const Mesh1D getPoints() const = 0;
-        virtual const Mesh1D getPointDerivatives() const = 0;
-        virtual const Mesh1D getBoundaryCondition() const = 0;
-        virtual const Mesh1D getBoundaryConditionNormalDeriv() const = 0;
-        virtual const Mesh1D applyBoundaryCondition(const Mesh1D& points) const = 0;
-        virtual bool isBoundaryPositiveNormal() const = 0;
+  virtual ~RadialSegment2D();
 
-    };
+  virtual void recalculateQuadratures(const int M);
+  
+  virtual int size() const;
+  virtual const Mesh1D& getPoints() const;
+  virtual const Mesh1D& getPointDerivatives() const;
+};
 
 }
 

@@ -7,32 +7,32 @@
 
 namespace empirical {
 
-    typedef Eigen::Matrix<cScalar, Eigen::Dynamic, 1> Mesh1D;
+typedef Eigen::Matrix<cScalar, Eigen::Dynamic, 1> Mesh1D;
 
-    class DomainSegment2D {
-    protected:
-        std::function<cScalar(cScalar) > bc;
-        std::function<cScalar(cScalar) > bcN;
-        bool boundaryInPositiveNormalDirection;
+class DomainSegment2D {
+ protected:
+  std::function<cScalar(cScalar)> bc;
+  std::function<cScalar(cScalar)> bcN;
+  bool boundaryInPositiveNormalDirection;
 
-        DomainSegment2D();
+  DomainSegment2D();
 
-    public:
+ public:
 
-        virtual int size() const = 0;
-        virtual const Mesh1D getNormals() const;
-        virtual const Mesh1D getPoints() const = 0;
-        virtual const Mesh1D getPointDerivatives() const = 0;
-        virtual const Mesh1D getBoundaryCondition() const;
-        virtual const Mesh1D getBoundaryConditionNormalDeriv() const;
-        virtual bool isBoundaryInPositiveNormalDirection() const;
+  virtual int size() const = 0;
+  virtual const Mesh1D& getNormals() const;
+  virtual const Mesh1D& getPoints() const = 0;
+  virtual const Mesh1D& getPointDerivatives() const = 0;
+  virtual const Mesh1D getBoundaryCondition() const;
+  virtual const Mesh1D getBoundaryConditionNormalDeriv() const;
+  virtual bool isBoundaryInPositiveNormalDirection() const;
 
-        virtual void setBoundaryInPositiveNormalDirection(const bool bcPositive);
-        virtual void setBoundaryCondition(const std::function<cScalar(cScalar) >& bc);
-        virtual void setBoundaryConditionNormal(const std::function<cScalar(cScalar) >& bcN);
+  virtual void setBoundaryInPositiveNormalDirection(const bool bcPositive);
+  virtual void setBoundaryCondition(const std::function<cScalar(cScalar) >& bc);
+  virtual void setBoundaryConditionNormal(const std::function<cScalar(cScalar) >& bcN);
 
-        virtual ~DomainSegment2D() = 0;
-    };
+  virtual ~DomainSegment2D() = 0;
+};
 
 }
 
