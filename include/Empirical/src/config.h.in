@@ -1,5 +1,5 @@
-#ifndef HEADER_CONFIG_H_INCLUDED
-#define HEADER_CONFIG_H_INCLUDED
+#ifndef HEADER_CONFIG_H_INCLUDED_
+#define HEADER_CONFIG_H_INCLUDED_
 
 #define EMPIRICAL_VERSION_MAJOR @PROJECT_VERSION_MAJOR@
 #define EMPIRICAL_VERSION_MINOR @PROJECT_VERSION_MINOR@
@@ -11,14 +11,18 @@
 
 namespace empirical {
 
-    /** Scalar value type. Should support your desired precision. */
-    typedef long double Scalar;
-    /** Complex scalar value type. Should support your desired precision and complex numbers. */
-    typedef std::complex<Scalar> cScalar;
+/** Scalar value type. Should support your desired precision. */
+typedef double Scalar;
+
+/** Machine epsilon for the scalar type. */
+extern const Scalar epsScalar;
+
+/** Complex scalar value type. Should support your desired precision and complex numbers. */
+typedef std::complex<Scalar> cScalar;
     
-    /** For convenience. */
-    extern const Scalar PI;
+/** For convenience. */
+extern const Scalar PI;
 
 }
 
-#endif // HEADER_CONFIG_H_INCLUDED
+#endif // HEADER_CONFIG_H_INCLUDED_

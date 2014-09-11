@@ -7,41 +7,39 @@
 
 namespace empirical {
 
-    typedef Eigen::Array<Scalar, Eigen::Dynamic, 1> quadratureVector;
+typedef Eigen::Array<Scalar, Eigen::Dynamic, 1> quadratureVector;
 
-    class Quadrature {
-    protected:
-        quadratureVector points;
-        quadratureVector weights;
+class Quadrature {
+ protected:
+  quadratureVector points;
+  quadratureVector weights;
 
-        Quadrature(const int N)
-        : points(N), weights(N) {
-        }
+  Quadrature(const int N) : points(N), weights(N) {}
 
-    public:
+ public:
 
-        int size() const {
-            return points.rows();
-        }
+  int size() const {
+    return points.rows();
+  }
 
-        const quadratureVector& getPoints() const {
-            return points;
-        }
+  const quadratureVector& getPoints() const {
+    return points;
+  }
 
-        const quadratureVector& getWeights() const {
-            return weights;
-        }
-    };
+  const quadratureVector& getWeights() const {
+    return weights;
+  }
+};
 
-    class LegendreGaussLobatto : public Quadrature {
-    public:
-        LegendreGaussLobatto(const int N);
-    };
+class LegendreGaussLobatto : public Quadrature {
+ public:
+  LegendreGaussLobatto(const int N);
+};
 
-    class TrapezoidQuadrature : public Quadrature {
-    public:
-        TrapezoidQuadrature(const int N);
-    };
+class TrapezoidQuadrature : public Quadrature {
+ public:
+  TrapezoidQuadrature(const int N);
+};
 }
 
 #endif /* QUADRATURE_HPP_ */
