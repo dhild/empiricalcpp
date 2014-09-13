@@ -1,49 +1,88 @@
-#ifndef DOMAIN_HPP_
-#define DOMAIN_HPP_
+#ifndef DOMAIN2D_HPP_
+#define DOMAIN2D_HPP_
 
 #include <vector>
-#include <utility>
+#include <functional>
+#include <Eigen/Dense>
 #include "Empirical/src/config.h"
-#include "Empirical/src/domain/DomainSegment2D.hpp"
+#include "Empirical/src/quadrature/Quadrature.hpp"
 
 namespace empirical {
 
-    class Basis2D;
+typedef Eigen::Matrix<cScalar, Eigen::Dynamic, 1> Mesh1D;
+typedef Eigen::Matrix<cScalar, Eigen::Dynamic, Eigen::Dynamic> Mesh2D;
 
-    enum NormalDirection {
-        UNCHANGED, REVERSED
-    };
+class Quadrature;
 
-    class Domain2D {
-    protected:
+class DomainSegment2D {
+ protected:
+  Quadrature* base_quadrature;
+  
+  std::function<cScalar(cScalar)> boundary_condition;
+  std::function<cScalar(cScalar)> boundary_condition_normal;
+  bool boundary_in_positive_normal_direction;
 
-        /** Segments and their normal sense */
-        std::vector<std::pair<DomainSegment2D&, NormalDirection> > segments;
-        std::vector<Basis2D&> bases;
-        bool isExterior;
-        Scalar wavenumber;
-        Scalar refractiveIndex;
+  DomainSegment2D();
 
-    public:
+ public:
 
-        Domain2D();
+  virtual ~DomainSegment2D();
 
-        virtual ~Domain2D();
+  virtual const Mesh1D& getPoints() const = 0;
+  virtual const Mesh1D& getPointDerivatives() const = 0;
+  virtual const Mesh1D& getNormals() const = 0;
 
-        const bool isExterior() const {
-            return this->isExterior;
-        }
+  virtual int size() const;
+  virtual const QuadratureVector& getWeights() const;
+  virtual const QuadratureVector& getT() const;
 
-        const Scalar getWavenumber() const {
-            return this->wavenumber;
-        }
+  virtual bool isBoundaryInPositiveNormalDirection() const;
+  virtual void setBoundaryInPositiveNormalDirection(const bool bcPositive);
+  
+  virtual const Mesh1D getBoundaryCondition() const;
+  virtual void setBoundaryCondition(const std::function<cScalar(cScalar)>& bc);
+  
+  virtual const Mesh1D getBoundaryConditionNormalDeriv() const;
+  virtual void setBoundaryConditionNormal(const std::function<cScalar(cScalar)>& bcN);
 
-        const Scalar getRefractiveIndex() const {
-            return this->refractiveIndex;
-        }
+};
 
-    };
+class Basis2D;
+
+class Domain2D {
+ protected:
+  std::vector<DomainSegment2D*> segments;
+  std::vector<const Basis2D*> bases;
+  bool is_exterior;
+  Scalar refractive_index;
+
+ public:
+
+  Domain2D();
+
+  virtual ~Domain2D();
+
+  const bool isExterior() const {
+    return is_exterior;
+  }
+
+  const Scalar getWavenumber() const {
+    return wavenumber;
+  }
+
+  void addSegment(const DomainSegment2D& segment, NormalsReversed reversed = false);
+
+  void addBasis(const Basis2D* basis);
+
+  int sizeSegments() const;
+  int sizeBases() const;
+
+  const Mesh1D& getPoints() const;
+  const Mesh1D& getPointNormals() const;
+  const QuadratureVector& getWeights() const;
+
+};
 
 }
 
-#endif /* DOMAIN_HPP_ */
+#endif /* DOMAIN2D_HPP_ */

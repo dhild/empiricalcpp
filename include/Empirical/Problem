@@ -1,3 +1,3 @@
-#include "Empirical/src/problem/Problem.hpp"
-#include "Empirical/src/problem/BVP.hpp"
-#include "Empirical/src/problem/Scattering.hpp"
+#include "Empirical/src/problem/BoundaryValueProblem2D.hpp"
+#include "Empirical/src/problem/ScatteringProblem2D.hpp"
+

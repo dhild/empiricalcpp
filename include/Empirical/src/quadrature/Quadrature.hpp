@@ -7,12 +7,12 @@
 
 namespace empirical {
 
-typedef Eigen::Array<Scalar, Eigen::Dynamic, 1> quadratureVector;
+typedef Eigen::Array<Scalar, Eigen::Dynamic, 1> QuadratureVector;
 
 class Quadrature {
  protected:
-  quadratureVector points;
-  quadratureVector weights;
+  QuadratureVector points;
+  QuadratureVector weights;
 
   Quadrature(const int N) : points(N), weights(N) {}
 
@@ -22,11 +22,11 @@ class Quadrature {
     return points.rows();
   }
 
-  const quadratureVector& getPoints() const {
+  const QuadratureVector& getPoints() const {
     return points;
   }
 
-  const quadratureVector& getWeights() const {
+  const QuadratureVector& getWeights() const {
     return weights;
   }
 };

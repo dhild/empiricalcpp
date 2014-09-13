@@ -1,34 +1,44 @@
 #ifndef EMPIRICAL_DOMAIN_ARCSEGMENT2D_HPP_
 #define EMPIRICAL_DOMAIN_ARCSEGMENT2D_HPP_
 
-#include "Empirical/src/domain/segments.hpp"
-#include "Empirical/src/quadrature/Quadrature.hpp"
+#include <functional>
+#include <Eigen/Dense>
+#include "Empirical/src/domain/Domain2D.hpp"
+#include "Empirical/src/config.h"
 
 namespace empirical {
 
-    class ArcSegment2D: public DomainSegment2D {
-    private:
+class Quadrature;
 
-        Quadrature& z;
-        Quadrature* zPrime;
-        Quadrature* normals;
+class ArcSegment2D : public ArcSegment2D {
+ private:
 
-    public:
+  const std::function<cScalar(Scalar)>& z;
+  const std::function<cScalar(Scalar)>& zPrime;
 
-        ArcSegment2D(const Quadrature& points, const Quadrature& pointsPrime);
+  Quadrature* t;
+  Mesh1D points;
+  Mesh1D pointPrimes;
+  Mesh1D normals;
 
-        virtual ~ArcSegment2D();
+  void recalculate(const int M);
 
-        virtual void recalculateQuadratures(const int M);
+ public:
 
-        virtual const Eigen::ArrayBase<cScalar> getNormals() const;
-        virtual const Eigen::ArrayBase<cScalar> getPoints() const;
-        virtual const Eigen::ArrayBase<cScalar> getFirstDerivative() const;
+  ArcSegment2D(const std::function<cScalar(Scalar)>& z,
+                  const std::function<cScalar(Scalar)>& zPrime,
+                  const int M);
 
-    };
+  virtual ~ArcSegment2D();
 
-    const ArcSegment2D createArcSegment2D(const cScalar& center, const Scalar& radius, const Scalar& theta0,
-            const Scalar& theta1);
+  virtual void recalculateQuadratures(const int M);
+  
+  virtual int size() const;
+  virtual const Quadrature& getT() const;
+  virtual const Mesh1D& getPoints() const;
+  virtual const Mesh1D& getPointDerivatives() const;
+  virtual const Mesh1D& getNormals() const;
+};
 
 }
 
