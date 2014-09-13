@@ -60,5 +60,6 @@ void test_integration(const Quadrature& q, Scalar (&func)(Scalar), const Scalar 
     }\
   }
 
+TEST_QUADRATURE(PeriodicTrapezoidQuadrature, 1e-14, 1e-14, 1e-4);
 TEST_QUADRATURE(TrapezoidQuadrature, 1e-2, 1e-10, 1e-2);
 TEST_QUADRATURE(LegendreGaussLobatto, 1e-15, 1e-16, 1e-15);

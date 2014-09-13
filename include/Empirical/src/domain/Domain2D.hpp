@@ -17,20 +17,30 @@ class Quadrature;
 class DomainSegment2D {
  protected:
   Quadrature* base_quadrature;
+
+  const std::function<cScalar(Scalar)>& z;
+  const std::function<cScalar(Scalar)>& zPrime;
+
+  Mesh1D points;
+  Mesh1D pointPrimes;
+  Mesh1D normals;
   
   std::function<cScalar(cScalar)> boundary_condition;
   std::function<cScalar(cScalar)> boundary_condition_normal;
   bool boundary_in_positive_normal_direction;
-
-  DomainSegment2D();
+  
+  virtual void recalculate(const int M);
 
  public:
 
+  DomainSegment2D(Quadrature* quadrature, std::function<cScalar(Scalar)> z,
+                  std::function<cScalar(Scalar)> zPrime);
+
   virtual ~DomainSegment2D();
 
-  virtual const Mesh1D& getPoints() const = 0;
-  virtual const Mesh1D& getPointDerivatives() const = 0;
-  virtual const Mesh1D& getNormals() const = 0;
+  virtual const Mesh1D& getPoints() const;
+  virtual const Mesh1D& getPointDerivatives() const;
+  virtual const Mesh1D& getNormals() const;
 
   virtual int size() const;
   virtual const QuadratureVector& getWeights() const;
@@ -66,11 +76,7 @@ class Domain2D {
     return is_exterior;
   }
 
-  const Scalar getWavenumber() const {
-    return wavenumber;
-  }
-
-  void addSegment(const DomainSegment2D& segment, NormalsReversed reversed = false);
+  void addSegment(const DomainSegment2D& segment);
 
   void addBasis(const Basis2D* basis);
 

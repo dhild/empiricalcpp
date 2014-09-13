@@ -13,31 +13,19 @@ class Quadrature;
 class RadialSegment2D : public DomainSegment2D {
  private:
 
-  const std::function<cScalar(Scalar)>& z;
-  const std::function<cScalar(Scalar)>& zPrime;
+  const std::function<cScalar(Scalar)>& radius;
+  const std::function<cScalar(Scalar)>& radius_derivative;
 
-  Quadrature* t;
-  Mesh1D points;
-  Mesh1D pointPrimes;
-  Mesh1D normals;
-
-  void recalculate(const int M);
+  cScalar points(Scalar t) const;
+  cScalar pointDerivative(Scalar t) const;
 
  public:
 
-  RadialSegment2D(const std::function<cScalar(Scalar)>& z,
-                  const std::function<cScalar(Scalar)>& zPrime,
+  RadialSegment2D(const std::function<cScalar(Scalar)>& radius_func,
+                  const std::function<cScalar(Scalar)>& radius_derivative_func,
                   const int M);
 
   virtual ~RadialSegment2D();
-
-  virtual void recalculateQuadratures(const int M);
-  
-  virtual int size() const;
-  virtual const Quadrature& getT() const;
-  virtual const Mesh1D& getPoints() const;
-  virtual const Mesh1D& getPointDerivatives() const;
-  virtual const Mesh1D& getNormals() const;
 };
 
 }

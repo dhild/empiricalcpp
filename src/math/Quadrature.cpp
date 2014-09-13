@@ -14,6 +14,13 @@ TrapezoidQuadrature::TrapezoidQuadrature(const int N) : Quadrature(N) {
   this->weights(N - 1, 0) = w;
 }
 
+PeriodicTrapezoidQuadrature::PeriodicTrapezoidQuadrature(const int N) : Quadrature(N) {
+  Scalar shift = Scalar(1) / Scalar(N);
+  this->points.setLinSpaced(-1 + shift, 1 - shift);
+
+  this->weights.setConstant(Scalar(2) / Scalar(N));
+}
+
 LegendreGaussLobatto::LegendreGaussLobatto(const int N1) : Quadrature(N1) {
   const int N = N1 - 1;
   

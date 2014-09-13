@@ -10,34 +10,23 @@ namespace empirical {
 
 class Quadrature;
 
-class ArcSegment2D : public ArcSegment2D {
+class ArcSegment2D : public DomainSegment2D {
  private:
 
-  const std::function<cScalar(Scalar)>& z;
-  const std::function<cScalar(Scalar)>& zPrime;
+  const cScalar center;
+  const Scalar radius;
+  const Scalar t0;
+  const Scalar t1;
 
-  Quadrature* t;
-  Mesh1D points;
-  Mesh1D pointPrimes;
-  Mesh1D normals;
-
-  void recalculate(const int M);
+  cScalar points(Scalar t) const;
+  cScalar pointDerivative(Scalar t) const;
 
  public:
 
-  ArcSegment2D(const std::function<cScalar(Scalar)>& z,
-                  const std::function<cScalar(Scalar)>& zPrime,
-                  const int M);
+  ArcSegment2D(const cScalar center, const Scalar R, const Scalar t0,
+               const Scalar t1, const int M);
 
   virtual ~ArcSegment2D();
-
-  virtual void recalculateQuadratures(const int M);
-  
-  virtual int size() const;
-  virtual const Quadrature& getT() const;
-  virtual const Mesh1D& getPoints() const;
-  virtual const Mesh1D& getPointDerivatives() const;
-  virtual const Mesh1D& getNormals() const;
 };
 
 }
