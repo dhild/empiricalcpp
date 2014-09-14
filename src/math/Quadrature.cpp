@@ -5,23 +5,72 @@ using namespace empirical;
 using namespace Eigen;
 using namespace std;
 
+Quadrature::~Quadrature() {}
+
+void Quadrature::resize(const int N) {
+  points.resize(N, 1);
+  weights.resize(N, 1);
+}
+
 TrapezoidQuadrature::TrapezoidQuadrature(const int N) : Quadrature(N) {
-  this->points.setLinSpaced(-1, 1);
+  recalc(N);
+}
+
+TrapezoidQuadrature::~TrapezoidQuadrature() {}
+
+void TrapezoidQuadrature::resize(const int N) {
+  if (N == size()) {
+    return;
+  }
+  Quadrature::resize(N);
+  recalc(N);
+}
+
+void TrapezoidQuadrature::recalc(const int N) {
+  points.setLinSpaced(-1, 1);
 
   Scalar w = Scalar(1) / Scalar(N);
-  this->weights.setConstant(2 * w);
-  this->weights(0, 0) = w;
-  this->weights(N - 1, 0) = w;
+  weights.setConstant(2 * w);
+  weights(0, 0) = w;
+  weights(N - 1, 0) = w;
 }
 
 PeriodicTrapezoidQuadrature::PeriodicTrapezoidQuadrature(const int N) : Quadrature(N) {
-  Scalar shift = Scalar(1) / Scalar(N);
-  this->points.setLinSpaced(-1 + shift, 1 - shift);
+  recalc(N);
+}
 
-  this->weights.setConstant(Scalar(2) / Scalar(N));
+PeriodicTrapezoidQuadrature::~PeriodicTrapezoidQuadrature() {}
+
+void PeriodicTrapezoidQuadrature::resize(const int N) {
+  if (N == size()) {
+    return;
+  }
+  Quadrature::resize(N);
+  recalc(N);
+}
+
+void PeriodicTrapezoidQuadrature::recalc(const int N) {
+  Scalar shift = Scalar(1) / Scalar(N);
+  points.setLinSpaced(-1 + shift, 1 - shift);
+
+  weights.setConstant(Scalar(2) / Scalar(N));
 }
 
 LegendreGaussLobatto::LegendreGaussLobatto(const int N1) : Quadrature(N1) {
+  recalc(N1);
+}
+
+LegendreGaussLobatto::~LegendreGaussLobatto() {}
+
+void LegendreGaussLobatto::resize(const int N) {
+  if (N == size()) {
+    return;
+  }
+  Quadrature::resize(N);
+  recalc(N);
+}
+
+void LegendreGaussLobatto::recalc(const int N1) {
   const int N = N1 - 1;
   
   Array<Scalar, Dynamic, 1> x = Array<Scalar, Dynamic, 1>::LinSpaced(N1, 0, PI).cos();

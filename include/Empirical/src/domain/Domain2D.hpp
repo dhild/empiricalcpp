@@ -18,25 +18,28 @@ class DomainSegment2D {
  protected:
   Quadrature* base_quadrature;
 
-  const std::function<cScalar(Scalar)>& z;
-  const std::function<cScalar(Scalar)>& zPrime;
+  const std::function<cScalar(const Scalar)> z;
+  const std::function<cScalar(const Scalar)> z_prime;
 
   Mesh1D points;
-  Mesh1D pointPrimes;
+  Mesh1D point_primes;
   Mesh1D normals;
   
-  std::function<cScalar(cScalar)> boundary_condition;
-  std::function<cScalar(cScalar)> boundary_condition_normal;
+  std::function<cScalar(const cScalar)> boundary_condition;
+  std::function<cScalar(const cScalar)> boundary_condition_normal;
   bool boundary_in_positive_normal_direction;
-  
-  virtual void recalculate(const int M);
+
+  cScalar normalFunc(const cScalar zp) const;
+
+  DomainSegment2D(Quadrature* quadrature,
+                  const std::function<cScalar(const Scalar)>& z,
+                  const std::function<cScalar(const Scalar)>& zPrime);
 
  public:
 
-  DomainSegment2D(Quadrature* quadrature, std::function<cScalar(Scalar)> z,
-                  std::function<cScalar(Scalar)> zPrime);
-
   virtual ~DomainSegment2D();
+
+  void recalculate(const int M);
 
   virtual const Mesh1D& getPoints() const;
   virtual const Mesh1D& getPointDerivatives() const;
@@ -50,10 +53,10 @@ class DomainSegment2D {
   virtual void setBoundaryInPositiveNormalDirection(const bool bcPositive);
   
   virtual const Mesh1D getBoundaryCondition() const;
-  virtual void setBoundaryCondition(const std::function<cScalar(cScalar)>& bc);
+  virtual void setBoundaryCondition(const std::function<cScalar(const cScalar)>& bc);
   
   virtual const Mesh1D getBoundaryConditionNormalDeriv() const;
-  virtual void setBoundaryConditionNormal(const std::function<cScalar(cScalar)>& bcN);
+  virtual void setBoundaryConditionNormal(const std::function<cScalar(const cScalar)>& bcN);
 
 };
 

@@ -18,6 +18,9 @@ class Quadrature {
 
  public:
 
+  virtual ~Quadrature();
+  virtual void resize(const int N);
+
   int size() const {
     return points.rows();
   }
@@ -32,18 +35,30 @@ class Quadrature {
 };
 
 class LegendreGaussLobatto : public Quadrature {
+ private:
+  void recalc(const int N);
  public:
   LegendreGaussLobatto(const int N);
+  virtual ~LegendreGaussLobatto();
+  virtual void resize(const int N);
 };
 
 class TrapezoidQuadrature : public Quadrature {
+ private:
+  void recalc(const int N);
  public:
   TrapezoidQuadrature(const int N);
+  virtual ~TrapezoidQuadrature();
+  virtual void resize(const int N);
 };
 
 class PeriodicTrapezoidQuadrature : public Quadrature {
+ private:
+  void recalc(const int N);
  public:
   PeriodicTrapezoidQuadrature(const int N);
+  virtual ~PeriodicTrapezoidQuadrature();
+  virtual void resize(const int N);
 };
 }
 

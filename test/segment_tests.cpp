@@ -9,14 +9,12 @@ using namespace std;
 using namespace Eigen;
 using namespace empirical;
 
-cScalar unitCircle(cScalar t) {
-  cScalar arg = t * PI;
-  return exp(cScalar(0, 1) * arg);
+cScalar unitCircle(Scalar t) {
+  return 1;
 }
 
-cScalar unitCirclePrime(cScalar t) {
-  cScalar arg = t * PI;
-  return arg * exp(cScalar(0, 1) * arg);
+cScalar unitCirclePrime(Scalar t) {
+  return 0;
 }
 
 const int M = 125;
@@ -28,7 +26,7 @@ SUITE(segment_DomainSegment2D_RadialSegment2D) {
   }
   TEST(recalculateQuadratures) {
     RadialSegment2D segment(unitCircle, unitCirclePrime, M);
-    segment.recalculateQuadratures(50);
+    segment.recalculate(50);
     CHECK(50 == segment.size());
   }
   TEST(getPoints) {
@@ -43,23 +41,24 @@ SUITE(segment_DomainSegment2D_RadialSegment2D) {
   TEST(getPointDerivatives) {
     RadialSegment2D segment(unitCircle, unitCirclePrime, M);
 
-    const Array<Scalar, Dynamic, 1> t = segment.getT().getPoints() * PI;
+    const QuadratureVector t = segment.getT() * PI;
     const Mesh1D points = segment.getPointDerivatives();
 
     for (int i = 0; i < M; i++) {
-      Scalar x = 
-      Scalar cArg = arg(cScalar(0, 1) * t(i, 0));
-      cout << cArg << endl;
-      CHECK_CLOSE(cArg, abs(points(i, 0)), 10 * epsScalar);
+      Scalar x = -sin(t(i, 0));
+      Scalar y = cos(t(i, 0));
+      CHECK_CLOSE(x, real(points(i, 0)), 10 * epsScalar);
+      CHECK_CLOSE(y, imag(points(i, 0)), 10 * epsScalar);
     }
   }
   TEST(getNormals) {
     RadialSegment2D segment(unitCircle, unitCirclePrime, M);
 
-    const Array<Scalar, Dynamic, 1> t = segment.getT().getPoints() * PI;
+    const QuadratureVector t = segment.getT() * PI;
     const Mesh1D normals = segment.getPointDerivatives();
 
     for (int i = 0; i < M; i++) {
+      
       cScalar val = cScalar(0, 1) * t(i, 0);
       CHECK_CLOSE(real(val), real(normals(i, 0)), 10 * epsScalar);
       CHECK_CLOSE(imag(val), imag(normals(i, 0)), 10 * epsScalar);

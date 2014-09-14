@@ -22,7 +22,6 @@ Scalar function_integral(Scalar x) {
 }
 
 const Scalar sinusoid_integration_value = function_integral(1) - function_integral(-1);
-const int N = 250;
 
 void test_size(const Quadrature& q, const int N, const Scalar eps) {
   CHECK_EQUAL(N, q.size());
@@ -44,22 +43,29 @@ void test_integration(const Quadrature& q, Scalar (&func)(Scalar), const Scalar 
   CHECK_CLOSE(expected, integrated, eps);
 }
 
-#define TEST_QUADRATURE(Type, wEps, zeroEps, intEps) \
-  SUITE(Type ## _quadrature_suite) { \
-    TEST(Type ## _createN) { \
-      Type quadrature(N);\
-      test_size(quadrature, N, wEps);\
-    }\
-    TEST(Type ## _integration_one) {\
-      Type quadrature(N);\
-      test_integration(quadrature, one, 0, zeroEps);\
-    }\
-    TEST(Type ## _integration_sinusoid) {\
-      Type quadrature(N);\
-      test_integration(quadrature, sinusoid, sinusoid_integration_value, intEps);\
-    }\
+#define TEST_QUADRATURE(Type, N, wEps, zeroEps, intEps)  \
+  SUITE(Type ## _quadrature_suite) {                     \
+    TEST(Type ## _createN) {                             \
+      Type quadrature(N);                                \
+      test_size(quadrature, N, wEps);                    \
+    }                                                    \
+    TEST(Type ## _resize) {                              \
+      Type quadrature(N);                                \
+      quadrature.resize(N + 50);                         \
+      test_size(quadrature, N + 50, wEps);               \
+    }                                                    \
+    TEST(Type ## _integration_one) {                     \
+      Type quadrature(N);                                \
+      test_integration(quadrature, one, 0, zeroEps);     \
+    }                                                    \
+    TEST(Type ## _integration_sinusoid) {                \
+      Type quadrature(N);                                \
+      test_integration(quadrature, sinusoid,             \
+                       sinusoid_integration_value,       \
+                       intEps);                          \
+    }                                                    \
   }
 
-TEST_QUADRATURE(PeriodicTrapezoidQuadrature, 1e-14, 1e-14, 1e-4);
-TEST_QUADRATURE(TrapezoidQuadrature, 1e-2, 1e-10, 1e-2);
-TEST_QUADRATURE(LegendreGaussLobatto, 1e-15, 1e-16, 1e-15);
+TEST_QUADRATURE(PeriodicTrapezoidQuadrature, 250, 1e-14, 1e-14, 1e-4);
+TEST_QUADRATURE(TrapezoidQuadrature, 250, 1e-2, 1e-10, 1e-2);
+TEST_QUADRATURE(LegendreGaussLobatto, 250, 1e-15, 1e-16, 1e-15);

@@ -15,11 +15,11 @@ class ArcSegment2D : public DomainSegment2D {
 
   const cScalar center;
   const Scalar radius;
-  const Scalar t0;
-  const Scalar t1;
+  const Scalar t_start;
+  const Scalar t_size;
 
-  cScalar points(Scalar t) const;
-  cScalar pointDerivative(Scalar t) const;
+  cScalar pointsFunc(const Scalar t) const;
+  cScalar pointDerivativesFunc(const Scalar t) const;
 
  public:
 
