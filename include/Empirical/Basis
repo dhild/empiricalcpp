@@ -1,2 +1,2 @@
-#include "Empirical/src/basis/Basis.hpp"
-#include "Empirical/src/basis/MFSBasis.hpp"
+#include "Empirical/src/basis/Basis2D.hpp"
+#include "Empirical/src/basis/MFSBasis2D.hpp"

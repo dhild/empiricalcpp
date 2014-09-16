@@ -10,10 +10,12 @@ using namespace empirical;
 DomainSegment2D::DomainSegment2D(Quadrature* quadrature,
                                  const std::function<cScalar(Scalar)>& z,
                                  const std::function<cScalar(Scalar)>& zPrime)
-    : base_quadrature(quadrature), z(z), z_prime(zPrime),
-      boundary_in_positive_normal_direction(true) {
+    : base_quadrature(quadrature), z(z), z_prime(zPrime) {
 }
 
+DomainSegment2D::~DomainSegment2D() {
+  delete base_quadrature;
+}
 
 void DomainSegment2D::recalculate(const int M) {
   base_quadrature->resize(M);
@@ -60,31 +62,12 @@ const QuadratureVector& DomainSegment2D::getT() const {
   return base_quadrature->getPoints();
 }
 
-void DomainSegment2D::setBoundaryInPositiveNormalDirection(const bool bcPositive) {
-  boundary_in_positive_normal_direction = bcPositive;
+void DomainSegment2D::setBoundaryCondition(const BoundaryCondition2D& condition) {
+  boundary_condition = &condition;
 }
-
-bool DomainSegment2D::isBoundaryInPositiveNormalDirection() const {
-  return boundary_in_positive_normal_direction;
+const BoundaryCondition2D& DomainSegment2D::getBoundaryCondition() const {
+  return *boundary_condition;
 }
-
-const Mesh1D DomainSegment2D::getBoundaryCondition() const {
-  return this->getPoints().unaryExpr(this->boundary_condition);
-}
-
-const Mesh1D DomainSegment2D::getBoundaryConditionNormalDeriv() const {
-  return this->getPointDerivatives().unaryExpr(this->boundary_condition_normal);
-}
-
-void DomainSegment2D::setBoundaryCondition(const std::function<cScalar(cScalar) >& bc) {
-  this->boundary_condition = bc;
-}
-
-void DomainSegment2D::setBoundaryConditionNormal(const std::function<cScalar(cScalar) >& bcN) {
-  this->boundary_condition_normal = bcN;
-}
-
-DomainSegment2D::~DomainSegment2D() {}
 
 ArcSegment2D::ArcSegment2D(const cScalar center, const Scalar R,
                            const Scalar t0, const Scalar t1, const int M)
@@ -99,7 +82,6 @@ ArcSegment2D::ArcSegment2D(const cScalar center, const Scalar R,
 }
 
 ArcSegment2D::~ArcSegment2D() {
-  delete base_quadrature;
 }
 
 cScalar ArcSegment2D::pointsFunc(const Scalar t) const {
@@ -126,7 +108,6 @@ RadialSegment2D::RadialSegment2D(
 }
 
 RadialSegment2D::~RadialSegment2D() {
-  delete base_quadrature;
 }
 
 cScalar RadialSegment2D::pointsFunc(const Scalar t) const {
@@ -159,7 +140,6 @@ ComplexFunctionSegment2D::ComplexFunctionSegment2D(
 }
 
 ComplexFunctionSegment2D::~ComplexFunctionSegment2D() {
-  delete base_quadrature;
 }
 
 cScalar ComplexFunctionSegment2D::pointsFunc(const Scalar t) const {

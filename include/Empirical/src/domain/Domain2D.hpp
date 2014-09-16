@@ -6,13 +6,11 @@
 #include <Eigen/Dense>
 #include "Empirical/src/config.h"
 #include "Empirical/src/quadrature/Quadrature.hpp"
+#include "Empirical/src/domain/BoundaryCondition2D.hpp"
 
 namespace empirical {
 
 typedef Eigen::Matrix<cScalar, Eigen::Dynamic, 1> Mesh1D;
-typedef Eigen::Matrix<cScalar, Eigen::Dynamic, Eigen::Dynamic> Mesh2D;
-
-class Quadrature;
 
 class DomainSegment2D {
  protected:
@@ -24,10 +22,8 @@ class DomainSegment2D {
   Mesh1D points;
   Mesh1D point_primes;
   Mesh1D normals;
-  
-  std::function<cScalar(const cScalar)> boundary_condition;
-  std::function<cScalar(const cScalar)> boundary_condition_normal;
-  bool boundary_in_positive_normal_direction;
+
+  const BoundaryCondition2D* boundary_condition;
 
   cScalar normalFunc(const cScalar zp) const;
 
@@ -49,16 +45,8 @@ class DomainSegment2D {
   virtual const QuadratureVector& getWeights() const;
   virtual const QuadratureVector& getT() const;
 
-  virtual bool isBoundaryInPositiveNormalDirection() const;
-  virtual void setBoundaryInPositiveNormalDirection(const bool bcPositive);
-  
-  virtual const Mesh1D getBoundaryCondition() const;
-  virtual void setBoundaryCondition(
-      const std::function<cScalar(const cScalar)>& bc);
-  
-  virtual const Mesh1D getBoundaryConditionNormalDeriv() const;
-  virtual void setBoundaryConditionNormal(
-      const std::function<cScalar(const cScalar)>& bcN);
+  virtual void setBoundaryCondition(const BoundaryCondition2D& condition);
+  virtual const BoundaryCondition2D& getBoundaryCondition() const;
 
 };
 
@@ -66,7 +54,7 @@ class Basis2D;
 
 class Domain2D {
  protected:
-  std::vector<DomainSegment2D*> segments;
+  std::vector<const DomainSegment2D*> segments;
   std::vector<const Basis2D*> bases;
   bool is_exterior;
   Scalar refractive_index;
@@ -77,20 +65,26 @@ class Domain2D {
 
   virtual ~Domain2D();
 
-  const bool isExterior() const {
+  bool isExterior() const {
     return is_exterior;
   }
 
-  void addSegment(const DomainSegment2D& segment);
+  Scalar getRefractiveIndex() const {
+    return refractive_index;
+  }
+
+  void addSegment(const DomainSegment2D* segment);
 
   void addBasis(const Basis2D* basis);
 
   int sizeSegments() const;
   int sizeBases() const;
 
-  const Mesh1D& getPoints() const;
-  const Mesh1D& getPointNormals() const;
-  const QuadratureVector& getWeights() const;
+  Mesh1D getPoints() const;
+  Mesh1D getPointDerivatives() const;
+  Mesh1D getNormals() const;
+  QuadratureVector getWeights() const;
+  const std::vector<const Basis2D*>& getBases() const;
 
 };
 

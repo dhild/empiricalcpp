@@ -34,15 +34,6 @@ class Quadrature {
   }
 };
 
-class LinearQuadrature : public Quadrature {
- private:
-  void recalc(const int N);
- public:
-  LinearQuadrature(const int N);
-  virtual ~LinearQuadrature();
-  virtual void resize(const int N);
-};
-
 class LegendreGaussLobatto : public Quadrature {
  private:
   void recalc(const int N);
@@ -69,6 +60,10 @@ class PeriodicTrapezoidQuadrature : public Quadrature {
   virtual ~PeriodicTrapezoidQuadrature();
   virtual void resize(const int N);
 };
+
+Quadrature* createLGL(const int N);
+Quadrature* createTrapezoid(const int N);
+Quadrature* createPeriodicTrapezoid(const int N);
 }
 
 #endif /* QUADRATURE_HPP_ */
