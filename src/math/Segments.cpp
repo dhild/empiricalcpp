@@ -1,6 +1,7 @@
 #include "Empirical/src/domain/Domain2D.hpp"
 #include "Empirical/src/domain/ArcSegment2D.hpp"
 #include "Empirical/src/domain/RadialSegment2D.hpp"
+#include "Empirical/src/domain/ComplexFunctionSegment2D.hpp"
 #include "Empirical/src/quadrature/Quadrature.hpp"
 
 using namespace Eigen;
@@ -92,7 +93,8 @@ ArcSegment2D::ArcSegment2D(const cScalar center, const Scalar R,
                                 std::placeholders::_1),
                       std::bind(&ArcSegment2D::pointDerivativesFunc, this,
                                 std::placeholders::_1)),
-      center(center), radius(R), t_start(t0), t_size(t1 - t0) {
+      center(center), radius(R), t_scale((t1 - t0) / 2),
+      t_offset((t1 + t0) / 2) {
   recalculate(M);
 }
 
@@ -101,13 +103,13 @@ ArcSegment2D::~ArcSegment2D() {
 }
 
 cScalar ArcSegment2D::pointsFunc(const Scalar t) const {
-  cScalar e = exp(cScalar(0, t_start + t * t_size));
+  cScalar e = exp(cScalar(0, (t * t_scale) + t_offset));
   return center + radius * e;
 }
 
 cScalar ArcSegment2D::pointDerivativesFunc(const Scalar t) const {
-  cScalar e = exp(cScalar(0, t_start + t * t_size));
-  return cScalar(0, radius * t_size) * e;
+  cScalar e = exp(cScalar(0, (t * t_scale) + t_offset));
+  return cScalar(0, radius * t_scale) * e;
 }
 
 RadialSegment2D::RadialSegment2D(
@@ -138,4 +140,34 @@ cScalar RadialSegment2D::pointDerivativesFunc(const Scalar t) const {
   const cScalar r = radius(angle);
   const cScalar rp = radius_derivative(angle);
   return PI * ((cScalar(0, 1) * r * e) + (rp * e));
+}
+
+ComplexFunctionSegment2D::ComplexFunctionSegment2D(
+    const std::function<cScalar(cScalar)>& z_complex_func,
+    const std::function<cScalar(cScalar)>& z_complex_derivative_func,
+    const int M, const cScalar offset_val, const cScalar scale_val)
+    : DomainSegment2D(new LegendreGaussLobatto(M),
+                      std::bind(&ComplexFunctionSegment2D::pointsFunc, this,
+                                std::placeholders::_1),
+                      std::bind(
+                          &ComplexFunctionSegment2D::pointDerivativesFunc,
+                          this, std::placeholders::_1)),
+      offset(offset_val), scale(scale_val),
+      z_complex(z_complex_func),
+      z_complex_derivative(z_complex_derivative_func) {
+  recalculate(M);
+}
+
+ComplexFunctionSegment2D::~ComplexFunctionSegment2D() {
+  delete base_quadrature;
+}
+
+cScalar ComplexFunctionSegment2D::pointsFunc(const Scalar t) const {
+  const cScalar argument = scale * (t + offset);
+  return z_complex(argument);
+}
+
+cScalar ComplexFunctionSegment2D::pointDerivativesFunc(const Scalar t) const {
+  const cScalar argument = scale * (t + offset);
+  return z_complex_derivative(argument);
 }

@@ -34,6 +34,15 @@ class Quadrature {
   }
 };
 
+class LinearQuadrature : public Quadrature {
+ private:
+  void recalc(const int N);
+ public:
+  LinearQuadrature(const int N);
+  virtual ~LinearQuadrature();
+  virtual void resize(const int N);
+};
+
 class LegendreGaussLobatto : public Quadrature {
  private:
   void recalc(const int N);
