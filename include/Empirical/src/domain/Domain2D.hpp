@@ -53,10 +53,12 @@ class DomainSegment2D {
   virtual void setBoundaryInPositiveNormalDirection(const bool bcPositive);
   
   virtual const Mesh1D getBoundaryCondition() const;
-  virtual void setBoundaryCondition(const std::function<cScalar(const cScalar)>& bc);
+  virtual void setBoundaryCondition(
+      const std::function<cScalar(const cScalar)>& bc);
   
   virtual const Mesh1D getBoundaryConditionNormalDeriv() const;
-  virtual void setBoundaryConditionNormal(const std::function<cScalar(const cScalar)>& bcN);
+  virtual void setBoundaryConditionNormal(
+      const std::function<cScalar(const cScalar)>& bcN);
 
 };
 

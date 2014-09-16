@@ -1,4 +1,4 @@
-add_subdirectory(math)
+add_subdirectory(libmath)
 
 file (GLOB project_SRCS *.cpp *.c *.h)
 
