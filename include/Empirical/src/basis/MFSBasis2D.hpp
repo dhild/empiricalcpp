@@ -7,6 +7,10 @@
 
 namespace empirical {
 
+cScalar hankel(const Scalar v, const Scalar x);
+cScalar mfsBasis(const Scalar k, const cScalar dist);
+cScalar mfsBasisNormalDerivative(const Scalar k, const cScalar dist);
+
 /** An implementation of a 2D basis using the method of fundamental solutions.*/
 class MFSBasis2D : public Basis2D {
  protected:

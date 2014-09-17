@@ -11,25 +11,22 @@ namespace empirical {
 typedef Eigen::Matrix<cScalar, Eigen::Dynamic, Eigen::Dynamic> Mesh2D;
 
 class Basis2D {
- protected:
-
-  Basis2D();
 
  public:
 
   virtual ~Basis2D() = 0;
 
-  virtual int size() const;
+  virtual int size() const = 0;
 
-  virtual cScalar basis(const Scalar k, const cScalar z, const cScalar x) const;
+  virtual cScalar basis(const Scalar k, const cScalar z, const cScalar x) const = 0;
   virtual cScalar basisNormalDerivative(const Scalar k, const cScalar z,
-                                        const cScalar x) const;
+                                        const cScalar x) const = 0;
 
-  virtual Mesh1D basis(const Scalar k, const cScalar z) const;
-  virtual Mesh1D basisNormalDerivative(const Scalar k, const cScalar z) const;
+  virtual Mesh1D basis(const Scalar k, const cScalar z) const = 0;
+  virtual Mesh1D basisNormalDerivative(const Scalar k, const cScalar z) const = 0;
 
-  virtual Mesh2D basis(const Scalar k, const Mesh1D& z) const;
-  virtual Mesh2D basisNormalDerivative(const Scalar k, const Mesh1D& z) const;
+  virtual Mesh2D basis(const Scalar k, const Mesh1D& z) const = 0;
+  virtual Mesh2D basisNormalDerivative(const Scalar k, const Mesh1D& z) const = 0;
 
 };
 
