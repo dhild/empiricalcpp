@@ -14,7 +14,7 @@ class Basis2D {
 
  public:
 
-  virtual ~Basis2D() = 0;
+  virtual ~Basis2D();
 
   virtual int size() const = 0;
 

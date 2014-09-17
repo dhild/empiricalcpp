@@ -29,6 +29,8 @@ cScalar mfsBasisNormalDerivative(const Scalar k, const cScalar dist) {
 
 }
 
+Basis2D::~Basis2D() {}
+
 MFSBasis2D::MFSBasis2D(const Mesh1D& points)
     : charge_points(points) {}
 
