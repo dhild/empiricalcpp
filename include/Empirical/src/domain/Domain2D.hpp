@@ -56,17 +56,21 @@ class Domain2D {
  protected:
   std::vector<const DomainSegment2D*> segments;
   std::vector<const Basis2D*> bases;
-  bool is_exterior;
+  const bool is_exterior;
   Scalar refractive_index;
 
  public:
 
-  Domain2D();
+  Domain2D(const bool exterior = false, const Scalar refractive_index = 1);
 
   virtual ~Domain2D();
 
   bool isExterior() const {
     return is_exterior;
+  }
+
+  void setRefractiveIndex(const Scalar refractive_index) {
+    this->refractive_index = refractive_index;
   }
 
   Scalar getRefractiveIndex() const {

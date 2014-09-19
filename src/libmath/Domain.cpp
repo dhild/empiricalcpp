@@ -4,7 +4,8 @@
 using namespace Eigen;
 using namespace empirical;
 
-Domain2D::Domain2D() {
+Domain2D::Domain2D(const bool exterior, const Scalar n)
+    : is_exterior(exterior), refractive_index(n) {
 }
 
 Domain2D::~Domain2D() {
