@@ -71,6 +71,10 @@ BoundaryValueProblem2D::~BoundaryValueProblem2D() {
   delete solution;
 }
 
+const void BoundaryValueProblem2D::addDomain(Domain2D* domain) {
+  domains.push_back(domain);
+}
+
 const Solution2D& BoundaryValueProblem2D::solve() {
   
 }

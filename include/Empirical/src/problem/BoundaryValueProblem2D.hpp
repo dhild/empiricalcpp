@@ -38,6 +38,8 @@ class BoundaryValueProblem2D {
 
   virtual ~BoundaryValueProblem2D();
 
+  virtual void addDomain(Domain2D* domain);
+
   virtual const Solution2D& solve();
 
   virtual Scalar conditionNumber() const;
