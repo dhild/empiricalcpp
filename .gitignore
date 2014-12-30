@@ -1,14 +1,2 @@
 *~
-*CMakeCache.txt
-*CMakeFiles/
-*Makefile
-cmake_install.cmake
-bin/
-docs/
-lib/
-.project
-.cproject
-.checkstyle
-.settings/
-nbproject/
-*.kdev4
+build/
