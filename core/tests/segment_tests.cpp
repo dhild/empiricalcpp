@@ -1,3 +1,4 @@
+/*
 #include <cmath>
 #include <complex>
 #include <functional>
@@ -137,3 +138,4 @@ cScalar arcNorm(const Scalar t) {
 
 TEST_SEGMENT(ArcSegment2D, 10, arcPoint, arcDeriv, arcNorm,
              cScalar(0.5, -0.5), 1.5, -PI / 4, 3 * PI / 4, 10);
+*/

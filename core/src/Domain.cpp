@@ -1,8 +1,8 @@
-#include "Empirical/src/domain/Domain2D.hpp"
-#include "Empirical/src/basis/Basis2D.hpp"
+#include "Empirical/domain/Domain2D.hpp"
+#include "Empirical/basis/Basis2D.hpp"
 
 using namespace Eigen;
-using namespace empirical;
+using namespace Empirical;
 
 Domain2D::Domain2D(const bool exterior, const Scalar n)
     : is_exterior(exterior), refractive_index(n) {
@@ -19,8 +19,8 @@ void Domain2D::addBasis(const Basis2D* basis) {
   bases.push_back(basis);
 }
 
-int Domain2D::sizeSegments() const {
-  int size = 0;
+int64_t Domain2D::sizeSegments() const {
+  int64_t size = 0;
 
   auto it = segments.cbegin();
   auto end_it = segments.cend();
@@ -33,8 +33,8 @@ int Domain2D::sizeSegments() const {
   return size;
 }
 
-int Domain2D::sizeBases() const {
-  int size = 0;
+int64_t Domain2D::sizeBases() const {
+    int64_t size = 0;
 
   auto it = bases.cbegin();
   auto end_it = bases.cend();
@@ -53,7 +53,7 @@ Mesh1D Domain2D::getPoints() const {
   auto it = segments.cbegin();
   auto end_it = segments.cend();
 
-  int i = 0;
+  int64_t i = 0;
   while (it != end_it) {
     mesh.block(i, 0, (*it)->size(), 1) = (*it)->getPoints();
     
@@ -70,7 +70,7 @@ Mesh1D Domain2D::getPointDerivatives() const {
   auto it = segments.cbegin();
   auto end_it = segments.cend();
 
-  int i = 0;
+  int64_t i = 0;
   while (it != end_it) {
     mesh.block(i, 0, (*it)->size(), 1) = (*it)->getPointDerivatives();
     
@@ -87,7 +87,7 @@ Mesh1D Domain2D::getNormals() const {
   auto it = segments.cbegin();
   auto end_it = segments.cend();
 
-  int i = 0;
+  int64_t i = 0;
   while (it != end_it) {
     mesh.block(i, 0, (*it)->size(), 1) = (*it)->getNormals();
     
@@ -104,7 +104,7 @@ QuadratureVector Domain2D::getWeights() const {
   auto it = segments.cbegin();
   auto end_it = segments.cend();
 
-  int i = 0;
+  int64_t i = 0;
   while (it != end_it) {
     weights.block(i, 0, (*it)->size(), 1) = (*it)->getWeights();
     

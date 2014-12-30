@@ -1,7 +1,7 @@
 #include <functional>
-#include "Empirical/src/domain/BoundaryCondition2D.hpp"
+#include "Empirical/domain/BoundaryCondition2D.hpp"
 
-using namespace empirical;
+using namespace Empirical;
 
 BoundaryCondition2D::BoundaryCondition2D(
     const std::function<cScalar(const cScalar)> pointFunc,

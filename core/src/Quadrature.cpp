@@ -1,7 +1,7 @@
+#include "Empirical/Quadrature.hpp"
 #include <functional>
-#include <Empirical/Quadrature>
 
-using namespace empirical;
+using namespace Empirical;
 using namespace Eigen;
 using namespace std;
 

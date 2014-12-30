@@ -1,12 +1,12 @@
 #ifndef EMPIRICAL_DOMAIN_ARCSEGMENT2D_HPP_
 #define EMPIRICAL_DOMAIN_ARCSEGMENT2D_HPP_
 
+#include "Empirical/Constants.hpp"
+#include "Empirical/domain/Domain2D.hpp"
 #include <functional>
 #include <Eigen/Dense>
-#include "Empirical/src/domain/Domain2D.hpp"
-#include "Empirical/src/config.h"
 
-namespace empirical {
+namespace Empirical {
 
 class Quadrature;
 

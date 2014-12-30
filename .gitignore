@@ -1,2 +1,8 @@
 *~
 build/
+*\.idb
+*\.ilk
+*\.lib
+*\.pdb
+*\.exe
+core/tests/runner.cpp

@@ -1,11 +1,11 @@
-#include "Empirical/src/problem/BoundaryValueProblem2D.hpp"
+#include "Empirical/problem/BoundaryValueProblem2D.hpp"
 #include "Problem2D.hpp"
 #include <cstddef>
 #include <limits>
 #include <vector>
 #include <functional>
 
-using namespace empirical;
+using namespace Empirical;
 using namespace Eigen;
 
 BoundaryValueSolution2D::BoundaryValueSolution2D(const int N)
@@ -71,12 +71,12 @@ BoundaryValueProblem2D::~BoundaryValueProblem2D() {
   delete solution;
 }
 
-const void BoundaryValueProblem2D::addDomain(Domain2D* domain) {
+void BoundaryValueProblem2D::addDomain(Domain2D* domain) {
   domains.push_back(domain);
 }
 
 const Solution2D& BoundaryValueProblem2D::solve() {
-  
+    throw new std::runtime_error("Not implemented yet");
 }
 
 const Solution2D& BoundaryValueProblem2D::getSolution() const {

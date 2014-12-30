@@ -1,10 +1,10 @@
 #ifndef EMPIRICAL_BOUNDARY_CONDITION_2D_HPP_
 #define EMPIRICAL_BOUNDARY_CONDITION_2D_HPP_
 
+#include "Empirical/Constants.hpp"
 #include <functional>
-#include "Empirical/src/config.h"
 
-namespace empirical {
+namespace Empirical {
 
 class BoundaryCondition2D {
  protected:

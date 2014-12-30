@@ -3,8 +3,8 @@ project "corelib"
     kind "StaticLib"
     language "c++"
     
-    files {"src/**.cpp", "include/**.hpp"}
-    includedirs {"../thirdparty/include"}
+    files {"src/**.cpp", "src/**.hpp", "include/**.hpp"}
+    includedirs {"include", "../thirdparty/include"}
     
 		configuration "Debug"
 			defines {"DEBUG", "_DEBUG"}
@@ -14,6 +14,8 @@ project "corelib"
 			defines {"RELEASE", "NDEBUG"}
 			flags {"OptimizeSpeed", "NoFramePointer", "ExtraWarnings", "NoEditAndContinue"}
 
+os.execute("cxxtestgen --error-printer -o tests/runner.cpp tests/**.hpp")
+
 project "coretest"
     kind "ConsoleApp"
     language "c++"
@@ -21,5 +23,13 @@ project "coretest"
     links "corelib"
     
     files {"tests/**.cpp", "tests/**.hpp"}
-    includedirs {"../thirdparty/include"}
+    includedirs {"include", "../thirdparty/include"}
+    
+		configuration "Debug"
+			defines {"DEBUG", "_DEBUG"}
+			flags {"Symbols", "ExtraWarnings"}
+		
+		configuration "Release"
+			defines {"RELEASE", "NDEBUG"}
+			flags {"OptimizeSpeed", "NoFramePointer", "ExtraWarnings", "NoEditAndContinue"}
     

@@ -1,11 +1,11 @@
-#include "Empirical/src/domain/Domain2D.hpp"
-#include "Empirical/src/domain/ArcSegment2D.hpp"
-#include "Empirical/src/domain/RadialSegment2D.hpp"
-#include "Empirical/src/domain/ComplexFunctionSegment2D.hpp"
-#include "Empirical/src/quadrature/Quadrature.hpp"
+#include "Empirical/domain/Domain2D.hpp"
+#include "Empirical/domain/ArcSegment2D.hpp"
+#include "Empirical/domain/RadialSegment2D.hpp"
+#include "Empirical/domain/ComplexFunctionSegment2D.hpp"
+#include "Empirical/quadrature/Quadrature.hpp"
 
 using namespace Eigen;
-using namespace empirical;
+using namespace Empirical;
 
 DomainSegment2D::DomainSegment2D(Quadrature* quadrature,
                                  const std::function<cScalar(Scalar)>& z,
@@ -50,7 +50,7 @@ const Mesh1D& DomainSegment2D::getNormals() const {
   return normals;
 }
 
-int DomainSegment2D::size() const {
+int64_t DomainSegment2D::size() const {
   return base_quadrature->size();
 }
 

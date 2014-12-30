@@ -3,9 +3,9 @@
 
 #include <vector>
 #include <functional>
-#include "Empirical/src/problem/BoundaryValueProblem2D.hpp"
+#include "Empirical/problem/BoundaryValueProblem2D.hpp"
 
-namespace empirical {
+namespace Empirical {
 
 class BoundaryValueSolution2D : public Solution2D {
  protected:

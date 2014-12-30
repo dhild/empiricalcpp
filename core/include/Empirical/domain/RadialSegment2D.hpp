@@ -3,10 +3,10 @@
 
 #include <functional>
 #include <Eigen/Dense>
-#include "Empirical/src/domain/Domain2D.hpp"
-#include "Empirical/src/config.h"
+#include "Empirical/domain/Domain2D.hpp"
+#include "Empirical/Constants.hpp"
 
-namespace empirical {
+namespace Empirical {
 
 class Quadrature;
 

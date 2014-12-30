@@ -1,12 +1,12 @@
-#include "Empirical/src/basis/MFSBasis2D.hpp"
+#include "Empirical/basis/MFSBasis2D.hpp"
 #include <boost/math/special_functions/bessel.hpp>
 #include <functional>
 
 using namespace Eigen;
 using namespace boost::math;
-using namespace empirical;
+using namespace Empirical;
 
-namespace empirical {
+namespace Empirical {
 
 /** Evaluates the Hankel function. */
 cScalar hankel(const Scalar v, const Scalar x) {
@@ -36,7 +36,7 @@ MFSBasis2D::MFSBasis2D(const Mesh1D& points)
 
 MFSBasis2D::~MFSBasis2D() {}
 
-int MFSBasis2D::size() const {
+int64_t MFSBasis2D::size() const {
   return charge_points.rows();
 }
 
@@ -48,7 +48,7 @@ cScalar MFSBasis2D::basisNormalDerivative(const Scalar k, const cScalar z,
                                           const cScalar x) const {
   return mfsBasisNormalDerivative(k, z - x);
 }
-
+/*
 Mesh1D MFSBasis2D::basis(const Scalar k, const cScalar z) const {
   Mesh1D dist = Mesh1D::Constant(charge_points.rows(), 1, z) - charge_points;
   
@@ -64,17 +64,17 @@ Mesh1D MFSBasis2D::basisNormalDerivative(const Scalar k, const cScalar z) const 
 }
 
 Mesh2D MFSBasis2D::basis(const Scalar k, const Mesh1D& z) const {
-  const int M = z.rows();
-  const int N = charge_points.rows();
+    const int64_t M = z.rows();
+    const int64_t N = charge_points.rows();
   Mesh2D dist = charge_points.transpose().replicate(M, 1) - z.replicate(1, N);
   auto func = std::bind(mfsBasis, k, std::placeholders::_1);
   return dist.unaryExpr(func);
 }
 
 Mesh2D MFSBasis2D::basisNormalDerivative(const Scalar k, const Mesh1D& z) const {
-  const int M = z.rows();
-  const int N = charge_points.rows();
+    const int64_t M = z.rows();
+    const int64_t N = charge_points.rows();
   Mesh2D dist = charge_points.transpose().replicate(M, 1) - z.replicate(1, N);
   auto func = std::bind(mfsBasisNormalDerivative, k, std::placeholders::_1);
   return dist.unaryExpr(func);
-}
+}*/

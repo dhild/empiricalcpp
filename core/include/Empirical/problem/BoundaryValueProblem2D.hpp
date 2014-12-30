@@ -2,11 +2,11 @@
 #define	EMPIRICAL_DOMAIN_BVP_HPP_
 
 #include <vector>
-#include "Empirical/src/config.h"
-#include "Empirical/src/domain/Domain2D.hpp"
-#include "Empirical/src/basis/Basis2D.hpp"
+#include "Empirical/Constants.hpp"
+#include "Empirical/domain/Domain2D.hpp"
+#include "Empirical/basis/Basis2D.hpp"
 
-namespace empirical {
+namespace Empirical {
 
 class Solution2D {
  protected:

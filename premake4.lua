@@ -1,6 +1,7 @@
 
 solution "EmpiricalCpp"
     location "build"
+    platforms { "x64" }
     configurations {"Debug", "Release"}
     
     configuration "windows"

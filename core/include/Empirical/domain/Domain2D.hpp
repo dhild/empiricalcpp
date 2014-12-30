@@ -4,11 +4,11 @@
 #include <vector>
 #include <functional>
 #include <Eigen/Dense>
-#include "Empirical/src/config.h"
-#include "Empirical/src/quadrature/Quadrature.hpp"
-#include "Empirical/src/domain/BoundaryCondition2D.hpp"
+#include "Empirical/Constants.hpp"
+#include "Empirical/quadrature/Quadrature.hpp"
+#include "Empirical/domain/BoundaryCondition2D.hpp"
 
-namespace empirical {
+namespace Empirical {
 
 typedef Eigen::Matrix<cScalar, Eigen::Dynamic, 1> Mesh1D;
 
@@ -41,7 +41,7 @@ class DomainSegment2D {
   virtual const Mesh1D& getPointDerivatives() const;
   virtual const Mesh1D& getNormals() const;
 
-  virtual int size() const;
+  virtual int64_t size() const;
   virtual const QuadratureVector& getWeights() const;
   virtual const QuadratureVector& getT() const;
 
@@ -81,8 +81,8 @@ class Domain2D {
 
   void addBasis(const Basis2D* basis);
 
-  int sizeSegments() const;
-  int sizeBases() const;
+  int64_t sizeSegments() const;
+  int64_t sizeBases() const;
 
   Mesh1D getPoints() const;
   Mesh1D getPointDerivatives() const;

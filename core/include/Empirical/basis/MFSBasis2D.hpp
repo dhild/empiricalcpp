@@ -1,11 +1,11 @@
 #ifndef EMPIRICAL_BASIS_MFSBASIS_HPP_
 #define EMPIRICAL_BASIS_MFSBASIS_HPP_
 
+#include "Empirical/Constants.hpp"
+#include "Empirical/basis/Basis2D.hpp"
 #include <Eigen/Dense>
-#include "Empirical/src/config.h"
-#include "Empirical/src/basis/Basis2D.hpp"
 
-namespace empirical {
+namespace Empirical {
 
 cScalar hankel(const Scalar v, const Scalar x);
 cScalar mfsBasis(const Scalar k, const cScalar dist);
@@ -22,7 +22,7 @@ class MFSBasis2D : public Basis2D {
   
   virtual ~MFSBasis2D();
 
-  virtual int size() const;
+  virtual int64_t size() const;
 
   virtual cScalar basis(const Scalar k, const cScalar z, const cScalar x) const;
   virtual cScalar basisNormalDerivative(const Scalar k, const cScalar z,

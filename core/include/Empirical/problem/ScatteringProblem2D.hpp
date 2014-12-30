@@ -1,7 +1,7 @@
 #ifndef SCATTERING_HPP_
 #define SCATTERING_HPP_
 
-#include "Empirical/src/problem/Problem.hpp"
+#include "Empirical/Problem.hpp"
 
 namespace empirical {
 
