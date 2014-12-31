@@ -11,22 +11,22 @@ namespace Empirical {
 class Quadrature;
 
 class ArcSegment2D : public DomainSegment2D {
- private:
+private:
 
-  const cScalar center;
-  const Scalar radius;
-  const Scalar t_scale;
-  const Scalar t_offset;
+    const cScalar center;
+    const Scalar radius;
+    const Scalar t_scale;
+    const Scalar t_offset;
 
-  cScalar pointsFunc(const Scalar t) const;
-  cScalar pointDerivativesFunc(const Scalar t) const;
+    cScalar pointsFunc(const Scalar t) const;
+    cScalar pointDerivativesFunc(const Scalar t) const;
 
- public:
+public:
 
-  ArcSegment2D(const cScalar center, const Scalar R, const Scalar t0,
-               const Scalar t1, const int M);
+    ArcSegment2D(const cScalar center, const Scalar R, const Scalar t0,
+                 const Scalar t1, const int M);
 
-  virtual ~ArcSegment2D();
+    virtual ~ArcSegment2D();
 };
 
 }

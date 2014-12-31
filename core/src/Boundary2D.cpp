@@ -11,23 +11,23 @@ BoundaryCondition2D::BoundaryCondition2D(
 BoundaryCondition2D::~BoundaryCondition2D() {}
 
 bool BoundaryCondition2D::requiresPoint() const {
-  return true;
+    return true;
 }
 
 bool BoundaryCondition2D::requiresNormal() const {
-  return true;
+    return true;
 }
 
 cScalar BoundaryCondition2D::boundary(const cScalar x) const {
-  return point(x);
+    return point(x);
 }
 
 cScalar BoundaryCondition2D::boundaryNormal(const cScalar x) const {
-  return normal(x);
+    return normal(x);
 }
 
 cScalar zeroFunction(const cScalar) {
-  return 0;
+    return 0;
 }
 
 DirichletBoundary2D::DirichletBoundary2D(
@@ -37,11 +37,11 @@ DirichletBoundary2D::DirichletBoundary2D(
 DirichletBoundary2D::~DirichletBoundary2D() {}
 
 bool DirichletBoundary2D::requiresPoint() const {
-  return true;
+    return true;
 }
 
 bool DirichletBoundary2D::requiresNormal() const {
-  return false;
+    return false;
 }
 
 NeumannBoundary2D::NeumannBoundary2D(
@@ -51,9 +51,9 @@ NeumannBoundary2D::NeumannBoundary2D(
 NeumannBoundary2D::~NeumannBoundary2D() {}
 
 bool NeumannBoundary2D::requiresPoint() const {
-  return false;
+    return false;
 }
 
 bool NeumannBoundary2D::requiresNormal() const {
-  return true;
+    return true;
 }

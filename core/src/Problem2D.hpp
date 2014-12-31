@@ -8,20 +8,20 @@
 namespace Empirical {
 
 class BoundaryValueSolution2D : public Solution2D {
- protected:
-  std::vector<std::function<cScalar(const cScalar)>> components;
+protected:
+    std::vector<std::function<cScalar(const cScalar)>> components;
 
- public:
-  BoundaryValueSolution2D(const int N);
+public:
+    BoundaryValueSolution2D(const int N);
 
-  virtual ~BoundaryValueSolution2D();
+    virtual ~BoundaryValueSolution2D();
 
-  virtual void addBasis(const std::function<cScalar(const cScalar)>& basis,
-                        const cScalar coefficient);
+    virtual void addBasis(const std::function<cScalar(const cScalar)>& basis,
+                          const cScalar coefficient);
 
-  virtual cScalar operator()(const cScalar point) const;
-  virtual Mesh1D operator()(const Mesh1D& points) const;
-  virtual Mesh2D operator()(const Mesh2D& points) const;
+    virtual cScalar operator()(const cScalar point) const;
+    virtual Mesh1D operator()(const Mesh1D& points) const;
+    virtual Mesh2D operator()(const Mesh2D& points) const;
 };
 
 }

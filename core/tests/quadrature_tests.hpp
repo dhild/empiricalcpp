@@ -17,33 +17,33 @@ Scalar sinusoid(Scalar x) {
 
 Scalar function_integral(Scalar x) {
     return (-(1.0 / 30.0) * x * cos(30 * x) +
-        (1.0 / 5.0) * sin(5 * x) +
-        (1.0 / 900.0) * sin(30 * x));
+            (1.0 / 5.0) * sin(5 * x) +
+            (1.0 / 900.0) * sin(30 * x));
 }
 
 const Scalar sinusoid_integration_value = function_integral(1) - function_integral(-1);
 
 class QuadratureTests : public CxxTest::TestSuite {
 private:
-void test_size(const Quadrature& q, const int N, const Scalar eps) {
-  TS_ASSERT_EQUALS(N, q.size());
+    void test_size(const Quadrature& q, const int N, const Scalar eps) {
+        TS_ASSERT_EQUALS(N, q.size());
 
-  Array<Scalar, Dynamic, 1> x = q.getPoints();
-  Array<Scalar, Dynamic, 1> w = q.getWeights();
+        Array<Scalar, Dynamic, 1> x = q.getPoints();
+        Array<Scalar, Dynamic, 1> w = q.getWeights();
 
-  TS_ASSERT(x.minCoeff() >= -1);
-  TS_ASSERT(x.maxCoeff() <= 1);
+        TS_ASSERT(x.minCoeff() >= -1);
+        TS_ASSERT(x.maxCoeff() <= 1);
 
-  TS_ASSERT_DELTA(2.0, w.sum(), eps);
-}
+        TS_ASSERT_DELTA(2.0, w.sum(), eps);
+    }
 
-void test_integration(const Quadrature& q, Scalar (&func)(Scalar), const Scalar expected, const Scalar eps) {
-  Array<Scalar, Dynamic, 1> x = q.getPoints();
-  Array<Scalar, Dynamic, 1> evals = x.unaryExpr(ptr_fun(func));
-  Array<Scalar, Dynamic, 1> mult = evals * q.getWeights();
-  Scalar integrated = mult.sum();
-  TS_ASSERT_DELTA(expected, integrated, eps);
-}
+    void test_integration(const Quadrature& q, Scalar (&func)(Scalar), const Scalar expected, const Scalar eps) {
+        Array<Scalar, Dynamic, 1> x = q.getPoints();
+        Array<Scalar, Dynamic, 1> evals = x.unaryExpr(ptr_fun(func));
+        Array<Scalar, Dynamic, 1> mult = evals * q.getWeights();
+        Scalar integrated = mult.sum();
+        TS_ASSERT_DELTA(expected, integrated, eps);
+    }
 
 public:
 

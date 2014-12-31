@@ -11,22 +11,22 @@ namespace Empirical {
 class Quadrature;
 
 class RadialSegment2D : public DomainSegment2D {
- private:
+private:
 
-  const std::function<cScalar(const Scalar)> radius;
-  const std::function<cScalar(const Scalar)> radius_derivative;
+    const std::function<cScalar(const Scalar)> radius;
+    const std::function<cScalar(const Scalar)> radius_derivative;
 
-  cScalar pointsFunc(const Scalar t) const;
-  cScalar pointDerivativesFunc(const Scalar t) const;
+    cScalar pointsFunc(const Scalar t) const;
+    cScalar pointDerivativesFunc(const Scalar t) const;
 
- public:
+public:
 
-  RadialSegment2D(const std::function<cScalar(const Scalar)>& radius_func,
-                  const std::function<cScalar(const Scalar)>&
-                  radius_derivative_func,
-                  const int M);
+    RadialSegment2D(const std::function<cScalar(const Scalar)>& radius_func,
+                    const std::function<cScalar(const Scalar)>&
+                    radius_derivative_func,
+                    const int M);
 
-  virtual ~RadialSegment2D();
+    virtual ~RadialSegment2D();
 };
 
 }

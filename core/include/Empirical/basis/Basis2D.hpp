@@ -12,21 +12,21 @@ typedef Eigen::Matrix<cScalar, Eigen::Dynamic, Eigen::Dynamic> Mesh2D;
 
 class Basis2D {
 
- public:
+public:
 
-  virtual ~Basis2D();
+    virtual ~Basis2D();
 
-  virtual int64_t size() const = 0;
+    virtual int64_t size() const = 0;
 
-  virtual cScalar basis(const Scalar k, const cScalar z, const cScalar x) const = 0;
-  virtual cScalar basisNormalDerivative(const Scalar k, const cScalar z,
-                                        const cScalar x) const = 0;
+    virtual cScalar basis(const Scalar k, const cScalar z, const cScalar x) const = 0;
+    virtual cScalar basisNormalDerivative(const Scalar k, const cScalar z,
+                                          const cScalar x) const = 0;
 
-  virtual Mesh1D basis(const Scalar k, const cScalar z) const = 0;
-  virtual Mesh1D basisNormalDerivative(const Scalar k, const cScalar z) const = 0;
+    virtual Mesh1D basis(const Scalar k, const cScalar z) const = 0;
+    virtual Mesh1D basisNormalDerivative(const Scalar k, const cScalar z) const = 0;
 
-  virtual Mesh2D basis(const Scalar k, const Mesh1D& z) const = 0;
-  virtual Mesh2D basisNormalDerivative(const Scalar k, const Mesh1D& z) const = 0;
+    virtual Mesh2D basis(const Scalar k, const Mesh1D& z) const = 0;
+    virtual Mesh2D basisNormalDerivative(const Scalar k, const Mesh1D& z) const = 0;
 
 };
 
