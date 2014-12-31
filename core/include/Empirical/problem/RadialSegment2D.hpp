@@ -1,17 +1,15 @@
-#ifndef EMPIRICAL_DOMAIN_RADIALSEGMENT_HPP_
-#define EMPIRICAL_DOMAIN_RADIALSEGMENT_HPP_
+#ifndef EMPIRICAL_PROBLEM_RADIAL_SEGMENT_2D_HPP_
+#define EMPIRICAL_PROBLEM_RADIAL_SEGMENT_2D_HPP_
 
-#include <functional>
-#include <Eigen/Dense>
-#include "Empirical/domain/Domain2D.hpp"
-#include "Empirical/Constants.hpp"
+#include "Empirical/Boundary.hpp"
 
 namespace Empirical {
 
 class Quadrature;
 
-class RadialSegment2D : public DomainSegment2D {
+class RadialSegment2D : public BoundarySegment2D {
 private:
+    Quadrature* quadrature;
 
     const std::function<cScalar(const Scalar)> radius;
     const std::function<cScalar(const Scalar)> radius_derivative;
@@ -26,9 +24,11 @@ public:
                     radius_derivative_func,
                     const int M);
 
+    virtual void recalculate(const int64_t M);
+
     virtual ~RadialSegment2D();
 };
 
 }
 
-#endif /* RADIALSEGMENT_HPP_ */
+#endif /* EMPIRICAL_PROBLEM_RADIAL_SEGMENT_2D_HPP_ */

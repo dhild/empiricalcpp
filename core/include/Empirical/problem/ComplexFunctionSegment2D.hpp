@@ -1,18 +1,14 @@
-#ifndef EMPIRICAL_DOMAIN_FUNCTION_SEGMENT_2D_HPP_
-#define EMPIRICAL_DOMAIN_FUNCTION_SEGMENT_2D_HPP_
+#ifndef EMPIRICAL_PROBLEM_COMPLEX_FUNCTION_SEGMENT_2D_HPP_
+#define EMPIRICAL_PROBLEM_COMPLEX_FUNCTION_SEGMENT_2D_HPP_
 
-#include <functional>
-#include <Eigen/Dense>
-#include "Empirical/domain/Domain2D.hpp"
-#include "Empirical/Constants.hpp"
+#include "Empirical/Boundary.hpp"
 
 namespace Empirical {
 
-class Quadrature;
-
-class ComplexFunctionSegment2D : public DomainSegment2D {
+class ComplexFunctionSegment2D : public BoundarySegment2D {
 private:
 
+    Quadrature* quadrature;
     const cScalar offset;
     const cScalar scale;
     const std::function<cScalar(const cScalar)>& z_complex;
@@ -28,9 +24,11 @@ public:
         const std::function<cScalar(const cScalar)>& z_complex_derivative_func,
         const int M, const cScalar offset = 0, const cScalar scale = 1);
 
+    virtual void recalculate(const int64_t M);
+
     virtual ~ComplexFunctionSegment2D();
 };
 
 }
 
-#endif /* EMPIRICAL_DOMAIN_FUNCTION_SEGMENT_2D_HPP_ */
+#endif /* EMPIRICAL_PROBLEM_COMPLEX_FUNCTION_SEGMENT_2D_HPP_ */
