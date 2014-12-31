@@ -1,0 +1,56 @@
+#ifndef EMPIRICAL_PROBLEM_BOUNDARY_CONDITIONS_2D_HPP_
+#define EMPIRICAL_PROBLEM_BOUNDARY_CONDITIONS_2D_HPP_
+
+#include "Empirical/BoundaryCondition.hpp"
+
+namespace Empirical {
+
+class DirichletCondition2D : public BoundaryCondition2D {
+protected:
+    BoundaryFunc pointValues;
+public:
+    DirichletCondition2D(const BoundaryFunc pointValues);
+
+    virtual ~DirichletCondition2D();
+
+    virtual bool requiresPoint() const;
+    virtual bool requiresNormal() const;
+
+    virtual cScalar operator()(const cScalar x) const;
+    virtual cScalar normal(const cScalar x) const;
+};
+
+class NeumannCondition2D : public BoundaryCondition2D {
+protected:
+    BoundaryFunc normalValues;
+public:
+    NeumannCondition2D(const BoundaryFunc normalValues);
+
+    virtual ~NeumannCondition2D();
+
+    virtual bool requiresPoint() const;
+    virtual bool requiresNormal() const;
+
+    virtual cScalar operator()(const cScalar x) const;
+    virtual cScalar normal(const cScalar x) const;
+};
+
+class CauchyCondition2D : public BoundaryCondition2D {
+protected:
+    BoundaryFunc pointValues;
+    BoundaryFunc normalValues;
+public:
+    CauchyCondition2D(const BoundaryFunc pointValues, const BoundaryFunc normalValues);
+
+    virtual ~CauchyCondition2D();
+
+    virtual bool requiresPoint() const;
+    virtual bool requiresNormal() const;
+
+    virtual cScalar operator()(const cScalar x) const;
+    virtual cScalar normal(const cScalar x) const;
+};
+
+}
+
+#endif /* EMPIRICAL_PROBLEM_BOUNDARY_CONDITIONS_2D_HPP_ */

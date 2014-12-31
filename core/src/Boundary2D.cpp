@@ -1,59 +1,72 @@
-#include <functional>
-#include "Empirical/domain/BoundaryCondition2D.hpp"
+#include "Empirical/problem/BoundaryConditions2D.hpp"
 
 using namespace Empirical;
 
-BoundaryCondition2D::BoundaryCondition2D(
-    const std::function<cScalar(const cScalar)> pointFunc,
-    const std::function<cScalar(const cScalar)> normalFunc)
-    : point(pointFunc), normal(normalFunc) {}
+namespace Empirical {
+const BoundaryFunc zeroFunction = [](const cScalar) {
+    return 0;
+};
+}
 
-BoundaryCondition2D::~BoundaryCondition2D() {}
+CauchyCondition2D::CauchyCondition2D(const BoundaryFunc pointFunc, const BoundaryFunc normalFunc)
+    : pointValues(pointFunc), normalValues(normalFunc) {}
 
-bool BoundaryCondition2D::requiresPoint() const {
+CauchyCondition2D::~CauchyCondition2D() {}
+
+bool CauchyCondition2D::requiresPoint() const {
     return true;
 }
 
-bool BoundaryCondition2D::requiresNormal() const {
+bool CauchyCondition2D::requiresNormal() const {
     return true;
 }
 
-cScalar BoundaryCondition2D::boundary(const cScalar x) const {
-    return point(x);
+cScalar CauchyCondition2D::operator()(const cScalar x) const {
+    return pointValues(x);
 }
 
-cScalar BoundaryCondition2D::boundaryNormal(const cScalar x) const {
-    return normal(x);
+cScalar CauchyCondition2D::normal(const cScalar x) const {
+    return normalValues(x);
 }
 
-cScalar zeroFunction(const cScalar) {
+DirichletCondition2D::DirichletCondition2D(const BoundaryFunc pointFunc)
+    : pointValues(pointFunc) {}
+
+DirichletCondition2D::~DirichletCondition2D() {}
+
+bool DirichletCondition2D::requiresPoint() const {
+    return true;
+}
+
+bool DirichletCondition2D::requiresNormal() const {
+    return false;
+}
+
+cScalar DirichletCondition2D::operator()(const cScalar x) const {
+    return pointValues(x);
+}
+
+cScalar DirichletCondition2D::normal(const cScalar) const {
     return 0;
 }
 
-DirichletBoundary2D::DirichletBoundary2D(
-    const std::function<cScalar(const cScalar)> pointFunc)
-    : BoundaryCondition2D(pointFunc, zeroFunction) {}
+NeumannCondition2D::NeumannCondition2D(const BoundaryFunc normalFunc)
+    : normalValues(normalFunc) {}
 
-DirichletBoundary2D::~DirichletBoundary2D() {}
+NeumannCondition2D::~NeumannCondition2D() {}
 
-bool DirichletBoundary2D::requiresPoint() const {
-    return true;
-}
-
-bool DirichletBoundary2D::requiresNormal() const {
+bool NeumannCondition2D::requiresPoint() const {
     return false;
 }
 
-NeumannBoundary2D::NeumannBoundary2D(
-    const std::function<cScalar(const cScalar)> normalFunc)
-    : BoundaryCondition2D(zeroFunction, normalFunc) {}
-
-NeumannBoundary2D::~NeumannBoundary2D() {}
-
-bool NeumannBoundary2D::requiresPoint() const {
-    return false;
+bool NeumannCondition2D::requiresNormal() const {
+    return true;
 }
 
-bool NeumannBoundary2D::requiresNormal() const {
-    return true;
+cScalar NeumannCondition2D::operator()(const cScalar) const {
+    return 0;
+}
+
+cScalar NeumannCondition2D::normal(const cScalar x) const {
+    return normalValues(x);
 }
