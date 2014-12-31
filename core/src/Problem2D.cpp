@@ -38,8 +38,8 @@ cScalar BoundaryValueSolution2D::operator()(const cScalar point) const {
     return sum;
 }
 
-Mesh1D BoundaryValueSolution2D::operator()(const Mesh1D& points) const {
-    Mesh1D sum = Mesh1D::Zero(points.rows());
+cVector BoundaryValueSolution2D::operator()(const cVector& points) const {
+    cVector sum = cVector::Zero(points.rows());
 
     auto it = components.begin();
     auto end = components.end();
@@ -51,8 +51,8 @@ Mesh1D BoundaryValueSolution2D::operator()(const Mesh1D& points) const {
     return sum;
 }
 
-Mesh2D BoundaryValueSolution2D::operator()(const Mesh2D& points) const {
-    Mesh2D sum = Mesh2D::Zero(points.rows(), points.cols());
+cMatrix BoundaryValueSolution2D::operator()(const cMatrix& points) const {
+    cMatrix sum = cMatrix::Zero(points.rows(), points.cols());
 
     auto it = components.begin();
     auto end = components.end();

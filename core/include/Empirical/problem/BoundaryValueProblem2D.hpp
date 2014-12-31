@@ -1,5 +1,5 @@
 #ifndef EMPIRICAL_DOMAIN_BVP_HPP_
-#define	EMPIRICAL_DOMAIN_BVP_HPP_
+#define EMPIRICAL_DOMAIN_BVP_HPP_
 
 #include <vector>
 #include "Empirical/Constants.hpp"
@@ -16,17 +16,17 @@ public:
     virtual ~Solution2D();
 
     virtual cScalar operator()(const cScalar point) const;
-    virtual Mesh1D operator()(const Mesh1D& points) const;
-    virtual Mesh2D operator()(const Mesh2D& points) const;
+    virtual cVector operator()(const cVector& points) const;
+    virtual cMatrix operator()(const cMatrix& points) const;
 };
 
 class BoundaryValueProblem2D {
 protected:
     std::vector<Domain2D*> domains;
 
-    Mesh2D boundary_condition_matrix;
-    Mesh1D right_hand_side;
-    Mesh1D solution_coeficients;
+    cMatrix boundary_condition_matrix;
+    cVector right_hand_side;
+    cVector solution_coeficients;
     Solution2D* solution;
 
     bool boundary_condition_dirty;
@@ -50,5 +50,5 @@ public:
 
 }
 
-#endif	/* EMPIRICAL_DOMAIN_BVP_HPP_ */
+#endif  /* EMPIRICAL_DOMAIN_BVP_HPP_ */
 

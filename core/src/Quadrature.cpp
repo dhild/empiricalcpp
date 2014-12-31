@@ -1,32 +1,32 @@
 #include "Empirical/Quadrature.hpp"
+#include "Empirical/quadrature/LegendreGaussLobatto.hpp"
+#include "Empirical/quadrature/PeriodicTrapezoid.hpp"
+#include "Empirical/quadrature/Trapezoid.hpp"
 #include <functional>
 
 using namespace Empirical;
 using namespace Eigen;
 using namespace std;
 
-Quadrature::~Quadrature() {}
-
-void Quadrature::resize(const int N) {
-    points.resize(N, 1);
-    weights.resize(N, 1);
+namespace Empirical {
+Quadrature* createLGL(const int64_t N) {
+    return new LegendreGaussLobatto(N);
+}
+Quadrature* createTrapezoid(const int64_t N) {
+    return new TrapezoidQuadrature(N);
+}
+Quadrature* createPeriodicTrapezoid(const int64_t N) {
+    return new PeriodicTrapezoidQuadrature(N);
+}
 }
 
-TrapezoidQuadrature::TrapezoidQuadrature(const int N) : Quadrature(N) {
+TrapezoidQuadrature::TrapezoidQuadrature(const int64_t N) : Quadrature(N) {
     recalc(N);
 }
 
 TrapezoidQuadrature::~TrapezoidQuadrature() {}
 
-void TrapezoidQuadrature::resize(const int N) {
-    if (N == size()) {
-        return;
-    }
-    Quadrature::resize(N);
-    recalc(N);
-}
-
-void TrapezoidQuadrature::recalc(const int N) {
+void TrapezoidQuadrature::recalc(const int64_t N) {
     points.setLinSpaced(-1, 1);
 
     Scalar w = Scalar(1) / Scalar(N);
@@ -35,43 +35,27 @@ void TrapezoidQuadrature::recalc(const int N) {
     weights(N - 1, 0) = w;
 }
 
-PeriodicTrapezoidQuadrature::PeriodicTrapezoidQuadrature(const int N) : Quadrature(N) {
+PeriodicTrapezoidQuadrature::PeriodicTrapezoidQuadrature(const int64_t N) : Quadrature(N) {
     recalc(N);
 }
 
 PeriodicTrapezoidQuadrature::~PeriodicTrapezoidQuadrature() {}
 
-void PeriodicTrapezoidQuadrature::resize(const int N) {
-    if (N == size()) {
-        return;
-    }
-    Quadrature::resize(N);
-    recalc(N);
-}
-
-void PeriodicTrapezoidQuadrature::recalc(const int N) {
+void PeriodicTrapezoidQuadrature::recalc(const int64_t N) {
     Scalar shift = Scalar(1) / Scalar(N);
     points.setLinSpaced(-1 + shift, 1 - shift);
 
     weights.setConstant(Scalar(2) / Scalar(N));
 }
 
-LegendreGaussLobatto::LegendreGaussLobatto(const int N1) : Quadrature(N1) {
+LegendreGaussLobatto::LegendreGaussLobatto(const int64_t N1) : Quadrature(N1) {
     recalc(N1);
 }
 
 LegendreGaussLobatto::~LegendreGaussLobatto() {}
 
-void LegendreGaussLobatto::resize(const int N) {
-    if (N == size()) {
-        return;
-    }
-    Quadrature::resize(N);
-    recalc(N);
-}
-
-void LegendreGaussLobatto::recalc(const int N1) {
-    const int N = N1 - 1;
+void LegendreGaussLobatto::recalc(const int64_t N1) {
+    const int64_t N = N1 - 1;
 
     Array<Scalar, Dynamic, 1> x = Array<Scalar, Dynamic, 1>::LinSpaced(N1, 0, PI).cos();
     Array<Scalar, Dynamic, 1> xold = Array<Scalar, Dynamic, 1>::Constant(N1, 1, Scalar(2));
@@ -82,7 +66,7 @@ void LegendreGaussLobatto::recalc(const int N1) {
         P.col(0).setOnes();
         P.col(1) = x;
 
-        for (int k = 2; k < N1; k++) {
+        for (int64_t k = 2; k < N1; k++) {
             P.col(k) = (Scalar(2 * k - 1) * x * P.col(k - 1) - Scalar(k - 1) * P.col(k - 2)) / Scalar(k);
         }
         x = xold - (x * P.col(N) - P.col(N - 1)) / (Scalar(N1) * P.col(N));

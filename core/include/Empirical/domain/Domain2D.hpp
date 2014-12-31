@@ -5,12 +5,10 @@
 #include <functional>
 #include <Eigen/Dense>
 #include "Empirical/Constants.hpp"
-#include "Empirical/quadrature/Quadrature.hpp"
+#include "Empirical/Quadrature.hpp"
 #include "Empirical/domain/BoundaryCondition2D.hpp"
 
 namespace Empirical {
-
-typedef Eigen::Matrix<cScalar, Eigen::Dynamic, 1> Mesh1D;
 
 class DomainSegment2D {
 protected:
@@ -19,9 +17,9 @@ protected:
     const std::function<cScalar(const Scalar)> z;
     const std::function<cScalar(const Scalar)> z_prime;
 
-    Mesh1D points;
-    Mesh1D point_primes;
-    Mesh1D normals;
+    cVector points;
+    cVector point_primes;
+    cVector normals;
 
     const BoundaryCondition2D* boundary_condition;
 
@@ -37,13 +35,13 @@ public:
 
     void recalculate(const int M);
 
-    virtual const Mesh1D& getPoints() const;
-    virtual const Mesh1D& getPointDerivatives() const;
-    virtual const Mesh1D& getNormals() const;
+    virtual const cVector& getPoints() const;
+    virtual const cVector& getPointDerivatives() const;
+    virtual const cVector& getNormals() const;
 
     virtual int64_t size() const;
-    virtual const QuadratureVector& getWeights() const;
-    virtual const QuadratureVector& getT() const;
+    virtual const Vector& getWeights() const;
+    virtual const Vector& getT() const;
 
     virtual void setBoundaryCondition(const BoundaryCondition2D& condition);
     virtual const BoundaryCondition2D& getBoundaryCondition() const;
@@ -84,10 +82,10 @@ public:
     int64_t sizeSegments() const;
     int64_t sizeBases() const;
 
-    Mesh1D getPoints() const;
-    Mesh1D getPointDerivatives() const;
-    Mesh1D getNormals() const;
-    QuadratureVector getWeights() const;
+    cVector getPoints() const;
+    cVector getPointDerivatives() const;
+    cVector getNormals() const;
+    Vector getWeights() const;
     const std::vector<const Basis2D*>& getBases() const;
 
 };

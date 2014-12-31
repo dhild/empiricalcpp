@@ -15,10 +15,10 @@ cScalar mfsBasisNormalDerivative(const Scalar k, const cScalar dist);
 class MFSBasis2D : public Basis2D {
 protected:
 
-    Mesh1D charge_points;
+    cVector charge_points;
 
 public:
-    MFSBasis2D(const Mesh1D& points);
+    MFSBasis2D(const cVector& points);
 
     virtual ~MFSBasis2D();
 
@@ -28,11 +28,11 @@ public:
     virtual cScalar basisNormalDerivative(const Scalar k, const cScalar z,
                                           const cScalar x) const;
 
-    virtual Mesh1D basis(const Scalar k, const cScalar z) const;
-    virtual Mesh1D basisNormalDerivative(const Scalar k, const cScalar z) const;
+    virtual cVector basis(const Scalar k, const cScalar z) const;
+    virtual cVector basisNormalDerivative(const Scalar k, const cScalar z) const;
 
-    virtual Mesh2D basis(const Scalar k, const Mesh1D& z) const;
-    virtual Mesh2D basisNormalDerivative(const Scalar k, const Mesh1D& z) const;
+    virtual cMatrix basis(const Scalar k, const cVector& z) const;
+    virtual cMatrix basisNormalDerivative(const Scalar k, const cVector& z) const;
 
 };
 

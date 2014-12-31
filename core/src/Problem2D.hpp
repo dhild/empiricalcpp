@@ -1,9 +1,8 @@
 #ifndef EMPIRICAL_LIBMATH_PROBLEM2D_HPP_
 #define EMPIRICAL_LIBMATH_PROBLEM2D_HPP_
 
-#include <vector>
-#include <functional>
 #include "Empirical/problem/BoundaryValueProblem2D.hpp"
+#include <vector>
 
 namespace Empirical {
 
@@ -20,8 +19,8 @@ public:
                           const cScalar coefficient);
 
     virtual cScalar operator()(const cScalar point) const;
-    virtual Mesh1D operator()(const Mesh1D& points) const;
-    virtual Mesh2D operator()(const Mesh2D& points) const;
+    virtual cVector operator()(const cVector& points) const;
+    virtual cMatrix operator()(const cMatrix& points) const;
 };
 
 }

@@ -2,7 +2,7 @@
 #include "Empirical/domain/ArcSegment2D.hpp"
 #include "Empirical/domain/RadialSegment2D.hpp"
 #include "Empirical/domain/ComplexFunctionSegment2D.hpp"
-#include "Empirical/quadrature/Quadrature.hpp"
+#include "Empirical/Quadrature.hpp"
 
 using namespace Eigen;
 using namespace Empirical;
@@ -22,7 +22,7 @@ void DomainSegment2D::recalculate(const int M) {
     points.resize(M, 1);
     point_primes.resize(M, 1);
     normals.resize(M, 1);
-    const QuadratureVector t = base_quadrature->getPoints();
+    const Vector t = base_quadrature->getPoints();
 
     for (int i = 0; i < M; i++) {
         const Scalar ti = t(i, 0);
@@ -38,15 +38,15 @@ cScalar DomainSegment2D::normalFunc(const cScalar zp) const {
     return cScalar(imag(zp) / mag, -real(zp) / mag);
 }
 
-const Mesh1D& DomainSegment2D::getPoints() const {
+const cVector& DomainSegment2D::getPoints() const {
     return points;
 }
 
-const Mesh1D& DomainSegment2D::getPointDerivatives() const {
+const cVector& DomainSegment2D::getPointDerivatives() const {
     return point_primes;
 }
 
-const Mesh1D& DomainSegment2D::getNormals() const {
+const cVector& DomainSegment2D::getNormals() const {
     return normals;
 }
 
@@ -54,11 +54,11 @@ int64_t DomainSegment2D::size() const {
     return base_quadrature->size();
 }
 
-const QuadratureVector& DomainSegment2D::getWeights() const {
+const Vector& DomainSegment2D::getWeights() const {
     return base_quadrature->getWeights();
 }
 
-const QuadratureVector& DomainSegment2D::getT() const {
+const Vector& DomainSegment2D::getT() const {
     return base_quadrature->getPoints();
 }
 
@@ -71,7 +71,7 @@ const BoundaryCondition2D& DomainSegment2D::getBoundaryCondition() const {
 
 ArcSegment2D::ArcSegment2D(const cScalar center, const Scalar R,
                            const Scalar t0, const Scalar t1, const int M)
-    : DomainSegment2D(new LegendreGaussLobatto(M),
+    : DomainSegment2D(createLGL(M),
                       std::bind(&ArcSegment2D::pointsFunc, this,
                                 std::placeholders::_1),
                       std::bind(&ArcSegment2D::pointDerivativesFunc, this,
@@ -98,7 +98,7 @@ RadialSegment2D::RadialSegment2D(
     const std::function<cScalar(const Scalar)>& radius_func,
     const std::function<cScalar(const Scalar)>& radius_derivative_func,
     const int M)
-    : DomainSegment2D(new PeriodicTrapezoidQuadrature(M),
+    : DomainSegment2D(createPeriodicTrapezoid(M),
                       std::bind(&RadialSegment2D::pointsFunc, this,
                                 std::placeholders::_1),
                       std::bind(&RadialSegment2D::pointDerivativesFunc, this,
@@ -127,7 +127,7 @@ ComplexFunctionSegment2D::ComplexFunctionSegment2D(
     const std::function<cScalar(cScalar)>& z_complex_func,
     const std::function<cScalar(cScalar)>& z_complex_derivative_func,
     const int M, const cScalar offset_val, const cScalar scale_val)
-    : DomainSegment2D(new LegendreGaussLobatto(M),
+    : DomainSegment2D(createLGL(M),
                       std::bind(&ComplexFunctionSegment2D::pointsFunc, this,
                                 std::placeholders::_1),
                       std::bind(

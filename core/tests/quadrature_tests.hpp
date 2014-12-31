@@ -28,8 +28,8 @@ private:
     void test_size(const Quadrature& q, const int N, const Scalar eps) {
         TS_ASSERT_EQUALS(N, q.size());
 
-        Array<Scalar, Dynamic, 1> x = q.getPoints();
-        Array<Scalar, Dynamic, 1> w = q.getWeights();
+        Vector x = q.getPoints();
+        Vector w = q.getWeights();
 
         TS_ASSERT(x.minCoeff() >= -1);
         TS_ASSERT(x.maxCoeff() <= 1);
@@ -38,84 +38,58 @@ private:
     }
 
     void test_integration(const Quadrature& q, Scalar (&func)(Scalar), const Scalar expected, const Scalar eps) {
-        Array<Scalar, Dynamic, 1> x = q.getPoints();
-        Array<Scalar, Dynamic, 1> evals = x.unaryExpr(ptr_fun(func));
-        Array<Scalar, Dynamic, 1> mult = evals * q.getWeights();
+        Vector x = q.getPoints();
+        Vector evals = x.unaryExpr(ptr_fun(func));
+        Vector mult = evals.array() * q.getWeights().array();
         Scalar integrated = mult.sum();
         TS_ASSERT_DELTA(expected, integrated, eps);
+    }
+
+    void testCreation(QuadratureFunc qfunc, const Scalar tolerance) {
+        Quadrature* q = qfunc(250);
+        test_size(*q, 250, tolerance);
+        delete q;
+    }
+
+    void testResize(QuadratureFunc qfunc, const Scalar tolerance) {
+        Quadrature* q = qfunc(250);
+        q->resize(300);
+        test_size(*q, 300, tolerance);
+        delete q;
+    }
+
+    void testIntegration1(QuadratureFunc qfunc, const Scalar tolerance) {
+        Quadrature* q = qfunc(250);
+        test_integration(*q, one, 0, tolerance);
+        delete q;
+    }
+
+    void testIntegration2(QuadratureFunc qfunc, const Scalar tolerance) {
+        Quadrature* q = qfunc(250);
+        test_integration(*q, sinusoid, sinusoid_integration_value, tolerance);
+        delete q;
     }
 
 public:
 
     void testPeriodicTrapeziod() {
-        {
-            //Create
-            PeriodicTrapezoidQuadrature quadrature(250);
-            test_size(quadrature, 250, 1e-14);
-        }
-        {
-            //Resize
-            PeriodicTrapezoidQuadrature quadrature(250);
-            quadrature.resize(300);
-            test_size(quadrature, 300, 1e-14);
-        }
-        {
-            //Integration of 1
-            PeriodicTrapezoidQuadrature quadrature(250);
-            test_integration(quadrature, one, 0, 1e-14);
-        }
-        {
-            //Integration of sinusoid
-            PeriodicTrapezoidQuadrature quadrature(250);
-            test_integration(quadrature, sinusoid, sinusoid_integration_value, 1e-4);
-        }
+        testCreation(&createPeriodicTrapezoid, 1e-14);
+        testResize(&createPeriodicTrapezoid, 1e-14);
+        testIntegration1(&createPeriodicTrapezoid, 1e-14);
+        testIntegration2(&createPeriodicTrapezoid, 1e-4);
     }
 
     void testTrapezoidQuadrature() {
-        {
-            //Create
-            TrapezoidQuadrature quadrature(250);
-            test_size(quadrature, 250, 1e-2);
-        }
-        {
-            //Resize
-            TrapezoidQuadrature quadrature(250);
-            quadrature.resize(300);
-            test_size(quadrature, 300, 1e-2);
-        }
-        {
-            //Integration of 1
-            TrapezoidQuadrature quadrature(250);
-            test_integration(quadrature, one, 0, 1e-10);
-        }
-        {
-            //Integration of sinusoid
-            TrapezoidQuadrature quadrature(250);
-            test_integration(quadrature, sinusoid, sinusoid_integration_value, 1e-2);
-        }
+        testCreation(&createTrapezoid, 1e-2);
+        testResize(&createTrapezoid, 1e-2);
+        testIntegration1(&createTrapezoid, 1e-10);
+        testIntegration2(&createTrapezoid, 1e-2);
     }
 
     void testLegendreGaussLobatto() {
-        {
-            //Create
-            LegendreGaussLobatto quadrature(250);
-            test_size(quadrature, 250, 1e-15);
-        }
-        {
-            //Resize
-            LegendreGaussLobatto quadrature(250);
-            quadrature.resize(300);
-            test_size(quadrature, 300, 1e-15);
-        }
-        {
-            //Integration of 1
-            LegendreGaussLobatto quadrature(250);
-            test_integration(quadrature, one, 0, 1e-16);
-        }
-        {
-            //Integration of sinusoid
-            LegendreGaussLobatto quadrature(250);
-            test_integration(quadrature, sinusoid, sinusoid_integration_value, 1e-15);
-        }
+        testCreation(&createLGL, 1e-15);
+        testResize(&createLGL, 1e-15);
+        testIntegration1(&createLGL, 1e-16);
+        testIntegration2(&createLGL, 1e-15);
     }
 };

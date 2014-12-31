@@ -47,8 +47,8 @@ int64_t Domain2D::sizeBases() const {
     return size;
 }
 
-Mesh1D Domain2D::getPoints() const {
-    Mesh1D mesh(sizeSegments());
+cVector Domain2D::getPoints() const {
+    cVector mesh(sizeSegments());
 
     auto it = segments.cbegin();
     auto end_it = segments.cend();
@@ -64,8 +64,8 @@ Mesh1D Domain2D::getPoints() const {
     return mesh;
 }
 
-Mesh1D Domain2D::getPointDerivatives() const {
-    Mesh1D mesh(sizeSegments());
+cVector Domain2D::getPointDerivatives() const {
+    cVector mesh(sizeSegments());
 
     auto it = segments.cbegin();
     auto end_it = segments.cend();
@@ -81,8 +81,8 @@ Mesh1D Domain2D::getPointDerivatives() const {
     return mesh;
 }
 
-Mesh1D Domain2D::getNormals() const {
-    Mesh1D mesh(sizeSegments());
+cVector Domain2D::getNormals() const {
+    cVector mesh(sizeSegments());
 
     auto it = segments.cbegin();
     auto end_it = segments.cend();
@@ -98,8 +98,8 @@ Mesh1D Domain2D::getNormals() const {
     return mesh;
 }
 
-QuadratureVector Domain2D::getWeights() const {
-    QuadratureVector weights(sizeSegments());
+Vector Domain2D::getWeights() const {
+    Vector weights(sizeSegments());
 
     auto it = segments.cbegin();
     auto end_it = segments.cend();
