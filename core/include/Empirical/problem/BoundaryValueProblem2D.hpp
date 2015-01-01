@@ -1,10 +1,9 @@
 #ifndef EMPIRICAL_DOMAIN_BVP_HPP_
 #define EMPIRICAL_DOMAIN_BVP_HPP_
 
+#include "Empirical/Domain.hpp"
+#include "Empirical/Basis.hpp"
 #include <vector>
-#include "Empirical/Constants.hpp"
-#include "Empirical/domain/Domain2D.hpp"
-#include "Empirical/basis/Basis2D.hpp"
 
 namespace Empirical {
 

@@ -6,3 +6,6 @@ build/
 *\.pdb
 *\.exe
 core/tests/runner.cpp
+*\.orig
+core/coretest
+core/libcorelib.a

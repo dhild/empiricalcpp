@@ -7,4 +7,7 @@ solution "EmpiricalCpp"
     configuration "windows"
         defines {"WIN32"}
 
+    configuration "linux"
+        buildoptions {"--std=c++11"}
+
 dofile("core/projects.lua")

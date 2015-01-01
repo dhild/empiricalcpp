@@ -7,7 +7,7 @@ namespace Empirical {
 
 class Quadrature;
 
-class RadialSegment2D : public BoundarySegment2D {
+class RadialSegment2D : public FunctionalBoundary2D {
 private:
     Quadrature* quadrature;
 
@@ -24,9 +24,10 @@ public:
                     radius_derivative_func,
                     const int M);
 
-    virtual void recalculate(const int64_t M);
-
     virtual ~RadialSegment2D();
+
+    virtual const Vector& getWeights() const;
+    virtual const Vector& getQuadraturePoints() const;
 };
 
 }

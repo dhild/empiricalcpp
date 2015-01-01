@@ -1,120 +1,17 @@
-#include "Empirical/domain/Domain2D.hpp"
-#include "Empirical/basis/Basis2D.hpp"
+#include "Empirical/domain/InteriorDomain2D.hpp"
+#include "Empirical/domain/ExteriorDomain2D.hpp"
 
-using namespace Eigen;
 using namespace Empirical;
+using namespace Eigen;
 
-Domain2D::Domain2D(const bool exterior, const Scalar n)
-    : is_exterior(exterior), refractive_index(n) {
+InteriorDomain2D::~InteriorDomain2D() {}
+
+bool InteriorDomain2D::isExterior() const {
+    return false;
 }
 
-Domain2D::~Domain2D() {
-}
+ExteriorDomain2D::~ExteriorDomain2D() {}
 
-void Domain2D::addSegment(const DomainSegment2D* segment) {
-    segments.push_back(segment);
-}
-
-void Domain2D::addBasis(const Basis2D* basis) {
-    bases.push_back(basis);
-}
-
-int64_t Domain2D::sizeSegments() const {
-    int64_t size = 0;
-
-    auto it = segments.cbegin();
-    auto end_it = segments.cend();
-
-    while (it != end_it) {
-        size += (*it)->size();
-        it++;
-    }
-
-    return size;
-}
-
-int64_t Domain2D::sizeBases() const {
-    int64_t size = 0;
-
-    auto it = bases.cbegin();
-    auto end_it = bases.cend();
-
-    while (it != end_it) {
-        size += (*it)->size();
-        it++;
-    }
-
-    return size;
-}
-
-cVector Domain2D::getPoints() const {
-    cVector mesh(sizeSegments());
-
-    auto it = segments.cbegin();
-    auto end_it = segments.cend();
-
-    int64_t i = 0;
-    while (it != end_it) {
-        mesh.block(i, 0, (*it)->size(), 1) = (*it)->getPoints();
-
-        i += (*it)->size();
-        it++;
-    }
-
-    return mesh;
-}
-
-cVector Domain2D::getPointDerivatives() const {
-    cVector mesh(sizeSegments());
-
-    auto it = segments.cbegin();
-    auto end_it = segments.cend();
-
-    int64_t i = 0;
-    while (it != end_it) {
-        mesh.block(i, 0, (*it)->size(), 1) = (*it)->getPointDerivatives();
-
-        i += (*it)->size();
-        it++;
-    }
-
-    return mesh;
-}
-
-cVector Domain2D::getNormals() const {
-    cVector mesh(sizeSegments());
-
-    auto it = segments.cbegin();
-    auto end_it = segments.cend();
-
-    int64_t i = 0;
-    while (it != end_it) {
-        mesh.block(i, 0, (*it)->size(), 1) = (*it)->getNormals();
-
-        i += (*it)->size();
-        it++;
-    }
-
-    return mesh;
-}
-
-Vector Domain2D::getWeights() const {
-    Vector weights(sizeSegments());
-
-    auto it = segments.cbegin();
-    auto end_it = segments.cend();
-
-    int64_t i = 0;
-    while (it != end_it) {
-        weights.block(i, 0, (*it)->size(), 1) = (*it)->getWeights();
-
-        i += (*it)->size();
-        it++;
-    }
-
-    return weights;
-}
-
-const std::vector<const Basis2D*>& Domain2D::getBases() const {
-    return bases;
+bool ExteriorDomain2D::isExterior() const {
+    return true;
 }

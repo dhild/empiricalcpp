@@ -1,11 +1,11 @@
-#ifndef EMPIRICAL_PROBLEM_ARC_SEGMENT_2D_HPP_
-#define EMPIRICAL_PROBLEM_ARC_SEGMENT_2D_HPP_
+#ifndef EMPIRICAL_BOUNDARY_ARC_SEGMENT_2D_HPP_
+#define EMPIRICAL_BOUNDARY_ARC_SEGMENT_2D_HPP_
 
 #include "Empirical/Boundary.hpp"
 
 namespace Empirical {
 
-class ArcSegment2D : public BoundarySegment2D {
+class ArcSegment2D : public FunctionalBoundary2D {
 private:
     Quadrature* quadrature;
     const cScalar center;
@@ -21,9 +21,10 @@ public:
 
     virtual ~ArcSegment2D();
 
-    virtual void recalculate(const int64_t M);
+    virtual const Vector& getWeights() const;
+    virtual const Vector& getQuadraturePoints() const;
 };
 
 }
 
-#endif /* EMPIRICAL_PROBLEM_ARC_SEGMENT_2D_HPP_ */
+#endif /* EMPIRICAL_BOUNDARY_ARC_SEGMENT_2D_HPP_ */

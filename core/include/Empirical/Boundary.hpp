@@ -6,9 +6,38 @@
 
 namespace Empirical {
 
+class Boundary2D {
+public:
+    virtual ~Boundary2D() {}
+
+    virtual int64_t size() const = 0;
+    virtual const cVector& getPoints() const = 0;
+    virtual const cVector& getPointDerivatives() const = 0;
+    virtual const cVector& getNormals() const = 0;
+    virtual const Vector& getWeights() const = 0;
+
+    virtual void setBoundaryCondition(const BoundaryCondition2D& condition) = 0;
+    virtual const BoundaryCondition2D& getBoundaryCondition() const = 0;
+};
+
+class RefinableBoundary2D : public Boundary2D {
+public:
+    virtual ~RefinableBoundary2D() {}
+
+    virtual void resize(const int64_t M) = 0;
+};
+
+class CompositeBoundary2D : public Boundary2D {
+public:
+    virtual ~CompositeBoundary2D() {}
+    virtual void addSegment(const Boundary2D& boundary) = 0;
+
+    virtual void recalculate() = 0;
+};
+
 typedef std::function<cScalar(const Scalar)> QuadratureConversion;
 
-class BoundarySegment2D {
+class FunctionalBoundary2D : public RefinableBoundary2D {
 protected:
     const BoundaryCondition2D* boundaryCondition;
 
@@ -21,58 +50,34 @@ protected:
 
     cScalar normalFunc(const cScalar zp) const;
 
-    explicit BoundarySegment2D(const QuadratureConversion& Z, const QuadratureConversion& ZPrime)
+    explicit FunctionalBoundary2D(const QuadratureConversion& Z, const QuadratureConversion& ZPrime)
         : boundaryCondition(nullptr), z(Z), zPrime(ZPrime) {}
 public:
-    virtual ~BoundarySegment2D();
+    virtual ~FunctionalBoundary2D() {}
 
-    virtual void recalculate(const int64_t M);
-
-    const cVector& getPoints() const {
-        return points;
-    }
-    const cVector& getPointDerivatives() const {
-        return point_primes;
-    }
-    const cVector& getNormals() const {
-        return normals;
-    }
-
-    int64_t size() const {
-        return points.rows();
-    }
     virtual const Vector& getWeights() const = 0;
     virtual const Vector& getQuadraturePoints() const = 0;
 
-    void setBoundaryCondition(const BoundaryCondition2D& condition) {
-        boundaryCondition = &condition;
-    }
-    const BoundaryCondition2D& getBoundaryCondition() const {
-        return *boundaryCondition;
-    }
-};
+    virtual void resize(const int64_t M);
 
-BoundarySegment2D* createRadialSegment2D(const QuadratureConversion& radius_func,
-    const QuadratureConversion& radius_derivative_func, const int M);
-BoundarySegment2D* createArcSegment2D(const cScalar center, const Scalar R, const Scalar t0,
-                                      const Scalar t1, const int M);
-BoundarySegment2D* createFunctionalSegment2D(const BoundaryFunc& z_complex_func,
-        const BoundaryFunc& z_complex_derivative_func, const int M,
-        const cScalar offset = 0, const cScalar scale = 1);
-
-class Boundary2D {
-public:
-    virtual ~Boundary2D();
-    virtual void addSegment(const BoundarySegment2D& boundary);
-
-    virtual void recalculate();
-
-    virtual int64_t getPointCount();
+    virtual int64_t size() const;
     virtual const cVector& getPoints() const;
     virtual const cVector& getPointDerivatives() const;
     virtual const cVector& getNormals() const;
-    virtual const Vector& getWeights() const;
+
+    virtual void setBoundaryCondition(const BoundaryCondition2D& condition);
+    virtual const BoundaryCondition2D& getBoundaryCondition() const;
 };
+
+FunctionalBoundary2D* createRadialSegment2D(const QuadratureConversion& radius_func,
+        const QuadratureConversion& radius_derivative_func, const int M);
+FunctionalBoundary2D* createArcSegment2D(const cScalar center, const Scalar R, const Scalar t0,
+                                      const Scalar t1, const int M);
+FunctionalBoundary2D* createFunctionalSegment2D(const BoundaryFunc& z_complex_func,
+        const BoundaryFunc& z_complex_derivative_func, const int M,
+        const cScalar offset = 0, const cScalar scale = 1);
+
+CompositeBoundary2D* createCompositeBoundary2D(Boundary2D** children, int count);
 
 }
 
