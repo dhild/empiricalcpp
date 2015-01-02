@@ -20,7 +20,7 @@ public:
     ComplexFunctionSegment2D(
         const std::function<cScalar(const cScalar)>& z_complex_func,
         const std::function<cScalar(const cScalar)>& z_complex_derivative_func,
-        const int M, const cScalar offset = 0, const cScalar scale = 1);
+        const int M, const cScalar offset, const cScalar scale);
 
     virtual ~ComplexFunctionSegment2D();
 

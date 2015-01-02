@@ -5,6 +5,21 @@
 using namespace Eigen;
 using namespace Empirical;
 
+FunctionalBoundary2D* Empirical::createRadialSegment2D(const QuadratureConversion& radius_func,
+					    const QuadratureConversion& radius_derivative_func, const int M) {
+    return new RadialSegment2D(radius_func, radius_derivative_func, M);
+}
+FunctionalBoundary2D* Empirical::createArcSegment2D(const cScalar center, const Scalar R, const Scalar t0,
+					 const Scalar t1, const int M) {
+    return new ArcSegment2D(center, R, t0, t1, M);
+}
+FunctionalBoundary2D* Empirical::createFunctionalSegment2D(const BoundaryFunc& z_complex_func,
+						const BoundaryFunc& z_complex_derivative_func, const int M,
+						const cScalar offset, const cScalar scale) {
+    return new ComplexFunctionSegment2D(z_complex_func, z_complex_derivative_func, M, offset, scale);
+}
+
+
 void FunctionalBoundary2D::resize(const int64_t M) {
     points.resize(M, 1);
     point_primes.resize(M, 1);

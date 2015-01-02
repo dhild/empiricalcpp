@@ -14,5 +14,5 @@ project "coretest"
     
     files {"tests/**.cpp", "tests/**.hpp"}
     includedirs {"include", "../thirdparty/include"}
-    defines {"BOOST_TEST_DYN_LINK", "BOOST_TEST_MAIN"}
+    defines {"BOOST_TEST_DYN_LINK"}
 
