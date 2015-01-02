@@ -1,5 +1,6 @@
 #include <Empirical/Quadrature.hpp>
-#include <cxxtest/TestSuite.h>
+#include <boost/test/unit_test.hpp>
+#include <boost/test/floating_point_comparison.hpp>
 #include <cmath>
 #include <functional>
 
@@ -7,6 +8,7 @@ using namespace std;
 using namespace Eigen;
 using namespace Empirical;
 
+namespace {
 Scalar one(Scalar x) {
     return x;
 }
@@ -23,18 +25,16 @@ Scalar function_integral(Scalar x) {
 
 const Scalar sinusoid_integration_value = function_integral(1) - function_integral(-1);
 
-class QuadratureTests : public CxxTest::TestSuite {
-private:
     void test_size(const Quadrature& q, const int N, const Scalar eps) {
-        TS_ASSERT_EQUALS(N, q.size());
+        BOOST_CHECK_EQUAL(N, q.size());
 
         Vector x = q.getPoints();
         Vector w = q.getWeights();
 
-        TS_ASSERT(x.minCoeff() >= -1);
-        TS_ASSERT(x.maxCoeff() <= 1);
+        BOOST_CHECK(x.minCoeff() >= -1);
+        BOOST_CHECK(x.maxCoeff() <= 1);
 
-        TS_ASSERT_DELTA(2.0, w.sum(), eps);
+        BOOST_CHECK_CLOSE(2.0, w.sum(), eps);
     }
 
     void test_integration(const Quadrature& q, Scalar (&func)(Scalar), const Scalar expected, const Scalar eps) {
@@ -42,7 +42,7 @@ private:
         Vector evals = x.unaryExpr(ptr_fun(func));
         Vector mult = evals.array() * q.getWeights().array();
         Scalar integrated = mult.sum();
-        TS_ASSERT_DELTA(expected, integrated, eps);
+        BOOST_CHECK_CLOSE(expected, integrated, eps);
     }
 
     void testCreation(QuadratureFunc qfunc, const Scalar tolerance) {
@@ -70,26 +70,24 @@ private:
         delete q;
     }
 
-public:
-
-    void testPeriodicTrapeziod() {
+    BOOST_AUTO_TEST_CASE( PeriodicTrapezoid ) {
         testCreation(&createPeriodicTrapezoid, 1e-14);
         testResize(&createPeriodicTrapezoid, 1e-14);
         testIntegration1(&createPeriodicTrapezoid, 1e-14);
         testIntegration2(&createPeriodicTrapezoid, 1e-4);
     }
-
-    void testTrapezoidQuadrature() {
+    
+    BOOST_AUTO_TEST_CASE( TrapezoidQuadrature ) {
         testCreation(&createTrapezoid, 1e-2);
         testResize(&createTrapezoid, 1e-2);
         testIntegration1(&createTrapezoid, 1e-10);
         testIntegration2(&createTrapezoid, 1e-2);
     }
 
-    void testLegendreGaussLobatto() {
+    BOOST_AUTO_TEST_CASE( LegendreGaussLobatto ) {
         testCreation(&createLGL, 1e-15);
         testResize(&createLGL, 1e-15);
         testIntegration1(&createLGL, 1e-16);
         testIntegration2(&createLGL, 1e-15);
     }
-};
+}

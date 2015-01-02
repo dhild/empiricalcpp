@@ -9,5 +9,13 @@ solution "EmpiricalCpp"
 
     configuration "linux"
         buildoptions {"--std=c++11"}
+    
+    configuration "Debug"
+        defines {"DEBUG", "_DEBUG"}
+        flags {"Symbols", "ExtraWarnings"}
+		
+    configuration "Release"
+        defines {"RELEASE", "NDEBUG"}
+        flags {"OptimizeSpeed", "NoFramePointer", "ExtraWarnings", "NoEditAndContinue"}
 
 dofile("core/projects.lua")
