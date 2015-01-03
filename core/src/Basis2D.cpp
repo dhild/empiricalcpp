@@ -44,14 +44,18 @@ cScalar MFSBasis2D::normal(const Scalar k, const cScalar z, const cScalar x) con
 cVector MFSBasis2D::operator()(const Scalar k, const cScalar z) const {
     cVector dist = cVector::Constant(chargePoints->getPoints().rows(), 1, z) - chargePoints->getPoints();
 
-    auto func = std::bind(&MFSBasis2D::mfsBasis, k, std::placeholders::_1);
+    auto func = [k](const cScalar x) {
+        return MFSBasis2D::mfsBasis(k, x);
+    };
     return dist.unaryExpr(func);
 }
 
 cVector MFSBasis2D::normal(const Scalar k, const cScalar z) const {
     cVector dist = cVector::Constant(chargePoints->getPoints().rows(), 1, z) - chargePoints->getPoints();
 
-    auto func = std::bind(&MFSBasis2D::mfsBasisNormalDerivative, k, std::placeholders::_1);
+    auto func = [k](const cScalar x) {
+        return MFSBasis2D::mfsBasisNormalDerivative(k, x);
+    };
     return dist.unaryExpr(func);
 }
 
@@ -59,7 +63,9 @@ cMatrix MFSBasis2D::operator()(const Scalar k, const cVector& z) const {
     const int64_t M = z.rows();
     const int64_t N = chargePoints->getPoints().rows();
     cMatrix dist = chargePoints->getPoints().transpose().replicate(M, 1) - z.replicate(1, N);
-    auto func = std::bind(&MFSBasis2D::mfsBasis, k, std::placeholders::_1);
+    auto func = [k](const cScalar x) {
+        return MFSBasis2D::mfsBasis(k, x);
+    };
     return dist.unaryExpr(func);
 }
 
@@ -67,6 +73,8 @@ cMatrix MFSBasis2D::normal(const Scalar k, const cVector& z) const {
     const int64_t M = z.rows();
     const int64_t N = chargePoints->getPoints().rows();
     cMatrix dist = chargePoints->getPoints().transpose().replicate(M, 1) - z.replicate(1, N);
-    auto func = std::bind(&MFSBasis2D::mfsBasisNormalDerivative, k, std::placeholders::_1);
+    auto func = [k](const cScalar x) {
+        return MFSBasis2D::mfsBasisNormalDerivative(k, x);
+    };
     return dist.unaryExpr(func);
 }
