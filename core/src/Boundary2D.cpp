@@ -152,6 +152,11 @@ ComplexFunctionSegment2D::~ComplexFunctionSegment2D() {
     delete quadrature;
 }
 
+void ComplexFunctionSegment2D::resize(const int64_t M) {
+    quadrature->resize(M);
+    FunctionalBoundary2D::resize(M);
+}
+
 cScalar ComplexFunctionSegment2D::pointsFunc(const Scalar t) const {
     const cScalar argument = scale * (t + offset);
     return z_complex(argument);
