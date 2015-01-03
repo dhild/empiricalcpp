@@ -10,9 +10,12 @@ project "coretest"
     kind "ConsoleApp"
     language "c++"
     
-    links {"corelib", "boost_unit_test_framework"}
+    links "corelib"
     
     files {"tests/**.cpp", "tests/**.hpp"}
     includedirs {"include", "../thirdparty/include"}
-    defines {"BOOST_TEST_DYN_LINK"}
-
+    
+    defines "BOOST_TEST_DYN_LINK"
+    
+    configuration "linux"
+        links "boost_unit_test_framework"
