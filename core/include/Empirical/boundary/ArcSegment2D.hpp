@@ -8,16 +8,8 @@ namespace Empirical {
 class ArcSegment2D : public FunctionalBoundary2D {
 private:
     Quadrature* quadrature;
-    const cScalar center;
-    const Scalar radius;
-    const Scalar t_scale;
-    const Scalar t_offset;
-
-    cScalar pointsFunc(const Scalar t) const;
-    cScalar pointDerivativesFunc(const Scalar t) const;
 public:
-    ArcSegment2D(const cScalar center, const Scalar R, const Scalar t0,
-                 const Scalar t1, const int M);
+    ArcSegment2D(const QuadratureConversion& Z, const QuadratureConversion& ZPrime, const int64_t M);
 
     virtual ~ArcSegment2D();
 

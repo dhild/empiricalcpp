@@ -39,9 +39,10 @@ void testCreation(CreationFunction create, const int64_t N) {
 }
 
 void testRecalculation(CreationFunction create, const int64_t N) {
-    unique_ptr<FunctionalBoundary2D> boundary(create());
-    boundary->resize(N + 50);
-    checkSizes(*boundary, N + 50);
+    FunctionalBoundary2D* ptr = create();
+    ptr->resize(N + 50);
+    checkSizes(*ptr, N + 50);
+    delete ptr;
 }
 
 void testPoints(CreationFunction create, QuadratureConversion point) {

@@ -70,14 +70,12 @@ public:
 };
 
 FunctionalBoundary2D* createRadialSegment2D(const QuadratureConversion& radius_func,
-        const QuadratureConversion& radius_derivative_func, const int M);
+    const QuadratureConversion& radius_derivative_func, const int64_t M);
 FunctionalBoundary2D* createArcSegment2D(const cScalar center, const Scalar R, const Scalar t0,
-                                      const Scalar t1, const int M);
+    const Scalar t1, const int64_t M);
 FunctionalBoundary2D* createFunctionalSegment2D(const BoundaryFunc& z_complex_func,
-        const BoundaryFunc& z_complex_derivative_func, const int M,
+    const BoundaryFunc& z_complex_derivative_func, const int64_t M,
         const cScalar offset = 0, const cScalar scale = 1);
-
-CompositeBoundary2D* createCompositeBoundary2D(Boundary2D** children, int count);
 
 }
 

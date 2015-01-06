@@ -8,19 +8,9 @@ namespace Empirical {
 class ComplexFunctionSegment2D : public FunctionalBoundary2D {
 private:
     Quadrature* quadrature;
-    const cScalar offset;
-    const cScalar scale;
-    const std::function<cScalar(const cScalar)>& z_complex;
-    const std::function<cScalar(const cScalar)>& z_complex_derivative;
-
-    cScalar pointsFunc(const Scalar t) const;
-    cScalar pointDerivativesFunc(const Scalar t) const;
 
 public:
-    ComplexFunctionSegment2D(
-        const std::function<cScalar(const cScalar)>& z_complex_func,
-        const std::function<cScalar(const cScalar)>& z_complex_derivative_func,
-        const int M, const cScalar offset, const cScalar scale);
+    ComplexFunctionSegment2D(const QuadratureConversion& Z, const QuadratureConversion& ZPrime, const int64_t M);
 
     virtual ~ComplexFunctionSegment2D();
 
