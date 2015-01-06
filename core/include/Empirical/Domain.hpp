@@ -14,36 +14,36 @@ protected:
     Scalar indexOfRefraction;
 
     Domain2D(Boundary2D* bnd, Basis2D* bas, const bool normalDir, const Scalar index)
-	: boundary(bnd), basis(bas), domainInNormalDirection(normalDir), indexOfRefraction(index) {}
+        : boundary(bnd), basis(bas), domainInNormalDirection(normalDir), indexOfRefraction(index) {}
 public:
     virtual ~Domain2D() {}
 
     virtual const Boundary2D& getBoundary() const {
-	return *boundary;
+        return *boundary;
     }
 
     virtual Boundary2D& getBoundary() {
-	return *boundary;
+        return *boundary;
     }
 
     virtual const Basis2D& getBasis() const {
-	return *basis;
+        return *basis;
     }
 
     virtual Basis2D& getBasis() {
-	return *basis;
+        return *basis;
     }
 
     Scalar getIndexOfRefraction() const {
-	return indexOfRefraction;
+        return indexOfRefraction;
     }
 
     void setIndexOfRefraction(Scalar index) {
-	indexOfRefraction = index;
+        indexOfRefraction = index;
     }
 
     bool isDomainInNormalDirection() const {
-	return domainInNormalDirection;
+        return domainInNormalDirection;
     }
 
     /** Exterior domains cover the full infinite plane. */
@@ -54,11 +54,11 @@ public:
 };
 
 Domain2D* createInteriorDomain2D(Boundary2D* boundary, Basis2D* basis,
-				 bool domainInNormalDirection = false,
-				 Scalar indexOfRefraction = 1.0);
+                                 bool domainInNormalDirection = false,
+                                 Scalar indexOfRefraction = 1.0);
 Domain2D* createExteriorDomain2D(Boundary2D* boundary, Basis2D* basis,
-				 bool domainInNormalDirection = false,
-				 Scalar indexOfRefraction = 1.0);
+                                 bool domainInNormalDirection = false,
+                                 Scalar indexOfRefraction = 1.0);
 
 }
 

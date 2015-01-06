@@ -24,10 +24,10 @@ void checkClose(const Vector& t_vec,
                 const cVector& p_vec,
                 const std::function<cScalar(const Scalar t)> points) {
     for (int i = 0; i < t_vec.rows(); i++) {
-	cScalar expected = points(t_vec(i, 0));
-	cScalar actual = p_vec(i, 0);
+        cScalar expected = points(t_vec(i, 0));
+        cScalar actual = p_vec(i, 0);
         BOOST_CHECK_CLOSE(real(expected), real(actual), 10 * epsScalar);
-	BOOST_CHECK_CLOSE(imag(expected), imag(actual), 10 * epsScalar);
+        BOOST_CHECK_CLOSE(imag(expected), imag(actual), 10 * epsScalar);
     }
 }
 
@@ -61,33 +61,33 @@ void testNormals(CreationFunction create, QuadratureConversion norm) {
 }
 
 cScalar complexFunc(const cScalar t) {
-  Scalar val = (imag(t) / PI) - 1;
-  BOOST_CHECK(-1 <= val);
-  BOOST_CHECK(val <= 1);
-  BOOST_CHECK_CLOSE(0, real(t), epsScalar);
-  return exp(t);
+    Scalar val = (imag(t) / PI) - 1;
+    BOOST_CHECK(-1 <= val);
+    BOOST_CHECK(val <= 1);
+    BOOST_CHECK_CLOSE(0, real(t), epsScalar);
+    return exp(t);
 }
 
 cScalar complexDerivFunc(const cScalar t) {
-  Scalar val = (imag(t) / PI) - 1;
-  BOOST_CHECK(-1 <= val);
-  BOOST_CHECK(val <= 1);
-  BOOST_CHECK_CLOSE(0, real(t), epsScalar);
-  return cScalar(0, PI) * exp(t);
+    Scalar val = (imag(t) / PI) - 1;
+    BOOST_CHECK(-1 <= val);
+    BOOST_CHECK(val <= 1);
+    BOOST_CHECK_CLOSE(0, real(t), epsScalar);
+    return cScalar(0, PI) * exp(t);
 }
 
 cScalar cfPoint(const Scalar t) {
-  return exp(cScalar(0, PI * (t + 1)));
+    return exp(cScalar(0, PI * (t + 1)));
 }
 
 cScalar cfDeriv(const Scalar t) {
-  return cScalar(0, PI) * exp(cScalar(0, PI * (t + 1)));
+    return cScalar(0, PI) * exp(cScalar(0, PI * (t + 1)));
 }
 
 cScalar cfNorm(const Scalar t) {
-  cScalar d = cfDeriv(t);
-  Scalar mag = abs(d);
-  return cScalar(imag(d) / mag, -real(d) / mag);
+    cScalar d = cfDeriv(t);
+    Scalar mag = abs(d);
+    return cScalar(imag(d) / mag, -real(d) / mag);
 }
 
 BOOST_AUTO_TEST_CASE( ComplexFunctionSegment2DTests ) {
@@ -100,29 +100,29 @@ BOOST_AUTO_TEST_CASE( ComplexFunctionSegment2DTests ) {
 }
 
 cScalar radialFunc(const Scalar angle) {
-  BOOST_CHECK(-PI <= angle);
-  BOOST_CHECK(angle <= PI);
-  return 1;
+    BOOST_CHECK(-PI <= angle);
+    BOOST_CHECK(angle <= PI);
+    return 1;
 }
 
 cScalar radialDerivFunc(const Scalar angle) {
-  BOOST_CHECK(-PI <= angle);
-  BOOST_CHECK(angle <= PI);
-  return 0;
+    BOOST_CHECK(-PI <= angle);
+    BOOST_CHECK(angle <= PI);
+    return 0;
 }
 
 cScalar rPoint(const Scalar t) {
-  return exp(cScalar(0, PI * t));
+    return exp(cScalar(0, PI * t));
 }
 
 cScalar rDeriv(const Scalar t) {
-  return cScalar(0, PI) * exp(cScalar(0, PI * t));
+    return cScalar(0, PI) * exp(cScalar(0, PI * t));
 }
 
 cScalar rNorm(const Scalar t) {
-  cScalar d = rDeriv(t);
-  Scalar mag = abs(d);
-  return cScalar(imag(d) / mag, -real(d) / mag);
+    cScalar d = rDeriv(t);
+    Scalar mag = abs(d);
+    return cScalar(imag(d) / mag, -real(d) / mag);
 }
 
 BOOST_AUTO_TEST_CASE( RadialSegment2DTests ) {
@@ -135,19 +135,19 @@ BOOST_AUTO_TEST_CASE( RadialSegment2DTests ) {
 }
 
 cScalar arcPoint(const Scalar t) {
-  cScalar argument = cScalar(0, (t * PI / 2) + PI / 4);
-  return cScalar(0.5, -0.5) + 1.5 * exp(argument);
+    cScalar argument = cScalar(0, (t * PI / 2) + PI / 4);
+    return cScalar(0.5, -0.5) + 1.5 * exp(argument);
 }
 
 cScalar arcDeriv(const Scalar t) {
-  cScalar argument = cScalar(0, (t * PI / 2) + PI / 4);
-  return cScalar(0, PI / 2) * 1.5 * exp(argument);
+    cScalar argument = cScalar(0, (t * PI / 2) + PI / 4);
+    return cScalar(0, PI / 2) * 1.5 * exp(argument);
 }
 
 cScalar arcNorm(const Scalar t) {
-  cScalar d = arcDeriv(t);
-  Scalar mag = abs(d);
-  return cScalar(imag(d) / mag, -real(d) / mag);
+    cScalar d = arcDeriv(t);
+    Scalar mag = abs(d);
+    return cScalar(imag(d) / mag, -real(d) / mag);
 }
 
 BOOST_AUTO_TEST_CASE( ArcSegment2DTests ) {

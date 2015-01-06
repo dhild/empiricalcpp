@@ -8,7 +8,7 @@ namespace Empirical {
 class InteriorDomain2D : public Domain2D {
 public:
     InteriorDomain2D(Boundary2D* bnd, Basis2D* bas, const bool normalDir, const Scalar index)
-	: Domain2D(bnd, bas, normalDir, index) {}
+        : Domain2D(bnd, bas, normalDir, index) {}
     virtual ~InteriorDomain2D();
 
     virtual bool isExterior() const;
