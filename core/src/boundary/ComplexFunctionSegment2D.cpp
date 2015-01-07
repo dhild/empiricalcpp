@@ -20,7 +20,7 @@ FunctionalBoundary2D* Empirical::createFunctionalSegment2D(const BoundaryFunc& z
         const BoundaryFunc& z_complex_derivative_func, const int64_t M,
         const cScalar offset, const cScalar scale) {
     auto z = std::bind(&pointsFunc, z_complex_func, scale, offset, std::placeholders::_1);
-    auto zPrime = std::bind(&pointsFunc, z_complex_derivative_func, scale, offset, std::placeholders::_1);
+    auto zPrime = std::bind(&pointDerivativesFunc, z_complex_derivative_func, scale, offset, std::placeholders::_1);
     ComplexFunctionSegment2D* p = new ComplexFunctionSegment2D(z, zPrime, M);
     p->resize(M);
     return p;

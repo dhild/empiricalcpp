@@ -34,7 +34,7 @@ void test_size(const Quadrature& q, const int N, const Scalar eps) {
     BOOST_CHECK(x.minCoeff() >= -1);
     BOOST_CHECK(x.maxCoeff() <= 1);
 
-    BOOST_CHECK_CLOSE(2.0, w.sum(), eps);
+    BOOST_CHECK(abs(2.0 - w.sum()) <= eps);
 }
 
 void test_integration(const Quadrature& q, Scalar (&func)(Scalar), const Scalar expected, const Scalar eps) {
@@ -42,7 +42,7 @@ void test_integration(const Quadrature& q, Scalar (&func)(Scalar), const Scalar 
     Vector evals = x.unaryExpr(ptr_fun(func));
     Vector mult = evals.array() * q.getWeights().array();
     Scalar integrated = mult.sum();
-    BOOST_CHECK_CLOSE(expected, integrated, eps);
+    BOOST_CHECK(abs(expected - integrated) <= eps);
 }
 
 void testCreation(QuadratureFunc qfunc, const Scalar tolerance) {
