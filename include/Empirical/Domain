@@ -1,6 +1,0 @@
-#include <Empirical/Quadrature>
-#include "Empirical/src/domain/Domain2D.hpp"
-#include "Empirical/src/domain/ArcSegment2D.hpp"
-#include "Empirical/src/domain/RadialSegment2D.hpp"
-#include "Empirical/src/domain/ComplexFunctionSegment2D.hpp"
-
