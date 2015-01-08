@@ -35,6 +35,11 @@ ArcSegment2D::~ArcSegment2D() {
     delete quadrature;
 }
 
+void ArcSegment2D::resize(const int64_t M) {
+    quadrature->resize(M);
+    FunctionalBoundary2D::resize(M);
+}
+
 const Vector& ArcSegment2D::getWeights() const {
     return quadrature->getWeights();
 }

@@ -35,6 +35,11 @@ RadialSegment2D::~RadialSegment2D() {
     delete quadrature;
 }
 
+void RadialSegment2D::resize(const int64_t M) {
+    quadrature->resize(M);
+    FunctionalBoundary2D::resize(M);
+}
+
 const Vector& RadialSegment2D::getWeights() const {
     return quadrature->getWeights();
 }

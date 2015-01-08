@@ -18,6 +18,8 @@ public:
 
     virtual const Vector& getWeights() const;
     virtual const Vector& getQuadraturePoints() const;
+
+    virtual void resize(const int64_t M);
 };
 
 }
