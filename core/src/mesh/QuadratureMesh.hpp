@@ -1,7 +1,7 @@
-#ifndef EMPIRICAL_MESH_QUADRATURE_HPP_
-#define EMPIRICAL_MESH_QUADRATURE_HPP_
+#ifndef EMPIRICAL_SRC_MESH_QUADRATURE_MESH_HPP_
+#define EMPIRICAL_SRC_MESH_QUADRATURE_MESH_HPP_
 
-#include "Empirical/Mesh.hpp"
+#include <Empirical/Mesh.hpp>
 
 namespace Empirical {
 
@@ -17,4 +17,4 @@ public:
 
 }
 
-#endif /* EMPIRICAL_MESH_QUADRATURE_HPP_ */
+#endif /* EMPIRICAL_SRC_MESH_QUADRATURE_MESH_HPP_ */

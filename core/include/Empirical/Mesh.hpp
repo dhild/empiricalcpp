@@ -1,7 +1,7 @@
 #ifndef EMPIRICAL_MESH_HPP_
 #define EMPIRICAL_MESH_HPP_
 
-#include "Empirical/Quadrature.hpp"
+#include <Empirical/Quadrature.hpp>
 
 namespace Empirical {
 

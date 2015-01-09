@@ -1,5 +1,4 @@
-#include "Empirical/Mesh.hpp"
-#include "Empirical/mesh/Quadrature.hpp"
+#include "QuadratureMesh.hpp"
 
 using namespace Empirical;
 using namespace Eigen;
