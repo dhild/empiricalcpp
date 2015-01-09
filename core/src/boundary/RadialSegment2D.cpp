@@ -1,4 +1,4 @@
-#include "Empirical/boundary/RadialSegment2D.hpp"
+#include "RadialSegment2D.hpp"
 
 using namespace Eigen;
 using namespace Empirical;

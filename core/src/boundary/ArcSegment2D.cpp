@@ -1,4 +1,4 @@
-#include "Empirical/boundary/ArcSegment2D.hpp"
+#include "ArcSegment2D.hpp"
 
 using namespace Eigen;
 using namespace Empirical;

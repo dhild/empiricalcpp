@@ -1,7 +1,7 @@
 #ifndef EMPIRICAL_BASIS_HPP_
 #define EMPIRICAL_BASIS_HPP_
 
-#include "Empirical/Boundary.hpp"
+#include <Empirical/Boundary.hpp>
 
 namespace Empirical {
 

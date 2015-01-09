@@ -1,8 +1,8 @@
 #ifndef EMPIRICAL_BOUNDARY_HPP_
 #define EMPIRICAL_BOUNDARY_HPP_
 
-#include "Empirical/BoundaryCondition.hpp"
-#include "Empirical/Quadrature.hpp"
+#include <Empirical/BoundaryCondition.hpp>
+#include <Empirical/Quadrature.hpp>
 
 namespace Empirical {
 

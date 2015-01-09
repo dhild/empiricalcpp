@@ -1,4 +1,4 @@
-#include "Empirical/basis/MFSBasis2D.hpp"
+#include "MFSBasis2D.hpp"
 #include <boost/math/special_functions/bessel.hpp>
 #include <functional>
 

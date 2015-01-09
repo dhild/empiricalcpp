@@ -1,7 +1,7 @@
-#ifndef EMPIRICAL_PROBLEM_RADIAL_SEGMENT_2D_HPP_
-#define EMPIRICAL_PROBLEM_RADIAL_SEGMENT_2D_HPP_
+#ifndef EMPIRICAL_SRC_BOUNDARY_RADIAL_SEGMENT_2D_HPP_
+#define EMPIRICAL_SRC_BOUNDARY_RADIAL_SEGMENT_2D_HPP_
 
-#include "Empirical/Boundary.hpp"
+#include <Empirical/Boundary.hpp>
 
 namespace Empirical {
 
@@ -24,4 +24,4 @@ public:
 
 }
 
-#endif /* EMPIRICAL_PROBLEM_RADIAL_SEGMENT_2D_HPP_ */
+#endif /* EMPIRICAL_SRC_BOUNDARY_RADIAL_SEGMENT_2D_HPP_ */

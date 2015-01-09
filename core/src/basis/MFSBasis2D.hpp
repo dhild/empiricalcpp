@@ -1,7 +1,7 @@
-#ifndef EMPIRICAL_BASIS_MFS_BASIS_2D_HPP_
-#define EMPIRICAL_BASIS_MFS_BASIS_2D_HPP_
+#ifndef EMPIRICAL_SRC_BASIS_MFS_BASIS_2D_HPP_
+#define EMPIRICAL_SRC_BASIS_MFS_BASIS_2D_HPP_
 
-#include "Empirical/Basis.hpp"
+#include <Empirical/Basis.hpp>
 
 namespace Empirical {
 
@@ -36,4 +36,4 @@ public:
 
 }
 
-#endif /* EMPIRICAL_BASIS_MFS_BASIS_2D_HPP_ */
+#endif /* EMPIRICAL_SRC_BASIS_MFS_BASIS_2D_HPP_ */

@@ -3,7 +3,7 @@
 using namespace std;
 
 namespace Empirical {
-void checkSizes(const FunctionalBoundary2D& segment, const int N) {
+void checkSizes(const FunctionalBoundary2D& segment, const int64_t N) {
     BOOST_CHECK_EQUAL(N, segment.size());
     BOOST_CHECK_EQUAL(N, segment.getPoints().rows());
     BOOST_CHECK_EQUAL(N, segment.getPointDerivatives().rows());

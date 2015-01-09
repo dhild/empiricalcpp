@@ -1,4 +1,4 @@
-#include "Empirical/boundary/ComplexFunctionSegment2D.hpp"
+#include "ComplexFunctionSegment2D.hpp"
 
 using namespace Eigen;
 using namespace Empirical;

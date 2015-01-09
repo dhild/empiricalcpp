@@ -1,7 +1,7 @@
 #ifndef EMPIRICAL_BOUNDARY_COMPLEX_FUNCTION_SEGMENT_2D_HPP_
 #define EMPIRICAL_BOUNDARY_COMPLEX_FUNCTION_SEGMENT_2D_HPP_
 
-#include "Empirical/Boundary.hpp"
+#include <Empirical/Boundary.hpp>
 
 namespace Empirical {
 
