@@ -70,6 +70,8 @@ void testIntegration2(QuadratureFunc qfunc, const Scalar tolerance) {
     delete q;
 }
 
+BOOST_AUTO_TEST_SUITE(Quadratures)
+
 BOOST_AUTO_TEST_CASE( PeriodicTrapezoid ) {
     testCreation(&createPeriodicTrapezoid, 1e-14);
     testResize(&createPeriodicTrapezoid, 1e-14);
@@ -90,4 +92,6 @@ BOOST_AUTO_TEST_CASE( LegendreGaussLobatto ) {
     testIntegration1(&createLGL, 1e-16);
     testIntegration2(&createLGL, 1e-15);
 }
+
+BOOST_AUTO_TEST_SUITE_END()
 }

@@ -1,8 +1,8 @@
 #ifndef EMPIRICAL_QUADRATURE_HPP_
 #define EMPIRICAL_QUADRATURE_HPP_
 
-#include "Empirical/Constants.hpp"
-#include "Empirical/Matrices.hpp"
+#include <Empirical/Constants.hpp>
+#include <Empirical/Matrices.hpp>
 
 namespace Empirical {
 

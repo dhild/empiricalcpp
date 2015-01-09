@@ -1,7 +1,7 @@
-#include "Empirical/Quadrature.hpp"
-#include "Empirical/quadrature/LegendreGaussLobatto.hpp"
-#include "Empirical/quadrature/PeriodicTrapezoid.hpp"
-#include "Empirical/quadrature/Trapezoid.hpp"
+#include <Empirical/Quadrature.hpp>
+#include "LegendreGaussLobatto.hpp"
+#include "PeriodicTrapezoid.hpp"
+#include "Trapezoid.hpp"
 #include <functional>
 
 using namespace Empirical;

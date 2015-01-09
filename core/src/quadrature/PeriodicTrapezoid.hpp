@@ -1,7 +1,7 @@
 #ifndef EMPIRICAL_QUADRATURE_PERIODIC_TRAPEZOID_HPP_
 #define EMPIRICAL_QUADRATURE_PERIODIC_TRAPEZOID_HPP_
 
-#include "Empirical/Quadrature.hpp"
+#include <Empirical/Quadrature.hpp>
 
 namespace Empirical {
 

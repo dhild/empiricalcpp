@@ -1,6 +1,6 @@
-#include "Empirical/boundaryconditions/Cauchy2D.hpp"
-#include "Empirical/boundaryconditions/Dirichlet2D.hpp"
-#include "Empirical/boundaryconditions/Neumann2D.hpp"
+#include "Cauchy2D.hpp"
+#include "Dirichlet2D.hpp"
+#include "Neumann2D.hpp"
 
 using namespace Empirical;
 
@@ -8,6 +8,19 @@ namespace Empirical {
 const BoundaryFunc zeroFunction = [](const cScalar) {
     return 0;
 };
+
+BoundaryCondition2D* createDirichlet(const BoundaryFunc pointValues) {
+    return new DirichletCondition2D(pointValues);
+}
+
+BoundaryCondition2D* createNeumann(const BoundaryFunc normalValues) {
+    return new NeumannCondition2D(normalValues);
+}
+
+BoundaryCondition2D* createCauchy(const BoundaryFunc pointValues, const BoundaryFunc normalValues) {
+    return new CauchyCondition2D(pointValues, normalValues);
+}
+
 }
 
 CauchyCondition2D::CauchyCondition2D(const BoundaryFunc pointFunc, const BoundaryFunc normalFunc)

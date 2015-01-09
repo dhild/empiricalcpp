@@ -1,7 +1,7 @@
 #ifndef EMPIRICAL_BOUNDARY_CONDITION_HPP_
 #define EMPIRICAL_BOUNDARY_CONDITION_HPP_
 
-#include "Empirical/Constants.hpp"
+#include <Empirical/Constants.hpp>
 #include <functional>
 
 namespace Empirical {
