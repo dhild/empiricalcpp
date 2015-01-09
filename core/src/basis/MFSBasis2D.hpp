@@ -28,10 +28,6 @@ public:
 
     virtual cMatrix operator()(const Scalar k, const cVector& z) const;
     virtual cMatrix normal(const Scalar k, const cVector& z) const;
-
-    static cScalar hankel(const Scalar v, const Scalar x);
-    static cScalar mfsBasis(const Scalar k, const cScalar dist);
-    static cScalar mfsBasisNormalDerivative(const Scalar k, const cScalar dist);
 };
 
 }

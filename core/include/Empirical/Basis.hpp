@@ -25,7 +25,6 @@ public:
 };
 
 Basis2D* createMFSBasis(RefinableBoundary2D* chargePoints);
-
 }
 
 #endif /* EMPIRICAL_BASIS_HPP_ */
