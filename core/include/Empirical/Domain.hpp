@@ -1,8 +1,9 @@
 #ifndef EMPIRICAL_DOMAIN_HPP_
 #define EMPIRICAL_DOMAIN_HPP_
 
-#include "Empirical/Basis.hpp"
-#include "Empirical/Boundary.hpp"
+#include <Empirical/Basis.hpp>
+#include <Empirical/Boundary.hpp>
+#include <Empirical/Mesh.hpp>
 
 namespace Empirical {
 
@@ -49,8 +50,13 @@ public:
     /** Exterior domains cover the full infinite plane. */
     virtual bool isExterior() const = 0;
 
-    /** Point samples are cached but are lazily evaluated. */
-    virtual const cVector& getInteriorPointSample() = 0;
+    virtual bool isDomainPoint(const cScalar point) const = 0;
+
+    /** Creates a mesh of points which are interior to the domain.
+     * If the point is inside the domain, then it has an x,y value.
+     * If the point is outside the domain, then is has a NaN value.
+     */
+    virtual const Mesh2D* getInteriorPointSample(const int64_t x_size, const int64_t y_size) = 0;
 };
 
 Domain2D* createInteriorDomain2D(Boundary2D* boundary, Basis2D* basis,
