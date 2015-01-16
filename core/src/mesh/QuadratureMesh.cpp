@@ -4,14 +4,14 @@ using namespace Empirical;
 using namespace Eigen;
 using namespace std;
 
-Mesh* Empirical::createQuadratureMesh(QuadratureFunc xQuad, QuadratureFunc yQuad, const int64_t x, const int64_t y) {
+Mesh2D* Empirical::createQuadratureMesh(QuadratureFunc xQuad, QuadratureFunc yQuad, const int64_t x, const int64_t y) {
     QuadratureMesh* mesh = new QuadratureMesh(xQuad, yQuad, x, y);
     mesh->recalc(x, y);
     return mesh;
 }
 
 QuadratureMesh::QuadratureMesh(QuadratureFunc xQuad, QuadratureFunc yQuad, const int64_t X, const int64_t Y)
-    : Mesh(X, Y), x(xQuad(X)), y(yQuad(Y)) {}
+    : Mesh2D(X, Y), x(xQuad(X)), y(yQuad(Y)) {}
 
 void QuadratureMesh::recalc(const int64_t X, const int64_t Y) {
     x->resize(X);

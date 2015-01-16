@@ -5,7 +5,7 @@
 
 namespace Empirical {
 
-class QuadratureMesh : public Mesh {
+class QuadratureMesh : public Mesh2D {
 protected:
     Quadrature* x;
     Quadrature* y;

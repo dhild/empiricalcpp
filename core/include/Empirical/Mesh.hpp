@@ -5,14 +5,14 @@
 
 namespace Empirical {
 
-class Mesh {
+class Mesh2D {
 protected:
     cMatrix points;
 
     virtual void recalc(const int64_t x, const int64_t y) = 0;
-    Mesh(const int64_t x, const int64_t y) : points(x, y) {}
+    Mesh2D(const int64_t x, const int64_t y) : points(x, y) {}
 public:
-    virtual ~Mesh() {}
+    virtual ~Mesh2D() {}
 
     void resize(const int64_t x, const int64_t y) {
         if (x == sizeX() && y == sizeY()) {
@@ -39,7 +39,7 @@ public:
     }
 };
 
-Mesh* createQuadratureMesh(QuadratureFunc xQuad, QuadratureFunc yQuad, const int64_t x, const int64_t y);
+Mesh2D* createQuadratureMesh(QuadratureFunc xQuad, QuadratureFunc yQuad, const int64_t x, const int64_t y);
 
 }
 
