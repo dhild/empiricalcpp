@@ -1,9 +1,9 @@
-#include "Empirical/Boundary.hpp"
+#include "BaseFunctionalBoundary2D.hpp"
 
 using namespace Eigen;
 using namespace Empirical;
 
-void FunctionalBoundary2D::resize(const int64_t M) {
+void BaseFunctionalBoundary2D::resize(const int64_t M) {
     points.resize(M, 1);
     point_primes.resize(M, 1);
     normals.resize(M, 1);
@@ -18,31 +18,31 @@ void FunctionalBoundary2D::resize(const int64_t M) {
     }
 }
 
-cScalar FunctionalBoundary2D::normalFunc(const cScalar zp) const {
+cScalar BaseFunctionalBoundary2D::normalFunc(const cScalar zp) const {
     const Scalar mag = abs(zp);
     return cScalar(imag(zp) / mag, -real(zp) / mag);
 }
 
-int64_t FunctionalBoundary2D::size() const {
+int64_t BaseFunctionalBoundary2D::size() const {
     return points.rows();
 }
 
-const cVector& FunctionalBoundary2D::getPoints() const {
+const cVector& BaseFunctionalBoundary2D::getPoints() const {
     return points;
 }
 
-const cVector& FunctionalBoundary2D::getPointDerivatives() const {
+const cVector& BaseFunctionalBoundary2D::getPointDerivatives() const {
     return point_primes;
 }
 
-const cVector& FunctionalBoundary2D::getNormals() const {
+const cVector& BaseFunctionalBoundary2D::getNormals() const {
     return normals;
 }
 
-void FunctionalBoundary2D::setBoundaryCondition(const BoundaryCondition2D& condition) {
+void BaseFunctionalBoundary2D::setBoundaryCondition(const BoundaryCondition2D& condition) {
     boundaryCondition = &condition;
 }
 
-const BoundaryCondition2D& FunctionalBoundary2D::getBoundaryCondition() const {
+const BoundaryCondition2D& BaseFunctionalBoundary2D::getBoundaryCondition() const {
     return *boundaryCondition;
 }

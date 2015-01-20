@@ -28,7 +28,7 @@ FunctionalBoundary2D* Empirical::createArcSegment2D(const cScalar center, const 
 
 
 ArcSegment2D::ArcSegment2D(const QuadratureConversion& Z, const QuadratureConversion& ZPrime, const int64_t M)
-    : FunctionalBoundary2D(Z, ZPrime), quadrature(createLGL(M)) {
+    : BaseFunctionalBoundary2D(Z, ZPrime), quadrature(createLGL(M)) {
 }
 
 ArcSegment2D::~ArcSegment2D() {
@@ -37,7 +37,7 @@ ArcSegment2D::~ArcSegment2D() {
 
 void ArcSegment2D::resize(const int64_t M) {
     quadrature->resize(M);
-    FunctionalBoundary2D::resize(M);
+    BaseFunctionalBoundary2D::resize(M);
 }
 
 const Vector& ArcSegment2D::getWeights() const {

@@ -1,14 +1,11 @@
 #ifndef EMPIRICAL_SRC_BOUNDARY_RADIAL_SEGMENT_2D_HPP_
 #define EMPIRICAL_SRC_BOUNDARY_RADIAL_SEGMENT_2D_HPP_
 
-#include <Empirical/Boundary.hpp>
+#include "BaseFunctionalBoundary2D.hpp"
 
 namespace Empirical {
 
-class Quadrature;
-
-class RadialSegment2D : public FunctionalBoundary2D {
-private:
+class RadialSegment2D : public BaseFunctionalBoundary2D {
     Quadrature* quadrature;
 public:
 

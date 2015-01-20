@@ -28,7 +28,7 @@ FunctionalBoundary2D* Empirical::createFunctionalSegment2D(const BoundaryFunc& z
 
 ComplexFunctionSegment2D::ComplexFunctionSegment2D(const QuadratureConversion& Z, const QuadratureConversion& ZPrime,
         const int64_t M)
-    : FunctionalBoundary2D(Z, ZPrime), quadrature(createLGL(M)) {
+        : BaseFunctionalBoundary2D(Z, ZPrime), quadrature(createLGL(M)) {
 }
 
 ComplexFunctionSegment2D::~ComplexFunctionSegment2D() {
@@ -37,7 +37,7 @@ ComplexFunctionSegment2D::~ComplexFunctionSegment2D() {
 
 void ComplexFunctionSegment2D::resize(const int64_t M) {
     quadrature->resize(M);
-    FunctionalBoundary2D::resize(M);
+    BaseFunctionalBoundary2D::resize(M);
 }
 
 const Vector& ComplexFunctionSegment2D::getWeights() const {

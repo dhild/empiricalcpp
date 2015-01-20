@@ -28,7 +28,7 @@ FunctionalBoundary2D* Empirical::createRadialSegment2D(const QuadratureConversio
 }
 
 RadialSegment2D::RadialSegment2D(const QuadratureConversion& Z, const QuadratureConversion& ZPrime, const int64_t M)
-    : FunctionalBoundary2D(Z, ZPrime), quadrature(createPeriodicTrapezoid(M)) {
+    : BaseFunctionalBoundary2D(Z, ZPrime), quadrature(createPeriodicTrapezoid(M)) {
 }
 
 RadialSegment2D::~RadialSegment2D() {
@@ -37,7 +37,7 @@ RadialSegment2D::~RadialSegment2D() {
 
 void RadialSegment2D::resize(const int64_t M) {
     quadrature->resize(M);
-    FunctionalBoundary2D::resize(M);
+    BaseFunctionalBoundary2D::resize(M);
 }
 
 const Vector& RadialSegment2D::getWeights() const {

@@ -1,4 +1,4 @@
-#include <Empirical/Domain.hpp>
+#include "BaseDomain2D.hpp"
 #include <functional>
 #include <memory>
 
@@ -7,10 +7,10 @@ using namespace std;
 
 namespace Empirical {
 
-class ExteriorDomain2D : public Domain2D {
+class ExteriorDomain2D : public BaseDomain2D {
 public:
     ExteriorDomain2D(Boundary2D* bnd, Basis2D* bas, const bool normalDir, const Scalar index)
-        : Domain2D(bnd, bas, normalDir, index) {}
+        : BaseDomain2D(bnd, bas, normalDir, index) {}
 
     virtual ~ExteriorDomain2D() {
     }

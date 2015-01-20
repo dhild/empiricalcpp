@@ -5,8 +5,7 @@
 
 namespace Empirical {
 
-class Basis2D {
-public:
+struct Basis2D {
     virtual ~Basis2D() {}
 
     virtual void resize(const int64_t M) = 0;
@@ -21,7 +20,6 @@ public:
 
     virtual cMatrix operator()(const Scalar k, const cVector& z) const = 0;
     virtual cMatrix normal(const Scalar k, const cVector& z) const = 0;
-
 };
 
 Basis2D* createMFSBasis(RefinableBoundary2D* chargePoints);

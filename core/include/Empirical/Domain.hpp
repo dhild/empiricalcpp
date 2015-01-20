@@ -7,45 +7,19 @@
 
 namespace Empirical {
 
-class Domain2D {
-protected:
-    Boundary2D* boundary;
-    Basis2D* basis;
-    const bool domainInNormalDirection;
-    Scalar indexOfRefraction;
-
-    Domain2D(Boundary2D* bnd, Basis2D* bas, const bool normalDir, const Scalar index)
-        : boundary(bnd), basis(bas), domainInNormalDirection(normalDir), indexOfRefraction(index) {}
-public:
+struct Domain2D {
     virtual ~Domain2D() {}
 
-    virtual const Boundary2D& getBoundary() const {
-        return *boundary;
-    }
+    virtual const Boundary2D& getBoundary() const = 0;
+    virtual Boundary2D& getBoundary() = 0;
 
-    virtual Boundary2D& getBoundary() {
-        return *boundary;
-    }
+    virtual const Basis2D& getBasis() const = 0;
+    virtual Basis2D& getBasis() = 0;
 
-    virtual const Basis2D& getBasis() const {
-        return *basis;
-    }
+    virtual Scalar getIndexOfRefraction() const = 0;
+    virtual void setIndexOfRefraction(Scalar index) = 0;
 
-    virtual Basis2D& getBasis() {
-        return *basis;
-    }
-
-    Scalar getIndexOfRefraction() const {
-        return indexOfRefraction;
-    }
-
-    void setIndexOfRefraction(Scalar index) {
-        indexOfRefraction = index;
-    }
-
-    bool isDomainInNormalDirection() const {
-        return domainInNormalDirection;
-    }
+    virtual bool isDomainInNormalDirection() const = 0;
 
     /** Exterior domains cover the full infinite plane. */
     virtual bool isExterior() const = 0;
