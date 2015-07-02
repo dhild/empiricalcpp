@@ -12,7 +12,7 @@
 #define EMPIRICAL_COMPLEX_SCALAR_TYPE std::complex<double>
 #endif
 
-namespace Empirical {
+namespace empirical {
 
     /** Scalar value type. Should support your desired precision. */
     typedef EMPIRICAL_SCALAR_TYPE Scalar;

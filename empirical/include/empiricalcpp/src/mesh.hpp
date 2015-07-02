@@ -1,13 +1,40 @@
-#ifndef EMPIRICALCPP_SRC_INTERPOLATION_HPP_
-#define EMPIRICALCPP_SRC_INTERPOLATION_HPP_
+#ifndef EMPIRICALCPP_SRC_MESH_HPP_
+#define EMPIRICALCPP_SRC_MESH_HPP_
 
-#include <empiricalcpp/src/Constants.hpp>
-#include <empiricalcpp/src/Quadrature.hpp>
+#include <empiricalcpp/src/constants.hpp>
+#include <empiricalcpp/src/quadrature.hpp>
+#include <array>
 #include <functional>
+#include <memory>
+#include <tuple>
 #include <vector>
 #include <boost/multi_array.hpp>
 
-namespace Empirical {
+namespace empirical {
+    namespace mesh {
+
+        class Mesh2D {
+        protected:
+            Mesh2D();
+        public:
+            virtual ~Mesh2D() {}
+
+            typedef boost::multi_array<Scalar, 3> mesh_type;
+
+            mesh_type points;
+            std::tuple<std::shared_ptr<Quadrature>, std::shared_ptr<Quadrature>> quadratures;
+
+            Mesh2D(Quadrature* qx, Quadrature* qy);
+            Mesh2D(std::shared_ptr<Quadrature>& qx, std::shared_ptr<Quadrature>& qy);
+        };
+
+        class QuadratureMesh2D : public Mesh2D {
+
+        };
+
+    }
+
+    typedef mesh::Mesh2D Mesh2D;
 
     template<std::size_t _Dimension>
     using Mesh = boost::multi_array<Scalar, _Dimension>;
@@ -74,4 +101,4 @@ namespace Empirical {
     }
 }
 
-#endif /* EMPIRICALCPP_SRC_INTERPOLATION_HPP_ */
+#endif /* EMPIRICALCPP_SRC_MESH_HPP_ */
