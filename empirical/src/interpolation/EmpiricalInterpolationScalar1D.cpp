@@ -1,4 +1,4 @@
-#include <empiricalcpp/src/Interpolation.hpp>
+#include <empiricalcpp/src/interpolation.hpp>
 
 using namespace Empirical;
 using namespace Empirical::Interpolation;

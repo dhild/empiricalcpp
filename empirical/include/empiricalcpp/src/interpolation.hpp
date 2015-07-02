@@ -1,17 +1,13 @@
-#ifndef EMPIRICAL_SRC_MESH_HPP_
-#define EMPIRICAL_SRC_MESH_HPP_
+#ifndef EMPIRICALCPP_SRC_INTERPOLATION_HPP_
+#define EMPIRICALCPP_SRC_INTERPOLATION_HPP_
 
-#include <Empirical/src/Constants.hpp>
-#include <Empirical/src/Quadrature.hpp>
+#include <empiricalcpp/src/constants.hpp>
+#include <empiricalcpp/src/quadrature.hpp>
 #include <functional>
 #include <vector>
 #include <boost/multi_array.hpp>
 
 namespace Empirical {
-
-    namespace Mesh {
-
-    }
 
     template<std::size_t _Dimension>
     using Mesh = boost::multi_array<Scalar, _Dimension>;
@@ -78,4 +74,4 @@ namespace Empirical {
     }
 }
 
-#endif /* EMPIRICAL_SRC_MESH_HPP_ */
+#endif /* EMPIRICALCPP_SRC_INTERPOLATION_HPP_ */

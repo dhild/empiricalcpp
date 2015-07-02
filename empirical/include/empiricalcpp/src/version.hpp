@@ -2,6 +2,7 @@
 #define EMPIRICALCPP_SRC_VERSION_HPP_
 
 #include <boost/preprocessor/stringize.hpp>
+#include <cstdint>
 #include <string>
 
 #define EMPIRICAL_VERSION_MAJOR 0
@@ -13,12 +14,12 @@
                                   "." BOOST_PP_STRINGIZE(EMPIRICAL_VERSION_PATCH) \
                                   "-" EMPIRICAL_VERSION_TYPE)
 
-namespace Empirical {
-namespace Version {
+namespace empirical {
+namespace version {
 
-extern int major();
-extern int minor();
-extern int patch();
+extern uint8_t major();
+extern uint8_t minor();
+extern uint8_t patch();
 extern const std::string& typeString();
 extern const std::string& versionString();
 extern const std::string& revisionString();
