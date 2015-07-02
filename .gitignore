@@ -1,2 +1,14 @@
 /build
 /msvc
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+cmake_install.cmake
+CMakeFiles
+*.opensdf
+*.sdf
+*.sln
+*.suo
+CMakeCache.txt
+/empirical/empiricalcpp.dir
+/x64

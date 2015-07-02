@@ -16,13 +16,6 @@ include(cmake/macros.cmake)
 
 config_compiler_and_linker()  # Defined in macros.cmake.
 
-include_directories(${empirical_SOURCE_DIR}/include)
-
-# Where empirical's libraries can be found.
-link_directories(${empirical_BINARY_DIR}/src)
-
-add_subdirectory(src)
-
 if (empirical_build_tests)
   # This must be set in the root directory for the tests to be run by
   # 'make test' or ctest.
@@ -31,3 +24,5 @@ if (empirical_build_tests)
   # use add_test()
   
 endif()
+
+add_subdirectory(empirical)
