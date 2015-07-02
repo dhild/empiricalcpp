@@ -34,3 +34,50 @@ macro(config_compiler_and_linker)
   # For building the empirical libraries.
   set(cxx_strict "${cxx_default} ${cxx_strict_flags}")
 endmacro()
+
+macro(add_empirical_library name)
+  if( BUILD_SHARED_LIBS )
+    add_library(${name} SHARED ${ARGN})
+  else()
+    add_library(${name} ${ARGN})
+  endif()
+
+  if( NOT empirical_build_tests )
+    set_target_properties(${name} PROPERTIES EXCLUDE_FROM_ALL ON)
+  endif()
+  set_target_properties(${name} PROPERTIES FOLDER "Libraries")
+endmacro(add_empirical_library name)
+
+function(add_unittest test_suite test_name)
+  if( empirical_build_tests )
+    add_executable(${test_name} ${ARGN})
+  else()
+    add_executable(${test_name} EXCLUDE_FROM_ALL ${ARGN})
+  endif()
+  
+  set(outdir ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR})
+  if(NOT "${CMAKE_CFG_INTDIR}" STREQUAL ".")
+    foreach(build_mode ${CMAKE_CONFIGURATION_TYPES})
+      string(TOUPPER "${build_mode}" CONFIG_SUFFIX)
+      string(REPLACE ${CMAKE_CFG_INTDIR} ${build_mode} outdir_config ${outdir})
+      set_target_properties(${test_name} PROPERTIES "RUNTIME_OUTPUT_DIRECTORY_${CONFIG_SUFFIX}" ${outdir_config})
+      set_target_properties(${test_name} PROPERTIES "ARCHIVE_OUTPUT_DIRECTORY_${CONFIG_SUFFIX}" ${outdir_config})
+      set_target_properties(${test_name} PROPERTIES "LIBRARY_OUTPUT_DIRECTORY_${CONFIG_SUFFIX}" ${outdir_config})
+    endforeach()
+  else()
+    set_target_properties(${test_name} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${outdir})
+    set_target_properties(${test_name} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${outdir})
+    set_target_properties(${test_name} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${outdir})
+  endif()
+  
+  target_link_libraries(${test_name}
+    gtest
+    epmiricalcpp
+    )
+
+  add_dependencies(${test_suite} ${test_name})
+  get_target_property(test_suite_folder ${test_suite} FOLDER)
+  if (NOT ${test_suite_folder} STREQUAL "NOTFOUND")
+    set_property(TARGET ${test_name} PROPERTY FOLDER "${test_suite_folder}")
+  endif ()
+endfunction()
