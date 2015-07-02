@@ -13,6 +13,7 @@ project(empirical CXX)
 cmake_minimum_required(VERSION 2.6.2)
 
 include(cmake/macros.cmake)
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 config_compiler_and_linker()  # Defined in macros.cmake.
 
@@ -26,3 +27,4 @@ if (empirical_build_tests)
 endif()
 
 add_subdirectory(empirical)
+add_subdirectory(unittests)
