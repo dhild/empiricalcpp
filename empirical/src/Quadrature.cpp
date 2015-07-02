@@ -1,76 +1,113 @@
-#include <Empirical/src/Quadrature.hpp>
+#include <empiricalcpp/src/Quadrature.hpp>
+#include <cassert>
 
-using namespace Empirical;
-using namespace std;
+#include <boost/multi_array.hpp>
 
 namespace Empirical {
-Quadrature* createLGL(const Index N) {
-    return new LegendreGaussLobatto(N);
-}
-Quadrature* createTrapezoid(const Index N) {
-    return new TrapezoidQuadrature(N);
-}
-Quadrature* createPeriodicTrapezoid(const Index N) {
-    return new PeriodicTrapezoidQuadrature(N);
-}
-}
+    namespace quadrature {
 
-TrapezoidQuadrature::TrapezoidQuadrature(const Index N) : Quadrature(N) {
-    recalc(N);
-}
-
-TrapezoidQuadrature::~TrapezoidQuadrature() {}
-
-void TrapezoidQuadrature::recalc(const Index N) {
-    points.setLinSpaced(-1, 1);
-
-    Scalar w = Scalar(1) / Scalar(N);
-    weights.setConstant(2 * w);
-    weights(0, 0) = w;
-    weights(N - 1, 0) = w;
-}
-
-PeriodicTrapezoidQuadrature::PeriodicTrapezoidQuadrature(const Index N) : Quadrature(N) {
-    recalc(N);
-}
-
-PeriodicTrapezoidQuadrature::~PeriodicTrapezoidQuadrature() {}
-
-void PeriodicTrapezoidQuadrature::recalc(const Index N) {
-    Scalar shift = Scalar(1) / Scalar(N);
-    points.setLinSpaced(-1 + shift, 1 - shift);
-
-    weights.setConstant(Scalar(2) / Scalar(N));
-}
-
-LegendreGaussLobatto::LegendreGaussLobatto(const Index N1) : Quadrature(N1) {
-    recalc(N1);
-}
-
-LegendreGaussLobatto::~LegendreGaussLobatto() {}
-
-void LegendreGaussLobatto::recalc(const Index N1) {
-    const Index N = N1 - 1;
-
-    Array<Scalar, Dynamic, 1> x = Array<Scalar, Dynamic, 1>::LinSpaced(N1, 0, PI).cos();
-    Array<Scalar, Dynamic, 1> xold = Array<Scalar, Dynamic, 1>::Constant(N1, 1, Scalar(2));
-    Array<Scalar, Dynamic, Dynamic> P = Array<Scalar, Dynamic, Dynamic>::Zero(N1, N1);
-
-    while ((x - xold).abs().maxCoeff() > epsScalar) {
-        xold = x;
-        P.col(0).setOnes();
-        P.col(1) = x;
-
-        for (Index k = 2; k < N1; k++) {
-            P.col(k) = (Scalar(2 * k - 1) * x * P.col(k - 1) - Scalar(k - 1) * P.col(k - 2)) / Scalar(k);
+        void Quadrature::resize(const std::size_t N) {
+            assert(N > 2);
+            points.resize(N);
+            weights.resize(N);
+            this->recalculate(N);
         }
-        x = xold - (x * P.col(N) - P.col(N - 1)) / (Scalar(N1) * P.col(N));
+
+        TrapezoidQuadrature::TrapezoidQuadrature(const std::size_t N) : Quadrature(N) {
+            recalculate(N);
+        }
+
+        PeroidicTrapezoidQuadrature::PeroidicTrapezoidQuadrature(const std::size_t N) : Quadrature(N) {
+            recalculate(N);
+        }
+
+        LGLQuadrature::LGLQuadrature(const std::size_t N) : Quadrature(N) {
+            recalculate(N);
+        }
+
+        CustomQuadrature::CustomQuadrature(
+            CustomQuadrature::customFunc xFunction,
+            CustomQuadrature::customFunc weightFunction,
+            const std::size_t N)
+             : Quadrature(N), xFunction(xFunction), weightFunction(weightFunction) {
+            recalculate(N);
+        }
+
+        void TrapezoidQuadrature::recalculate(const std::size_t N) {
+            const Scalar weight = 2.0 / N;
+            for (std::size_t i = 0; i < N; i++) {
+                points[i] = (2.0 * i - N) / N;
+                weights[i] = weight;
+            }
+            weights[0] = 1.0 / N;
+            weights[N - 1] = 1.0 / N;
+        }
+
+        void PeroidicTrapezoidQuadrature::recalculate(const std::size_t N) {
+            const Scalar size = Scalar(2 * N - 2) / N;
+            const Scalar weight = 2.0 / N;
+            for (std::size_t i = 0; i < N; i++) {
+                points[i] = (size * i - N) / N;
+                weights[i] = weight;
+            }
+        }
+
+        void LGLQuadrature::recalculate(const std::size_t N1) {
+            const std::size_t N = N1 - 1;
+
+            std::vector<Scalar> x(N1);
+            std::vector<Scalar> xold(N1);
+            boost::multi_array<Scalar, 2> P(boost::extents[N1][N1]);
+
+            for (std::size_t i = 0; i < N1; i++) {
+                x[i] = cos((PI * i - N1) / N1);
+                xold[i] = 2;
+                for (std::size_t j = 0; j < N1; j++) {
+                    P[i][j] = 0;
+                }
+            }
+
+            Scalar maxDiff = 2;
+            while (maxDiff > epsScalar) {
+                xold = x;
+
+                for (std::size_t i = 0; i < N1; i++) {
+                    P[i][0] = 1;
+                    P[i][1] = x[i];
+                }
+
+                for (std::size_t k = 2; k < N1; k++) {
+                    for (std::size_t i = 0; i < N1; i++) {
+                        P[i][k] = (Scalar(2 * k - 1) * x[i] * P[i][k - 1] - Scalar(k - 1) * P[i][k - 2]) / Scalar(k);
+                    }
+                }
+
+                maxDiff = 0;
+                for (std::size_t i = 0; i < N1; i++) {
+                    Scalar diff = (x[i] * P[i][N] - P[i][N - 1]) / (Scalar(N1) * P[i][N]);
+                    x[i] = xold[i] - diff;
+                    if (abs(diff) > maxDiff) {
+                        maxDiff = abs(diff);
+                    }
+                }
+            }
+
+            for (std::size_t i = 0; i < N1; i++) {
+                points[i] = x[N - i];
+                weights[i] = Scalar(2.0) / (Scalar(N) * Scalar(N1) * P[N - i][N] * P[N - i][N]);
+            }
+        }
+
+        void CustomQuadrature::recalculate(const std::size_t N) {
+            for (std::size_t i = 0; i < N; i++) {
+                points[i] = xFunction(i, N);
+                weights[i] = weightFunction(i, N);
+            }
+        }
+
+        TrapezoidQuadrature::~TrapezoidQuadrature() {}
+        PeroidicTrapezoidQuadrature::~PeroidicTrapezoidQuadrature() {}
+        LGLQuadrature::~LGLQuadrature() {}
+        CustomQuadrature::~CustomQuadrature() {}
     }
-
-    // Populate x2 with the weights.
-    xold = Scalar(2.0) / (Scalar(N) * Scalar(N1) * P.col(N).square());
-
-    // Reverse the arrays and store them.
-    this->points = x.reverse();
-    this->weights = xold.reverse();
 }

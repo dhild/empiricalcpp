@@ -1,4 +1,4 @@
-#include <Empirical/Interpolation.hpp>
+#include <empiricalcpp/src/Interpolation.hpp>
 
 using namespace Empirical;
 using namespace Empirical::Interpolation;
@@ -9,7 +9,7 @@ namespace {
 ScalarInterpolator1D* Empirical::Interpolation::constructInterpolator(
     const Mesh1 mesh,
     std::vector<ScalarEvaluation1> computedSolutions,
-    const size_t maxBasisSize,
-    const Scalar correctionScaleBound) {
+    const size_t,
+    const Scalar) {
     return nullptr;
 }

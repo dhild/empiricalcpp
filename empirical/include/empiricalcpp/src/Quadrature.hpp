@@ -1,7 +1,7 @@
-#ifndef EMPIRICAL_SRC_QUADRATURE_HPP_
-#define EMPIRICAL_SRC_QUADRATURE_HPP_
+#ifndef EMPIRICALCPP_SRC_QUADRATURE_HPP_
+#define EMPIRICALCPP_SRC_QUADRATURE_HPP_
 
-#include <Empirical/src/Constants.hpp>
+#include <empiricalcpp/src/Constants.hpp>
 #include <functional>
 #include <vector>
 
@@ -12,40 +12,50 @@ namespace Empirical {
             std::vector<Scalar> weights;
 
             Quadrature(const std::size_t N) : points(N), weights(N) {}
-            virtual void resize(const std::size_t N);
-        };
+            virtual ~Quadrature() {}
+            void resize(const std::size_t N);
 
-        struct LinearQuadrature : public Quadrature {
-            LinearQuadrature(const std::size_t N);
-            virtual void resize(const std::size_t N);
+        protected:
+            virtual void recalculate(const std::size_t N) = 0;
         };
 
         struct TrapezoidQuadrature : public Quadrature {
             TrapezoidQuadrature(const std::size_t N);
-            virtual void resize(const std::size_t N);
+            virtual ~TrapezoidQuadrature();
+
+        protected:
+            virtual void recalculate(const std::size_t N);
         };
 
         struct PeroidicTrapezoidQuadrature : public Quadrature {
             PeroidicTrapezoidQuadrature(const std::size_t N);
-            virtual void resize(const std::size_t N);
+            virtual ~PeroidicTrapezoidQuadrature();
+
+        protected:
+            virtual void recalculate(const std::size_t N);
         };
 
         struct LGLQuadrature : public Quadrature {
             LGLQuadrature(const std::size_t N);
-            virtual void resize(const std::size_t N);
+            virtual ~LGLQuadrature();
+
+        protected:
+            virtual void recalculate(const std::size_t N);
         };
 
         struct CustomQuadrature : public Quadrature {
             typedef std::function<Scalar(const std::size_t i, const std::size_t N)> customFunc;
 
-            CustomQuadrature(customFunc xFunction, customFunc weightFunction, std::size_t N);
-            virtual void resize(const std::size_t N);
+            CustomQuadrature(customFunc xFunction, customFunc weightFunction, const std::size_t N);
+            virtual ~CustomQuadrature();
 
         protected:
+            virtual void recalculate(const std::size_t N);
+
             customFunc xFunction;
             customFunc weightFunction;
         };
     }
 }
 
-#endif /* EMPIRICAL_SRC_QUADRATURE_HPP_ */
+#endif /* EMPIRICALCPP_SRC_QUADRATURE_HPP_ */

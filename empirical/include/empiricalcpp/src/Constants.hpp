@@ -1,5 +1,5 @@
-#ifndef EMPIRICAL_SRC_CONSTANTS_HPP_
-#define EMPIRICAL_SRC_CONSTANTS_HPP_
+#ifndef EMPIRICALCPP_SRC_CONSTANTS_HPP_
+#define EMPIRICALCPP_SRC_CONSTANTS_HPP_
 
 #include <complex>
 #include <cstdint>
@@ -28,4 +28,4 @@ namespace Empirical {
 
 }
 
-#endif /* EMPIRICAL_SRC_CONSTANTS_HPP_ */
+#endif /* EMPIRICALCPP_SRC_CONSTANTS_HPP_ */

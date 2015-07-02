@@ -1,8 +1,8 @@
-#ifndef EMPIRICAL_SRC_INTERPOLATION_HPP_
-#define EMPIRICAL_SRC_INTERPOLATION_HPP_
+#ifndef EMPIRICALCPP_SRC_INTERPOLATION_HPP_
+#define EMPIRICALCPP_SRC_INTERPOLATION_HPP_
 
-#include <Empirical/src/Constants.hpp>
-#include <Empirical/src/Quadrature.hpp>
+#include <empiricalcpp/src/Constants.hpp>
+#include <empiricalcpp/src/Quadrature.hpp>
 #include <functional>
 #include <vector>
 #include <boost/multi_array.hpp>
@@ -74,4 +74,4 @@ namespace Empirical {
     }
 }
 
-#endif /* EMPIRICAL_SRC_INTERPOLATION_HPP_ */
+#endif /* EMPIRICALCPP_SRC_INTERPOLATION_HPP_ */
