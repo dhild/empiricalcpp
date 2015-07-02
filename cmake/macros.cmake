@@ -15,6 +15,8 @@ macro(config_compiler_and_linker)
     set(cxx_base_flags "-GS -W4 -WX -nologo -J -Zi")
     set(cxx_base_flags "${cxx_base_flags} -D_UNICODE -DUNICODE -DWIN32 -D_WIN32")
     set(cxx_base_flags "${cxx_base_flags} -DSTRICT -DWIN32_LEAN_AND_MEAN")
+    # Disable warnings about copy-assignments; they don't indicate actual issues
+    set(cxx_base_flags "${cxx_base_flags} -D_SCL_SECURE_NO_WARNINGS")
     set(cxx_base_flags "${cxx_base_flags} -EHsc")
   elseif (CMAKE_COMPILER_IS_GNUCXX)
     set(cxx_base_flags "-Wall -Wshadow -Wextra")

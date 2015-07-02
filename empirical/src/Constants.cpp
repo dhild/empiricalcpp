@@ -1,5 +1,5 @@
 #include <limits>
-#include "Empirical/Constants.hpp"
+#include <empiricalcpp/src/Constants.hpp>
 
 using namespace Empirical;
 using namespace std;

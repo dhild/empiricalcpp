@@ -1,4 +1,4 @@
-include_directories(${empirical_SOURCE_DIR}/include)
+include_directories(${CMAKE_SOURCE_DIR}/empirical/include)
 
 add_subdirectory(include)
 add_subdirectory(src)
@@ -27,7 +27,7 @@ set_target_properties(empiricalcpp
     PROPERTIES
     COMPILE_FLAGS "${CMAKE_CXX_FLAGS} ${cxx_base_flags}")
 
-source_group("empiricalcpp" FILES ${empirical_main_headers})
-source_group("empiricalcpp\\src" FILES ${empirical_main_src_headers})
+source_group("include\\empiricalcpp" FILES ${empirical_main_headers})
+source_group("include\\empiricalcpp\\src" FILES ${empirical_main_src_headers})
 source_group("src" FILES ${empirical_src_files})
 source_group("src\\interpolation" FILES ${empirical_src_interpolation_files})
