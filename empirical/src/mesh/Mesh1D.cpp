@@ -5,8 +5,8 @@
 #endif
 namespace empirical {
     namespace mesh {
-        MeshRange range(std::size_t size, Scalar min, Scalar max) {
-            return std::make_tuple(size, min, max);
+        MeshRange range(Scalar min, Scalar max) {
+            return std::make_pair(min, max);
         }
         MeshQuadrature range(std::shared_ptr<Quadrature>& q, Scalar min, Scalar max) {
             return std::make_tuple(q, min, max);
