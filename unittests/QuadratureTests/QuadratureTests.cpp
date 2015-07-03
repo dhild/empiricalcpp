@@ -3,28 +3,8 @@
 #include <empiricalcpp/empirical.hpp>
 #include <cmath>
 #include <functional>
-#include <iostream>
-#include <iomanip>
 
-using namespace std;
 using namespace empirical;
-
-namespace empirical {
-    namespace quadrature {
-        std::ostream& operator<<(std::ostream& os, const Quadrature& q) {
-            os << "Quadrature {{ points:";
-            os << std::fixed << std::setw( 11 ) << std::setprecision( 6 );
-            for (Scalar val : q.points) {
-                os << val << ", ";
-            }
-            os << "}, { weights:";
-            for (Scalar val : q.weights) {
-                os << val << ", ";
-            }
-            return os << "}}";
-        }
-    }
-}
 
 namespace {
     Scalar one(Scalar x) {

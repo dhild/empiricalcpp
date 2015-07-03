@@ -3,6 +3,10 @@
 option(BUILD_SHARED_LIBS "Build shared libraries (DLLs)." OFF)
 
 option(empirical_build_tests "Build all of empirical's tests." OFF)
+option(empirical_define_ostream_operators "Compiles in std::ostream operators for printing" ON)
+
+set(empirical_compile_options ""
+    CACHE STRING "Command line options to add to the compilation")
 
 # Name of the project.
 #

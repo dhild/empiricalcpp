@@ -1,6 +1,10 @@
 #include <empiricalcpp/src/quadrature.hpp>
 #include <cassert>
 
+#ifndef EMPIRICAL_NO_OSTREAM_DEFINITIONS
+#  include <iomanip>
+#endif
+
 #include <boost/multi_array.hpp>
 
 namespace empirical {
@@ -142,5 +146,20 @@ namespace empirical {
             q->resize(N);
             return q;
         }
+
+#ifndef EMPIRICAL_NO_OSTREAM_DEFINITIONS
+        std::ostream& operator<<(std::ostream& os, const Quadrature& q) {
+            os << "Quadrature {{ points:";
+            os << std::fixed << std::setw(11) << std::setprecision(6);
+            for (Scalar val : q.points) {
+                os << val << ", ";
+            }
+            os << "}, { weights:";
+            for (Scalar val : q.weights) {
+                os << val << ", ";
+            }
+            return os << "}}";
+        }
+#endif
     }
 }

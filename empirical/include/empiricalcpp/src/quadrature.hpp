@@ -6,6 +6,10 @@
 #include <memory>
 #include <vector>
 
+#ifndef EMPIRICAL_NO_OSTREAM_DEFINITIONS
+#  include <iostream>
+#endif
+
 namespace empirical {
     namespace quadrature {
         class Quadrature : public std::enable_shared_from_this<Quadrature> {
@@ -51,6 +55,10 @@ namespace empirical {
 
         typedef std::function<Scalar(const std::size_t i, const std::size_t N)> customFunc;
         std::shared_ptr<Quadrature> custom(const std::size_t N, customFunc xFunction, customFunc weightFunction);
+
+#ifndef EMPIRICAL_NO_OSTREAM_DEFINITIONS
+        std::ostream& operator<<(std::ostream& os, const Quadrature& q);
+#endif
     }
 
     typedef quadrature::Quadrature Quadrature;
