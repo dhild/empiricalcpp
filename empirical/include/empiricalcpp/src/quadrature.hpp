@@ -6,10 +6,6 @@
 #include <memory>
 #include <vector>
 
-#ifndef EMPIRICAL_NO_OSTREAM_DEFINITIONS
-#  include <iostream>
-#endif
-
 namespace empirical {
     namespace quadrature {
         class Quadrature : public std::enable_shared_from_this<Quadrature> {
