@@ -24,3 +24,8 @@ CTestTestfile.cmake
 /unittests/QuadratureTests/QuadratureTests.dir
 /unittests/Debug
 /unittests/gtest.dir
+/Testing
+/unittests/gtest_main.dir
+/unittests/QuadratureTests/Debug
+/unittests/x64
+/unittests/*/test_detail.xml

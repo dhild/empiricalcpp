@@ -23,7 +23,6 @@ macro(config_compiler_and_linker)
     set(cxx_base_flags "${cxx_base_flags} -fexceptions")
   endif()
 
-
   # For building empirical's tests and samples.
   set(cxx_exception "${CMAKE_CXX_FLAGS} ${cxx_base_flags} ${cxx_exception_flags}")
   set(cxx_no_exception
@@ -42,6 +41,10 @@ macro(add_empirical_library name)
     add_library(${name} ${ARGN})
   endif()
 
+  set_target_properties(${name}
+    PROPERTIES
+    COMPILE_FLAGS "${CMAKE_CXX_FLAGS} ${cxx_base_flags}")
+
   if( NOT empirical_build_tests )
     set_target_properties(${name} PROPERTIES EXCLUDE_FROM_ALL ON)
   endif()
@@ -54,6 +57,12 @@ function(add_unittest test_suite test_name)
   else()
     add_executable(${test_name} EXCLUDE_FROM_ALL ${ARGN})
   endif()
+  
+  add_test(${test_name} ${test_name})
+
+  set_target_properties(${test_name}
+    PROPERTIES
+    COMPILE_FLAGS "${CMAKE_CXX_FLAGS} ${cxx_base_flags}")
   
   set(outdir ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR})
   if(NOT "${CMAKE_CFG_INTDIR}" STREQUAL ".")
@@ -72,9 +81,10 @@ function(add_unittest test_suite test_name)
   
   target_link_libraries(${test_name}
     gtest
-    epmiricalcpp
+    gtest_main
+    empiricalcpp
     )
-
+    
   add_dependencies(${test_suite} ${test_name})
   get_target_property(test_suite_folder ${test_suite} FOLDER)
   if (NOT ${test_suite_folder} STREQUAL "NOTFOUND")
