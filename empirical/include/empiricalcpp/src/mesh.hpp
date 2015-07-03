@@ -57,20 +57,20 @@ namespace empirical {
         };
 
         typedef std::function<Scalar(std::size_t i, std::size_t N)> MeshFunction;
-        typedef std::tuple<std::size_t, Scalar, Scalar> MeshRange;
+        typedef std::pair<Scalar, Scalar> MeshRange;
         typedef std::tuple<std::shared_ptr<Quadrature>, Scalar, Scalar> MeshQuadrature;
 
-        MeshRange range(std::size_t size, Scalar min, Scalar max);
+        MeshRange range(Scalar min, Scalar max);
         MeshQuadrature range(std::shared_ptr<Quadrature>& q, Scalar min, Scalar max);
         MeshQuadrature range(Quadrature& q, Scalar min, Scalar max);
 
         std::shared_ptr<Mesh1D> createMesh(std::size_t N, MeshFunction xFunction);
-        std::shared_ptr<Mesh1D> createMesh(MeshRange xRange);
-        std::shared_ptr<Mesh1D> createMesh(MeshQuadrature xQuadrature);
+        std::shared_ptr<Mesh1D> createMesh(std::size_t N, MeshRange xRange);
+        std::shared_ptr<Mesh1D> createMesh(std::size_t N, MeshQuadrature xQuadrature);
 
         std::shared_ptr<Mesh2D> createMesh(std::size_t N, MeshFunction xFunction, std::size_t M, MeshRange yFunction);
-        std::shared_ptr<Mesh2D> createMesh(MeshRange xRange, MeshRange yRange);
-        std::shared_ptr<Mesh2D> createMesh(MeshQuadrature xQuadrature, MeshQuadrature yQuadrature);
+        std::shared_ptr<Mesh2D> createMesh(std::size_t N, MeshRange xRange, std::size_t M, MeshRange yRange);
+        std::shared_ptr<Mesh2D> createMesh(std::size_t N, MeshQuadrature xQuadrature, std::size_t M, MeshQuadrature yQuadrature);
 
 #ifndef EMPIRICAL_NO_OSTREAM_DEFINITIONS
         std::ostream& operator<<(std::ostream& os, const Mesh1D& m);
