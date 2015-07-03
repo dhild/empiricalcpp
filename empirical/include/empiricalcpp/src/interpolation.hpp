@@ -3,37 +3,13 @@
 
 #include <empiricalcpp/src/constants.hpp>
 #include <empiricalcpp/src/quadrature.hpp>
+#include <empiricalcpp/src/mesh.hpp>
 #include <functional>
 #include <vector>
 #include <boost/multi_array.hpp>
 
-namespace Empirical {
-
-    template<std::size_t _Dimension>
-    using Mesh = boost::multi_array<Scalar, _Dimension>;
-
-    typedef Mesh<1> Mesh1;
-    typedef Mesh<2> Mesh2;
-    typedef Mesh<3> Mesh3;
-
-    template<typename _Scalar, std::size_t _Dimension>
-    using EvaluationsType = boost::multi_array<_Scalar, _Dimension>;
-
-    template<std::size_t _Dimension>
-    using ScalarEvaluation = EvaluationsType<Scalar, _Dimension>;
-
-    template<std::size_t _Dimension>
-    using ComplexEvaluation = EvaluationsType<cScalar, _Dimension>;
-
-    typedef ScalarEvaluation<1> ScalarEvaluation1;
-    typedef ScalarEvaluation<2> ScalarEvaluation2;
-    typedef ScalarEvaluation<3> ScalarEvaluation3;
-
-    typedef ComplexEvaluation<1> ComplexEvaluation1;
-    typedef ComplexEvaluation<2> ComplexEvaluation2;
-    typedef ComplexEvaluation<3> ComplexEvaluation3;
-
-    namespace Interpolation {
+namespace empirical {
+    namespace interpolation {
         typedef std::function<Scalar(const Scalar)> scalarFunction1;
         typedef std::function<cScalar(const Scalar)> complexFunction1;
         typedef std::function<Scalar(const Scalar, const Scalar)> scalarFunction2;
@@ -41,7 +17,8 @@ namespace Empirical {
         typedef std::function<Scalar(const Scalar, const Scalar, const Scalar)> scalarFunction3;
         typedef std::function<cScalar(const Scalar, const Scalar, const Scalar)> complexFunction3;
 
-        struct Interpolator {
+        class Interpolator {
+        public:
             virtual ~Interpolator() {}
 
             /** Returns the number of basis functions that compose this interpolator. */
@@ -58,7 +35,8 @@ namespace Empirical {
             virtual Scalar getLastCorrectionScale() const = 0;
         };
 
-        struct ScalarInterpolator1D : public Interpolator {
+        class ScalarInterpolator1D : public Interpolator, public std::enable_shared_from_this<ScalarInterpolator1D> {
+        public:
             virtual ~ScalarInterpolator1D() {}
 
             /** Calculates N() test points using the given function for the desired solution, then returns a function to interpolate the rest. */
@@ -66,12 +44,15 @@ namespace Empirical {
         };
 
         /** Constructs an interpolator, stoping when either of the given limits has been reached. */
-        ScalarInterpolator1D* constructInterpolator(
-            const Mesh1 mesh,
-            std::vector<ScalarEvaluation1> computedSolutions,
+        std::shared_ptr<ScalarInterpolator1D> constructInterpolator(
+            const Mesh1D& points, const Mesh1D& parameters,
+            boost::const_multi_array_ref<Scalar, 2> computedSolutions,
             const size_t maxBasisSize = 50,
             const Scalar correctionScaleBound = epsScalar * 4e10);
     }
+
+    typedef interpolation::Interpolator Interpolator;
+    typedef interpolation::ScalarInterpolator1D ScalarInterpolator1D;
 }
 
 #endif /* EMPIRICALCPP_SRC_INTERPOLATION_HPP_ */

@@ -1,19 +1,19 @@
-include_directories(${CMAKE_SOURCE_DIR}/empirical/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 add_subdirectory(include)
 add_subdirectory(src)
 
 get_directory_property(empirical_main_headers
-    DIRECTORY ${CMAKE_SOURCE_DIR}/empirical/include/empiricalcpp
+    DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/empiricalcpp
     DEFINITION empirical_header_files)
 get_directory_property(empirical_main_src_headers
-    DIRECTORY ${CMAKE_SOURCE_DIR}/empirical/include/empiricalcpp/src
+    DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/empiricalcpp/src
     DEFINITION empirical_header_files)
 get_directory_property(empirical_src_files
-    DIRECTORY ${CMAKE_SOURCE_DIR}/empirical/src
+    DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src
     DEFINITION empirical_src_files)
 get_directory_property(empirical_src_interpolation_files
-    DIRECTORY ${CMAKE_SOURCE_DIR}/empirical/src
+    DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src
     DEFINITION empirical_src_interpolation_files)
 
 add_library(empiricalcpp ""

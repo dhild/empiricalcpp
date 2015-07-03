@@ -15,9 +15,10 @@ namespace empirical {
 
         class TrapezoidQuadrature : public Quadrature {
         protected:
-            virtual void recalculate(const std::size_t N) {
+            virtual void recalculate(const std::size_t N1) {
+                const std::size_t N = N1 - 1;
                 const Scalar weight = 2.0 / N;
-                for (std::size_t i = 0; i < N; i++) {
+                for (std::size_t i = 0; i < N1; i++) {
                     points[i] = (2.0 * i - N) / N;
                     weights[i] = weight;
                 }
@@ -26,27 +27,24 @@ namespace empirical {
             }
 
         public:
-            TrapezoidQuadrature(const std::size_t N) : Quadrature(N) {
-                recalculate(N);
-            }
+            TrapezoidQuadrature(const std::size_t N) : Quadrature(N) {}
             virtual ~TrapezoidQuadrature() {}
         };
 
         class PeriodicTrapezoidQuadrature : public Quadrature {
         protected:
-            virtual void recalculate(const std::size_t N) {
-                const Scalar size = Scalar(2 * N - 2) / N;
-                const Scalar weight = 2.0 / N;
-                for (std::size_t i = 0; i < N; i++) {
-                    points[i] = (size * i - N) / N;
+            /** If you wrap around, where -1 == 1, then this quadrature maintains spacing across the boundary. */
+            virtual void recalculate(const std::size_t N1) {
+                const std::size_t N = N1 - 1;
+                const Scalar weight = 2.0 / N1;
+                for (std::size_t i = 0; i < N1; i++) {
+                    points[i] = (N - 2.0 * N * N + 4.0 * N * i - 2.0 * i) / (2.0 * N * N);
                     weights[i] = weight;
                 }
             }
 
         public:
-            PeriodicTrapezoidQuadrature(const std::size_t N) : Quadrature(N) {
-                recalculate(N);
-            }
+            PeriodicTrapezoidQuadrature(const std::size_t N) : Quadrature(N) {}
             virtual ~PeriodicTrapezoidQuadrature() {}
         };
 
@@ -60,7 +58,7 @@ namespace empirical {
                 boost::multi_array<Scalar, 2> P(boost::extents[N1][N1]);
 
                 for (std::size_t i = 0; i < N1; i++) {
-                    x[i] = cos((PI * i - N1) / N1);
+                    x[i] = cos((PI * i) / N);
                     xold[i] = 2;
                     for (std::size_t j = 0; j < N1; j++) {
                         P[i][j] = 0;
@@ -99,9 +97,7 @@ namespace empirical {
             }
 
         public:
-            LGLQuadrature(const std::size_t N) : Quadrature(N) {
-                recalculate(N);
-            }
+            LGLQuadrature(const std::size_t N) : Quadrature(N) {}
             virtual ~LGLQuadrature() {}
         };
 
@@ -119,26 +115,32 @@ namespace empirical {
 
         public:
             CustomQuadrature(customFunc xFunction, customFunc weightFunction, const std::size_t N)
-                : Quadrature(N), xFunction(xFunction), weightFunction(weightFunction) {
-                recalculate(N);
-            }
+                : Quadrature(N), xFunction(xFunction), weightFunction(weightFunction) {}
             virtual ~CustomQuadrature() {}
         };
 
         std::shared_ptr<Quadrature> trapezoid(const std::size_t N) {
-            return std::make_shared<TrapezoidQuadrature>(N);
+            auto q = std::make_shared<TrapezoidQuadrature>(N);
+            q->resize(N);
+            return q;
         }
 
         std::shared_ptr<Quadrature> periodicTrapezoid(const std::size_t N) {
-            return std::make_shared<PeriodicTrapezoidQuadrature>(N);
+            auto q = std::make_shared<PeriodicTrapezoidQuadrature>(N);
+            q->resize(N);
+            return q;
         }
 
         std::shared_ptr<Quadrature> legendreGaussLobatto(const std::size_t N) {
-            return std::make_shared<LGLQuadrature>(N);
+            auto q = std::make_shared<LGLQuadrature>(N);
+            q->resize(N);
+            return q;
         }
 
         std::shared_ptr<Quadrature> custom(const std::size_t N, customFunc xFunction, customFunc weightFunction) {
-            return std::make_shared<CustomQuadrature>(xFunction, weightFunction, N);
+            auto q = std::make_shared<CustomQuadrature>(xFunction, weightFunction, N);
+            q->resize(N);
+            return q;
         }
     }
 }

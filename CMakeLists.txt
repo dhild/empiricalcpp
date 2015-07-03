@@ -27,4 +27,6 @@ if (empirical_build_tests)
 endif()
 
 add_subdirectory(empirical)
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/empirical/include)
 add_subdirectory(unittests)
