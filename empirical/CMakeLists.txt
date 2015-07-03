@@ -15,12 +15,16 @@ get_directory_property(empirical_src_files
 get_directory_property(empirical_src_interpolation_files
     DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src
     DEFINITION empirical_src_interpolation_files)
+get_directory_property(empirical_src_mesh_files
+    DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src
+    DEFINITION empirical_src_mesh_files)
 
 add_library(empiricalcpp ""
   ${empirical_main_headers}
   ${empirical_main_src_headers}
   ${empirical_src_files}
   ${empirical_src_interpolation_files}
+  ${empirical_src_mesh_files}
 )
 
 set_target_properties(empiricalcpp
@@ -31,3 +35,4 @@ source_group("include\\empiricalcpp" FILES ${empirical_main_headers})
 source_group("include\\empiricalcpp\\src" FILES ${empirical_main_src_headers})
 source_group("src" FILES ${empirical_src_files})
 source_group("src\\interpolation" FILES ${empirical_src_interpolation_files})
+source_group("src\\mesh" FILES ${empirical_src_mesh_files})

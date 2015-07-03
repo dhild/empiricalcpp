@@ -4,6 +4,10 @@
 #include <complex>
 #include <cstdint>
 
+#ifndef EMPIRICAL_NO_OSTREAM_DEFINITIONS
+#  include <iostream>
+#endif
+
 #ifndef EMPIRICAL_SCALAR_TYPE
 #define EMPIRICAL_SCALAR_TYPE double
 #endif

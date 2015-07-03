@@ -12,3 +12,4 @@ function(add_empirical_unittest test_dirname)
 endfunction()
 
 add_subdirectory(QuadratureTests)
+add_subdirectory(MeshTests)

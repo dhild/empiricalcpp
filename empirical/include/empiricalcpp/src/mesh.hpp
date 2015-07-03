@@ -14,17 +14,28 @@ namespace empirical {
 
         class Mesh1D : public std::enable_shared_from_this<Mesh1D> {
         protected:
-            typedef boost::multi_array<Scalar, 2> mesh_type;
+            typedef std::vector<Scalar> mesh_type;
             mesh_type points;
-            Mesh1D(std::size_t sizeX) : points(boost::extents[sizeX][2]) {}
+            Mesh1D(std::size_t sizeX) : points(sizeX) {}
 
             virtual void recalculatePoints() = 0;
 
         public:
             virtual ~Mesh1D() {}
 
-            mesh_type::const_multi_array_ref mesh() const;
-            void resize(std::size_t sizeX);
+            Scalar operator()(const std::size_t i) const {
+                return points[i];
+            }
+            Scalar operator[](const std::size_t i) const {
+                return points[i];
+            }
+            const mesh_type mesh() const {
+                return points;
+            }
+            void resize(const std::size_t sizeX) {
+                points.resize(sizeX);
+                this->recalculatePoints();
+            }
         };
 
         class Mesh2D : public std::enable_shared_from_this<Mesh2D> {
@@ -38,29 +49,33 @@ namespace empirical {
         public:
             virtual ~Mesh2D() {}
 
+            Scalar operator()(const std::size_t i, const std::size_t j, const std::size_t k) const {
+                return points[i][j][k];
+            }
             mesh_type::const_multi_array_ref mesh() const;
-            void resize(std::size_t sizeX, std::size_t sizeY);
+            void resize(const std::size_t sizeX, std::size_t sizeY);
         };
 
+        typedef std::function<Scalar(std::size_t i, std::size_t N)> MeshFunction;
         typedef std::tuple<std::size_t, Scalar, Scalar> MeshRange;
         typedef std::tuple<std::shared_ptr<Quadrature>, Scalar, Scalar> MeshQuadrature;
 
-        MeshRange range(std::size_t size, Scalar min, Scalar max) {
-            return std::make_tuple(size, min, max);
-        }
-        MeshQuadrature range(std::shared_ptr<Quadrature>& q, Scalar min, Scalar max) {
-            return std::make_tuple(q, min, max);
-        }
-        MeshQuadrature range(Quadrature& q, Scalar min, Scalar max) {
-            return std::make_tuple(q.shared_from_this(), min, max);
-        }
+        MeshRange range(std::size_t size, Scalar min, Scalar max);
+        MeshQuadrature range(std::shared_ptr<Quadrature>& q, Scalar min, Scalar max);
+        MeshQuadrature range(Quadrature& q, Scalar min, Scalar max);
 
+        std::shared_ptr<Mesh1D> createMesh(std::size_t N, MeshFunction xFunction);
         std::shared_ptr<Mesh1D> createMesh(MeshRange xRange);
         std::shared_ptr<Mesh1D> createMesh(MeshQuadrature xQuadrature);
 
+        std::shared_ptr<Mesh2D> createMesh(std::size_t N, MeshFunction xFunction, std::size_t M, MeshRange yFunction);
         std::shared_ptr<Mesh2D> createMesh(MeshRange xRange, MeshRange yRange);
         std::shared_ptr<Mesh2D> createMesh(MeshQuadrature xQuadrature, MeshQuadrature yQuadrature);
 
+#ifndef EMPIRICAL_NO_OSTREAM_DEFINITIONS
+        std::ostream& operator<<(std::ostream& os, const Mesh1D& m);
+        std::ostream& operator<<(std::ostream& os, const Mesh2D& m);
+#endif
     }
 
     typedef mesh::Mesh1D Mesh1D;
