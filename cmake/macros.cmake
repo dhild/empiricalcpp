@@ -22,16 +22,13 @@ macro(config_compiler_and_linker)
     set(cxx_base_flags "-Wall -Wshadow -Wextra")
     set(cxx_base_flags "${cxx_base_flags} -fexceptions")
   endif()
+  
+  if (NOT empirical_define_ostream_operators)
+    add_definitions(-DEMPIRICAL_NO_OSTREAM_DEFINITIONS)
+  endif()
 
-  # For building empirical's tests and samples.
-  set(cxx_exception "${CMAKE_CXX_FLAGS} ${cxx_base_flags} ${cxx_exception_flags}")
-  set(cxx_no_exception
-    "${CMAKE_CXX_FLAGS} ${cxx_base_flags} ${cxx_no_exception_flags}")
-  set(cxx_default "${cxx_exception}")
-  set(cxx_no_rtti "${cxx_default} ${cxx_no_rtti_flags}")
-
-  # For building the empirical libraries.
-  set(cxx_strict "${cxx_default} ${cxx_strict_flags}")
+  # Add in compilation flags from the cmake configuration:
+  set(cxx_base_flags "${cxx_base_flags} ${empirical_compile_options}")
 endmacro()
 
 macro(add_empirical_library name)
