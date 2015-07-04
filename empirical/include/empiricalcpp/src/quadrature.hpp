@@ -18,21 +18,8 @@ namespace empirical {
             /** Returns a new Quadrature, which is initialized to the same values as this. */
             virtual Quadrature* clone() const = 0;
 
-            Scalar integrate(std::function<Scalar(Scalar)> func) const {
-                Scalar eval = 0;
-                for (std::size_t i = 0; i < points.size(); i++) {
-                    eval += weights[i] * func(points[i]);
-                }
-                return eval;
-            }
-
-            cScalar integrateComplex(std::function<cScalar(Scalar)> func) const {
-                cScalar eval = 0;
-                for (std::size_t i = 0; i < points.size(); i++) {
-                    eval += weights[i] * func(points[i]);
-                }
-                return eval;
-            }
+            Scalar integrate(std::function<Scalar(Scalar)> func) const;
+            cScalar integrateComplex(std::function<cScalar(Scalar)> func) const;
 
         protected:
             virtual void recalculate(const std::size_t N) = 0;

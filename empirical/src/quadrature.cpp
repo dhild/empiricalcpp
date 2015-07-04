@@ -17,6 +17,22 @@ namespace empirical {
             this->recalculate(N);
         }
 
+        Scalar Quadrature::integrate(std::function<Scalar(Scalar)> func) const {
+            Scalar eval = 0;
+            for (std::size_t i = 0; i < points.size(); i++) {
+                eval += weights[i] * func(points[i]);
+            }
+            return eval;
+        }
+
+        cScalar Quadrature::integrateComplex(std::function<cScalar(Scalar)> func) const {
+            cScalar eval = 0;
+            for (std::size_t i = 0; i < points.size(); i++) {
+                eval += weights[i] * func(points[i]);
+            }
+            return eval;
+        }
+
         class TrapezoidQuadrature : public Quadrature {
         protected:
             virtual void recalculate(const std::size_t N1) {
