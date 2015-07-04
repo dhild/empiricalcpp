@@ -3,6 +3,7 @@
 #ifndef EMPIRICAL_NO_OSTREAM_DEFINITIONS
 #  include <iomanip>
 #endif
+
 namespace empirical {
     namespace mesh {
         MeshRange range(Scalar min, Scalar max) {
