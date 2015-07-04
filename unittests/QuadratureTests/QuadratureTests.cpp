@@ -81,31 +81,44 @@ namespace {
             test_size(q, oldSize, lowerBound, upperBound);
         }
     }
+
+    void test_clone(Quadrature& q) {
+        SCOPED_TRACE("clone tests");
+        SCOPED_TRACE(q);
+        std::unique_ptr<Quadrature> cloned(q.clone());
+        std::size_t oldSize = q.points.size();
+        std::size_t newSize = oldSize - 5;
+        q.resize(newSize);
+        EXPECT_NE(q.points.size(), cloned->points.size());
+    }
 }
 
 TEST(QuadratureTest, PeriodicTrapezoidTests) {
     SCOPED_TRACE("PeriodicTrapezoidTests");
-    std::shared_ptr<Quadrature> quadrature = quadrature::periodicTrapezoid(250);
-    test_size(*quadrature.get(), 250, -1 + (1.0 / (2 * 250)), 1 - (1.0 / (2 * 250)));
-    test_constant_integration(*quadrature.get(), 1e-14);
-    test_sinusoid_integration(*quadrature.get(), 1e-2);
-    test_resize(*quadrature.get(), -1 + (1.0 / (2 * 300)), 1 - (1.0 / (2 * 300)));
+    Quadrature* quadrature = quadrature::periodicTrapezoid(250);
+    test_size(*quadrature, 250, -1 + (1.0 / (2 * 250)), 1 - (1.0 / (2 * 250)));
+    test_constant_integration(*quadrature, 1e-14);
+    test_sinusoid_integration(*quadrature, 1e-2);
+    test_resize(*quadrature, -1 + (1.0 / (2 * 300)), 1 - (1.0 / (2 * 300)));
+    test_clone(*quadrature);
 }
 
 TEST(QuadratureTest, TrapezoidTests) {
     SCOPED_TRACE("TrapezoidTests");
-    std::shared_ptr<Quadrature> quadrature = quadrature::trapezoid(250);
-    test_size(*quadrature.get(), 250);
-    test_constant_integration(*quadrature.get(), 5e-5);
-    test_sinusoid_integration(*quadrature.get(), 2e-2);
-    test_resize(*quadrature.get());
+    Quadrature* quadrature = quadrature::trapezoid(250);
+    test_size(*quadrature, 250);
+    test_constant_integration(*quadrature, 5e-5);
+    test_sinusoid_integration(*quadrature, 2e-2);
+    test_resize(*quadrature);
+    test_clone(*quadrature);
 }
 
 TEST(QuadratureTest, LegendreGaussLobattoTests) {
     SCOPED_TRACE("LegendreGaussLobattoTests");
-    std::shared_ptr<Quadrature> quadrature = quadrature::legendreGaussLobatto(250);
-    test_size(*quadrature.get(), 250);
-    test_constant_integration(*quadrature.get(), 1e-16);
-    test_sinusoid_integration(*quadrature.get(), 1e-15);
-    test_resize(*quadrature.get());
+    Quadrature* quadrature = quadrature::legendreGaussLobatto(250);
+    test_size(*quadrature, 250);
+    test_constant_integration(*quadrature, 1e-16);
+    test_sinusoid_integration(*quadrature, 1e-15);
+    test_resize(*quadrature);
+    test_clone(*quadrature);
 }

@@ -24,8 +24,8 @@ namespace {
 
 namespace empirical {
     namespace mesh {
-        std::shared_ptr<Mesh1D> createMesh(std::size_t N, MeshFunction xFunction) {
-            return std::make_shared<FunctionMesh1D>(N, xFunction);
+        Mesh1D* createMesh(std::size_t N, MeshFunction xFunction) {
+            return new FunctionMesh1D(N, xFunction);
         }
     }
 }
