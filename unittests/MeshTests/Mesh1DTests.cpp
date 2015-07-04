@@ -102,4 +102,48 @@ namespace {
         SCOPED_TRACE("RangeMesh1DTest");
         resizeAlsoRecalculates();
     }
+
+    class QuadratureMesh1DTest : public Mesh1DTest {
+    public:
+        std::shared_ptr<Quadrature> quad;
+
+        virtual void SetUp() {
+            size = 25;
+            quad = quadrature::legendreGaussLobatto(25);
+            testMesh = mesh::createMesh(size, mesh::range(quad, -3, 5));
+
+            const Quadrature* q = quad.get();
+            const Mesh1D* m = testMesh.get();
+            calc = [q, m](const std::size_t i, const std::size_t N)->Scalar {
+                EXPECT_EQ(N, q->points.size());
+                EXPECT_EQ(N, m->mesh().size());
+                return 1.0 + 4.0 * q->points[i];
+            };
+        }
+    };
+
+    TEST_F(QuadratureMesh1DTest, elementTest) {
+        SCOPED_TRACE("QuadratureMesh1DTest");
+        elementTest();
+    }
+
+    TEST_F(QuadratureMesh1DTest, accessorsAreEquivalent) {
+        SCOPED_TRACE("QuadratureMesh1DTest");
+        accessorsAreEquivalent();
+    }
+
+    TEST_F(QuadratureMesh1DTest, resizeAlsoRecalculates) {
+        SCOPED_TRACE("QuadratureMesh1DTest");
+        resizeAlsoRecalculates();
+    }
+
+    TEST_F(QuadratureMesh1DTest, quadratureReferencesOriginalObject) {
+        SCOPED_TRACE("QuadratureMesh1DTest");
+        SCOPED_TRACE("quadratureReferencesOriginalObject");
+        EXPECT_EQ(size, quad->points.size());
+        const std::size_t original = size;
+        resizeAlsoRecalculates();
+        EXPECT_NE(original, size);
+        EXPECT_EQ(size, quad->points.size());
+    }
 }

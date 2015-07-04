@@ -58,7 +58,21 @@ namespace empirical {
 
         typedef std::function<Scalar(std::size_t i, std::size_t N)> MeshFunction;
         typedef std::pair<Scalar, Scalar> MeshRange;
-        typedef std::tuple<std::shared_ptr<Quadrature>, Scalar, Scalar> MeshQuadrature;
+        class MeshQuadrature : public std::tuple < std::shared_ptr<Quadrature>, Scalar, Scalar > {
+        public:
+            MeshQuadrature(std::shared_ptr<Quadrature> q , Scalar min, Scalar max)
+             : std::tuple< std::shared_ptr<Quadrature>, Scalar, Scalar >(q, min, max) {}
+
+            Quadrature& quad() const {
+                return *(std::get<0, std::shared_ptr<Quadrature>, Scalar, Scalar>(*this).get());
+            }
+            Scalar min() const {
+                return std::get<1, std::shared_ptr<Quadrature>, Scalar, Scalar>(*this);
+            }
+            Scalar max() const {
+                return std::get<2, std::shared_ptr<Quadrature>, Scalar, Scalar>(*this);
+            }
+        };
 
         MeshRange range(Scalar min, Scalar max);
         MeshQuadrature range(std::shared_ptr<Quadrature>& q, Scalar min, Scalar max);
