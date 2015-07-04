@@ -38,22 +38,26 @@ namespace empirical {
         };
 
         class Mesh2D : public std::enable_shared_from_this<Mesh2D> {
-        protected:
+        public:
             typedef boost::multi_array<Scalar, 3> mesh_type;
-            mesh_type points;
-            Mesh2D(std::size_t sizeX, std::size_t sizeY) : points(boost::extents[sizeX][sizeY][2]) {}
+
+        protected:
+            mesh_type* points;
+            Mesh2D(std::size_t sizeX, std::size_t sizeY);
 
             virtual void recalculatePoints() = 0;
 
         public:
-            virtual ~Mesh2D() {}
+            virtual ~Mesh2D();
 
             Scalar operator()(const std::size_t i, const std::size_t j, const std::size_t k) const {
-                return points[i][j][k];
+                return (*points)[i][j][k];
             }
+
             mesh_type::const_multi_array_ref mesh() const {
-                return points;
+                return *points;
             }
+
             void resize(const std::size_t sizeX, std::size_t sizeY);
         };
 
@@ -74,7 +78,7 @@ namespace empirical {
         Mesh1D* createMesh(std::size_t N, MeshRange xRange);
         Mesh1D* createMesh(std::size_t N, MeshQuadrature xQuadrature);
 
-        Mesh2D* createMesh(std::size_t N, MeshFunction xFunction, std::size_t M, MeshRange yFunction);
+        Mesh2D* createMesh(std::size_t N, MeshFunction xFunction, std::size_t M, MeshFunction yFunction);
         Mesh2D* createMesh(std::size_t N, MeshRange xRange, std::size_t M, MeshRange yRange);
         Mesh2D* createMesh(std::size_t N, MeshQuadrature xQuadrature, std::size_t M, MeshQuadrature yQuadrature);
 
