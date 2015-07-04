@@ -8,12 +8,6 @@ namespace empirical {
         MeshRange range(Scalar min, Scalar max) {
             return std::make_pair(min, max);
         }
-        MeshQuadrature range(std::shared_ptr<Quadrature>& q, Scalar min, Scalar max) {
-            return MeshQuadrature(q, min, max);
-        }
-        MeshQuadrature range(Quadrature& q, Scalar min, Scalar max) {
-            return MeshQuadrature(q.shared_from_this(), min, max);
-        }
 
 #ifndef EMPIRICAL_NO_OSTREAM_DEFINITIONS
         std::ostream& operator<<(std::ostream& os, const Mesh1D& mesh) {

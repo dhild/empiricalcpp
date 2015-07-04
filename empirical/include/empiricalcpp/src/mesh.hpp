@@ -4,7 +4,6 @@
 #include <empiricalcpp/src/constants.hpp>
 #include <empiricalcpp/src/quadrature.hpp>
 #include <functional>
-#include <memory>
 #include <vector>
 #include <tuple>
 #include <boost/multi_array.hpp>
@@ -52,39 +51,32 @@ namespace empirical {
             Scalar operator()(const std::size_t i, const std::size_t j, const std::size_t k) const {
                 return points[i][j][k];
             }
-            mesh_type::const_multi_array_ref mesh() const;
+            mesh_type::const_multi_array_ref mesh() const {
+                return points;
+            }
             void resize(const std::size_t sizeX, std::size_t sizeY);
         };
 
         typedef std::function<Scalar(std::size_t i, std::size_t N)> MeshFunction;
         typedef std::pair<Scalar, Scalar> MeshRange;
-        class MeshQuadrature : public std::tuple < std::shared_ptr<Quadrature>, Scalar, Scalar > {
-        public:
-            MeshQuadrature(std::shared_ptr<Quadrature> q , Scalar min, Scalar max)
-             : std::tuple< std::shared_ptr<Quadrature>, Scalar, Scalar >(q, min, max) {}
+        struct MeshQuadrature {
+            Quadrature* quadrature;
+            Scalar min;
+            Scalar max;
 
-            Quadrature& quad() const {
-                return *(std::get<0, std::shared_ptr<Quadrature>, Scalar, Scalar>(*this).get());
-            }
-            Scalar min() const {
-                return std::get<1, std::shared_ptr<Quadrature>, Scalar, Scalar>(*this);
-            }
-            Scalar max() const {
-                return std::get<2, std::shared_ptr<Quadrature>, Scalar, Scalar>(*this);
-            }
+            MeshQuadrature(Quadrature* q, Scalar min, Scalar max)
+                : quadrature(q), min(min), max(max) {}
         };
 
         MeshRange range(Scalar min, Scalar max);
-        MeshQuadrature range(std::shared_ptr<Quadrature>& q, Scalar min, Scalar max);
-        MeshQuadrature range(Quadrature& q, Scalar min, Scalar max);
 
-        std::shared_ptr<Mesh1D> createMesh(std::size_t N, MeshFunction xFunction);
-        std::shared_ptr<Mesh1D> createMesh(std::size_t N, MeshRange xRange);
-        std::shared_ptr<Mesh1D> createMesh(std::size_t N, MeshQuadrature xQuadrature);
+        Mesh1D* createMesh(std::size_t N, MeshFunction xFunction);
+        Mesh1D* createMesh(std::size_t N, MeshRange xRange);
+        Mesh1D* createMesh(std::size_t N, MeshQuadrature xQuadrature);
 
-        std::shared_ptr<Mesh2D> createMesh(std::size_t N, MeshFunction xFunction, std::size_t M, MeshRange yFunction);
-        std::shared_ptr<Mesh2D> createMesh(std::size_t N, MeshRange xRange, std::size_t M, MeshRange yRange);
-        std::shared_ptr<Mesh2D> createMesh(std::size_t N, MeshQuadrature xQuadrature, std::size_t M, MeshQuadrature yQuadrature);
+        Mesh2D* createMesh(std::size_t N, MeshFunction xFunction, std::size_t M, MeshRange yFunction);
+        Mesh2D* createMesh(std::size_t N, MeshRange xRange, std::size_t M, MeshRange yRange);
+        Mesh2D* createMesh(std::size_t N, MeshQuadrature xQuadrature, std::size_t M, MeshQuadrature yQuadrature);
 
 #ifndef EMPIRICAL_NO_OSTREAM_DEFINITIONS
         std::ostream& operator<<(std::ostream& os, const Mesh1D& m);

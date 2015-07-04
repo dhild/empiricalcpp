@@ -26,8 +26,8 @@ namespace {
 
 namespace empirical {
     namespace mesh {
-        std::shared_ptr<Mesh1D> createMesh(std::size_t N, MeshRange xRange) {
-            return std::make_shared<RangeMesh1D>(N, xRange);
+        Mesh1D* createMesh(std::size_t N, MeshRange xRange) {
+            return new RangeMesh1D(N, xRange);
         }
     }
 }

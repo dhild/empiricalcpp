@@ -33,6 +33,12 @@ namespace empirical {
         public:
             TrapezoidQuadrature(const std::size_t N) : Quadrature(N) {}
             virtual ~TrapezoidQuadrature() {}
+            virtual Quadrature* clone() const {
+                Quadrature* cloned = new TrapezoidQuadrature(1);
+                cloned->points = points;
+                cloned->weights = weights;
+                return cloned;
+            }
         };
 
         class PeriodicTrapezoidQuadrature : public Quadrature {
@@ -50,6 +56,12 @@ namespace empirical {
         public:
             PeriodicTrapezoidQuadrature(const std::size_t N) : Quadrature(N) {}
             virtual ~PeriodicTrapezoidQuadrature() {}
+            virtual Quadrature* clone() const {
+                Quadrature* cloned = new PeriodicTrapezoidQuadrature(1);
+                cloned->points = points;
+                cloned->weights = weights;
+                return cloned;
+            }
         };
 
         class LGLQuadrature : public Quadrature {
@@ -103,6 +115,12 @@ namespace empirical {
         public:
             LGLQuadrature(const std::size_t N) : Quadrature(N) {}
             virtual ~LGLQuadrature() {}
+            virtual Quadrature* clone() const {
+                Quadrature* cloned = new LGLQuadrature(1);
+                cloned->points = points;
+                cloned->weights = weights;
+                return cloned;
+            }
         };
 
         class CustomQuadrature : public Quadrature {
@@ -121,28 +139,34 @@ namespace empirical {
             CustomQuadrature(customFunc xFunction, customFunc weightFunction, const std::size_t N)
                 : Quadrature(N), xFunction(xFunction), weightFunction(weightFunction) {}
             virtual ~CustomQuadrature() {}
+            virtual Quadrature* clone() const {
+                Quadrature* cloned = new CustomQuadrature(xFunction, weightFunction, 1);
+                cloned->points = points;
+                cloned->weights = weights;
+                return cloned;
+            }
         };
 
-        std::shared_ptr<Quadrature> trapezoid(const std::size_t N) {
-            auto q = std::make_shared<TrapezoidQuadrature>(N);
+        Quadrature* trapezoid(const std::size_t N) {
+            Quadrature* q = new TrapezoidQuadrature(N);
             q->resize(N);
             return q;
         }
 
-        std::shared_ptr<Quadrature> periodicTrapezoid(const std::size_t N) {
-            auto q = std::make_shared<PeriodicTrapezoidQuadrature>(N);
+        Quadrature* periodicTrapezoid(const std::size_t N) {
+            Quadrature* q = new PeriodicTrapezoidQuadrature(N);
             q->resize(N);
             return q;
         }
 
-        std::shared_ptr<Quadrature> legendreGaussLobatto(const std::size_t N) {
-            auto q = std::make_shared<LGLQuadrature>(N);
+        Quadrature* legendreGaussLobatto(const std::size_t N) {
+            Quadrature* q = new LGLQuadrature(N);
             q->resize(N);
             return q;
         }
 
-        std::shared_ptr<Quadrature> custom(const std::size_t N, customFunc xFunction, customFunc weightFunction) {
-            auto q = std::make_shared<CustomQuadrature>(xFunction, weightFunction, N);
+        Quadrature* custom(const std::size_t N, customFunc xFunction, customFunc weightFunction) {
+            Quadrature* q = new CustomQuadrature(xFunction, weightFunction, N);
             q->resize(N);
             return q;
         }
