@@ -1,11 +1,9 @@
 *~
-build/
+/build/
 *\.idb
 *\.ilk
 *\.lib
 *\.pdb
 *\.exe
-core/tests/runner.cpp
 *\.orig
-core/coretest
-core/libcorelib.a
+/msvc
