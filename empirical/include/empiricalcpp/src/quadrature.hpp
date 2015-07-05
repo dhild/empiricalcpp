@@ -7,6 +7,15 @@
 
 namespace empirical {
     namespace quadrature {
+        /** A Quadrature defines a set of points which lie in the region [-1, 1], and their corresponding weights.
+         *
+         * Ownership semantics
+         * ===================
+         * Because of the relatively low cost of creating a quadrature, any empirical class which uses a Quadrature
+         * is expected to maintain ownership of a unique copy of the Quadrature. This allows the owner class to
+         * control aspects such as resizing of the quadrature. Thus, most objects will use
+         * [clone](@ref Quadrature::clone()) when creating an object using a Quadrature.
+         */
         class Quadrature {
         public:
             std::vector<Scalar> points;
