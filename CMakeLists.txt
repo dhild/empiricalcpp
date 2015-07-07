@@ -14,7 +14,7 @@ set(empirical_compile_options ""
 # as ${empirical_SOURCE_DIR} and to the root binary directory as
 # ${empirical_BINARY_DIR}.
 project(empirical CXX)
-cmake_minimum_required(VERSION 2.6.2)
+cmake_minimum_required(VERSION 3.0)
 
 include(cmake/macros.cmake)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)

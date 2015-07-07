@@ -1,38 +1,20 @@
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-add_subdirectory(include)
-add_subdirectory(src)
-
-get_directory_property(empirical_main_headers
-    DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/empiricalcpp
-    DEFINITION empirical_header_files)
-get_directory_property(empirical_main_src_headers
-    DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/empiricalcpp/src
-    DEFINITION empirical_header_files)
-get_directory_property(empirical_src_files
-    DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src
-    DEFINITION empirical_src_files)
-get_directory_property(empirical_src_interpolation_files
-    DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src
-    DEFINITION empirical_src_interpolation_files)
-get_directory_property(empirical_src_mesh_files
-    DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src
-    DEFINITION empirical_src_mesh_files)
+file(GLOB_RECURSE empirical_sources "*.cpp")
+file(GLOB_RECURSE empirical_headers "*.hpp")
 
 add_library(empiricalcpp ""
-  ${empirical_main_headers}
-  ${empirical_main_src_headers}
-  ${empirical_src_files}
-  ${empirical_src_interpolation_files}
-  ${empirical_src_mesh_files}
+  ${empirical_sources}
+  ${empirical_headers}
 )
+
+foreach (_file ${empirical_sources} ${empirical_headers})
+  get_filename_component(_dir ${_file} DIRECTORY)
+  string(REPLACE "${CMAKE_CURRENT_SOURCE_DIR}/" "" _group_dir_tmp ${_dir})
+  string(REPLACE "/" "\\" _group_dir ${_group_dir_tmp})
+  source_group(${_group_dir} FILES ${_file})
+endforeach()
 
 set_target_properties(empiricalcpp
     PROPERTIES
     COMPILE_FLAGS "${CMAKE_CXX_FLAGS} ${cxx_base_flags}")
-
-source_group("include\\empiricalcpp" FILES ${empirical_main_headers})
-source_group("include\\empiricalcpp\\src" FILES ${empirical_main_src_headers})
-source_group("src" FILES ${empirical_src_files})
-source_group("src\\interpolation" FILES ${empirical_src_interpolation_files})
-source_group("src\\mesh" FILES ${empirical_src_mesh_files})

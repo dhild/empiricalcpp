@@ -13,3 +13,4 @@ endfunction()
 
 add_subdirectory(QuadratureTests)
 add_subdirectory(MeshTests)
+add_subdirectory(InterpolatorTests)

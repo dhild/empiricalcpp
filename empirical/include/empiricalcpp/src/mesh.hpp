@@ -11,7 +11,7 @@
 namespace empirical {
     namespace mesh {
 
-        class Mesh1D : public std::enable_shared_from_this<Mesh1D> {
+        class Mesh1D {
         protected:
             typedef std::vector<Scalar> mesh_type;
             mesh_type points;
@@ -37,7 +37,7 @@ namespace empirical {
             }
         };
 
-        class Mesh2D : public std::enable_shared_from_this<Mesh2D> {
+        class Mesh2D {
         public:
             typedef boost::multi_array<Scalar, 3> mesh_type;
 
