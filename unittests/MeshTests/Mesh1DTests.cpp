@@ -16,7 +16,9 @@ namespace {
         void elementTest() {
             const Mesh1D& m = *testMesh;
             SCOPED_TRACE("elementTest");
+#ifndef EMPIRICAL_NO_OSTREAM_DEFINITIONS
             SCOPED_TRACE(m);
+#endif
             EXPECT_EQ(size, m.mesh().size());
             for (std::size_t i = 0; i < size; i++) {
                 EXPECT_NEAR(calc(i, size), m(i), epsScalar);
@@ -26,7 +28,9 @@ namespace {
         void accessorsAreEquivalent() {
             const Mesh1D& m = *testMesh;
             SCOPED_TRACE("accessorsAreEquivalent");
+#ifndef EMPIRICAL_NO_OSTREAM_DEFINITIONS
             SCOPED_TRACE(m);
+#endif
             for (std::size_t i = 0; i < size; i++) {
                 EXPECT_NEAR(calc(i, size), m(i), epsScalar);
                 EXPECT_NEAR(calc(i, size), m[i], epsScalar);

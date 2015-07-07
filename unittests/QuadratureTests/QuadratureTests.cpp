@@ -25,7 +25,9 @@ namespace {
 
     void test_size(const Quadrature& q, const std::size_t N, const Scalar lowerBound = -1, const Scalar upperBound = 1) {
         SCOPED_TRACE("size test");
+#ifndef EMPIRICAL_NO_OSTREAM_DEFINITIONS
         SCOPED_TRACE(q);
+#endif
         EXPECT_EQ(N, q.points.size());
         EXPECT_EQ(N, q.weights.size());
 
@@ -53,14 +55,18 @@ namespace {
 
     void test_constant_integration(const Quadrature& q, const Scalar eps) {
         SCOPED_TRACE("constant integration");
+#ifndef EMPIRICAL_NO_OSTREAM_DEFINITIONS
         SCOPED_TRACE(q);
+#endif
         Scalar integrated = q.integrate(one);
         EXPECT_NEAR(0, integrated, eps);
     }
 
     void test_sinusoid_integration(const Quadrature& q, const Scalar eps) {
         SCOPED_TRACE("sinusoid integration");
+#ifndef EMPIRICAL_NO_OSTREAM_DEFINITIONS
         SCOPED_TRACE(q);
+#endif
         Scalar integrated = q.integrate(sinusoid);
         EXPECT_NEAR(sinusoid_integration_value, integrated, eps);
     }
@@ -70,13 +76,17 @@ namespace {
         std::size_t newSize = q.points.size() + 50;
         {
             SCOPED_TRACE("first resize tests");
+#ifndef EMPIRICAL_NO_OSTREAM_DEFINITIONS
             SCOPED_TRACE(q);
+#endif
             q.resize(newSize);
             test_size(q, newSize, lowerBound, upperBound);
         }
         {
             SCOPED_TRACE("second resize tests");
+#ifndef EMPIRICAL_NO_OSTREAM_DEFINITIONS
             SCOPED_TRACE(q);
+#endif
             q.resize(oldSize);
             test_size(q, oldSize, lowerBound, upperBound);
         }
@@ -84,7 +94,9 @@ namespace {
 
     void test_clone(Quadrature& q) {
         SCOPED_TRACE("clone tests");
+#ifndef EMPIRICAL_NO_OSTREAM_DEFINITIONS
         SCOPED_TRACE(q);
+#endif
         std::unique_ptr<Quadrature> cloned(q.clone());
         std::size_t oldSize = q.points.size();
         std::size_t newSize = oldSize - 5;
