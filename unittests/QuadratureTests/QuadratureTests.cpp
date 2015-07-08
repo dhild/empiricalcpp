@@ -1,5 +1,6 @@
 #include "gtest/gtest.h"
 
+#undef EMPIRICAL_NO_OSTREAM_DEFINITIONS
 #include <empiricalcpp/empirical.hpp>
 #include <cmath>
 #include <functional>
@@ -23,17 +24,16 @@ namespace {
 
     const Scalar sinusoid_integration_value = function_integral(1) - function_integral(-1);
 
-    void test_size(const Quadrature& q, const std::size_t N, const Scalar lowerBound = -1, const Scalar upperBound = 1) {
+    void test_size(const Quadrature& q, const Quadrature::size_type N) {
         SCOPED_TRACE("size test");
-#ifndef EMPIRICAL_NO_OSTREAM_DEFINITIONS
         SCOPED_TRACE(q);
-#endif
-        EXPECT_EQ(N, q.points.size());
-        EXPECT_EQ(N, q.weights.size());
+        EXPECT_EQ(N, q.size());
+        EXPECT_EQ(N, q.getPoints().size());
+        EXPECT_EQ(N, q.getWeights().size());
 
-        Scalar minX = q.points[0];
+        Scalar minX = q[0];
         Scalar maxX = minX;
-        for (Scalar s : q.points) {
+        for (Scalar s : q) {
             if (s <= minX) {
                 minX = s;
             }
@@ -42,95 +42,95 @@ namespace {
             }
         }
 
-        EXPECT_TRUE(minX >= lowerBound);
-        EXPECT_TRUE(maxX <= upperBound);
+        EXPECT_GE(minX, q.min());
+        EXPECT_LE(maxX, q.max());
 
-        Scalar sum = 0;
-        for (Scalar s : q.weights) {
-            sum += s;
-        }
-
-        EXPECT_NEAR(2.0, sum, N * epsScalar);
+        auto weights = q.getWeights();
+        Scalar sum = std::accumulate(weights.begin(), weights.end(), Scalar(0));
+        Scalar size = q.max() - q.min();
+        SCOPED_TRACE(size);
+        EXPECT_NEAR(size, sum, N * epsScalar * size);
     }
 
     void test_constant_integration(const Quadrature& q, const Scalar eps) {
         SCOPED_TRACE("constant integration");
-#ifndef EMPIRICAL_NO_OSTREAM_DEFINITIONS
         SCOPED_TRACE(q);
-#endif
         Scalar integrated = q.integrate(one);
         EXPECT_NEAR(0, integrated, eps);
     }
 
     void test_sinusoid_integration(const Quadrature& q, const Scalar eps) {
         SCOPED_TRACE("sinusoid integration");
-#ifndef EMPIRICAL_NO_OSTREAM_DEFINITIONS
         SCOPED_TRACE(q);
-#endif
         Scalar integrated = q.integrate(sinusoid);
         EXPECT_NEAR(sinusoid_integration_value, integrated, eps);
     }
 
     void test_resize(Quadrature& q, const Scalar lowerBound = -1, const Scalar upperBound = 1) {
-        std::size_t oldSize = q.points.size();
-        std::size_t newSize = q.points.size() + 50;
+        Quadrature::size_type oldSize = q.size();
+        Quadrature::size_type newSize = q.size() + 50;
         {
             SCOPED_TRACE("first resize tests");
-#ifndef EMPIRICAL_NO_OSTREAM_DEFINITIONS
             SCOPED_TRACE(q);
-#endif
-            q.resize(newSize);
-            test_size(q, newSize, lowerBound, upperBound);
+            q.resize(newSize, lowerBound, upperBound);
+            test_size(q, newSize);
         }
         {
             SCOPED_TRACE("second resize tests");
-#ifndef EMPIRICAL_NO_OSTREAM_DEFINITIONS
             SCOPED_TRACE(q);
-#endif
-            q.resize(oldSize);
-            test_size(q, oldSize, lowerBound, upperBound);
+            q.resize(oldSize, lowerBound, upperBound);
+            test_size(q, oldSize);
         }
-    }
-
-    void test_clone(Quadrature& q) {
-        SCOPED_TRACE("clone tests");
-#ifndef EMPIRICAL_NO_OSTREAM_DEFINITIONS
-        SCOPED_TRACE(q);
-#endif
-        std::unique_ptr<Quadrature> cloned(q.clone());
-        std::size_t oldSize = q.points.size();
-        std::size_t newSize = oldSize - 5;
-        q.resize(newSize);
-        EXPECT_NE(q.points.size(), cloned->points.size());
     }
 }
 
 TEST(QuadratureTest, PeriodicTrapezoidTests) {
     SCOPED_TRACE("PeriodicTrapezoidTests");
-    Quadrature* quadrature = quadrature::periodicTrapezoid(250);
-    test_size(*quadrature, 250, -1 + (1.0 / (2 * 250)), 1 - (1.0 / (2 * 250)));
-    test_constant_integration(*quadrature, 1e-14);
-    test_sinusoid_integration(*quadrature, 1e-2);
-    test_resize(*quadrature, -1 + (1.0 / (2 * 300)), 1 - (1.0 / (2 * 300)));
-    test_clone(*quadrature);
+    Quadrature quadrature = quadrature::periodicTrapezoid(250);
+    test_size(quadrature, 250);
+    test_constant_integration(quadrature, 1e-14);
+    test_sinusoid_integration(quadrature, 1e-2);
+    test_resize(quadrature, -1 + (1.0 / (2 * 300)), 1 - (1.0 / (2 * 300)));
+    {
+        SCOPED_TRACE("Resize 2, 3");
+        test_resize(quadrature, 2, 3);
+    }
+    {
+        SCOPED_TRACE("Resize -5, 10");
+        test_resize(quadrature, -5, 10);
+    }
 }
 
 TEST(QuadratureTest, TrapezoidTests) {
     SCOPED_TRACE("TrapezoidTests");
-    Quadrature* quadrature = quadrature::trapezoid(250);
-    test_size(*quadrature, 250);
-    test_constant_integration(*quadrature, 5e-5);
-    test_sinusoid_integration(*quadrature, 2e-2);
-    test_resize(*quadrature);
-    test_clone(*quadrature);
+    Quadrature quadrature = quadrature::trapezoid(250);
+    test_size(quadrature, 250);
+    test_constant_integration(quadrature, 5e-5);
+    test_sinusoid_integration(quadrature, 2e-2);
+    test_resize(quadrature);
+    {
+        SCOPED_TRACE("Resize 2, 3");
+        test_resize(quadrature, 2, 3);
+    }
+    {
+        SCOPED_TRACE("Resize -5, 10");
+        test_resize(quadrature, -5, 10);
+    }
 }
 
 TEST(QuadratureTest, LegendreGaussLobattoTests) {
     SCOPED_TRACE("LegendreGaussLobattoTests");
-    Quadrature* quadrature = quadrature::legendreGaussLobatto(250);
-    test_size(*quadrature, 250);
-    test_constant_integration(*quadrature, 1e-16);
-    test_sinusoid_integration(*quadrature, 1e-15);
-    test_resize(*quadrature);
-    test_clone(*quadrature);
+    Quadrature quadrature = quadrature::legendreGaussLobatto(250);
+    test_size(quadrature, 250);
+    test_constant_integration(quadrature, 1e-16);
+    test_sinusoid_integration(quadrature, 1e-15);
+    test_resize(quadrature);
+    {
+        SCOPED_TRACE("Resize 2, 3");
+        test_resize(quadrature, 2, 3);
+    }
+    {
+        SCOPED_TRACE("Resize -5, 10");
+        test_resize(quadrature, -5, 10);
+    }
 }

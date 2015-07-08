@@ -1,205 +1,90 @@
 #include <empiricalcpp/src/quadrature.hpp>
 #include <cassert>
-
-#ifndef EMPIRICAL_NO_OSTREAM_DEFINITIONS
-#  include <iomanip>
-#endif
-
 #include <boost/multi_array.hpp>
+
+using empirical::Scalar;
+using empirical::epsScalar;
+using empirical::PI;
+using namespace empirical::quadrature;
+
+namespace {
+
+    Quadrature::points_weights_type trapezoid_gen(const Quadrature::size_type N1, const Scalar min, const Scalar max) {
+        Quadrature::vector_type points(N1), weights(N1);
+        const Quadrature::size_type N = N1 - 1;
+        const Scalar step = (max - min) / N;
+        const Scalar weight = (max - min) / N;
+        for (Quadrature::size_type i = 0; i < N1; i++) {
+            points[i] = min + i * step;
+            weights[i] = weight;
+        }
+        weights[0] = weight / 2.0;
+        weights[N - 1] = weight / 2.0;
+        return Quadrature::points_weights_type({ points, weights });
+    }
+
+    Quadrature::points_weights_type periodic_trapezoid_gen(const Quadrature::size_type N1, const Scalar min, const Scalar max) {
+        Quadrature::vector_type points(N1), weights(N1);
+        const Scalar step = (max - min) / N1;
+        const Scalar weight = (max - min) / N1;
+        for (Quadrature::size_type i = 0; i < N1; i++) {
+            points[i] = (2 * min + step * (2 * i + 1)) / 2;
+            weights[i] = weight;
+        }
+        return Quadrature::points_weights_type({ points, weights });
+    }
+
+    Quadrature::points_weights_type lgl_gen(const Quadrature::size_type N1, const Scalar min, const Scalar max) {
+        using namespace Eigen;
+        typedef Array<Scalar, Dynamic, 1> Vector;
+        const int64_t N = N1 - 1;
+
+        Vector x = Vector::LinSpaced(N1, 0, PI).cos();
+        Vector xold = Vector::Constant(N1, 1, Scalar(2));
+        Array<Scalar, Dynamic, Dynamic> P = Array<Scalar, Dynamic, Dynamic>::Zero(N1, N1);
+
+        while ((x - xold).abs().maxCoeff() > epsScalar) {
+            xold = x;
+            P.col(0).setOnes();
+            P.col(1) = x;
+
+            for (Quadrature::size_type k = 2; k < N1; k++) {
+                P.col(k) = (Scalar(2 * k - 1) * x * P.col(k - 1) - Scalar(k - 1) * P.col(k - 2)) / Scalar(k);
+            }
+            x = xold - (x * P.col(N) - P.col(N - 1)) / (Scalar(N1) * P.col(N));
+        }
+
+        // Populate x2 with the weights.
+        xold = Scalar(max - min) / (Scalar(N) * Scalar(N1) * P.col(N).square());
+
+        // Reverse the arrays and store them.
+        Quadrature::vector_type points(N1);
+        Quadrature::vector_type weights(N1);
+
+        const Scalar scale = (max - min) / 2.0;
+        const Scalar mid = min + scale;
+        for (Quadrature::size_type i = 0; i < N1; i++) {
+            points[i] = mid + (x(N - i, 0) * scale);
+            weights[i] = xold(N - i, 0);
+        }
+        return Quadrature::points_weights_type({ points, weights });
+    }
+
+}
 
 namespace empirical {
     namespace quadrature {
 
-        void Quadrature::resize(const std::size_t N) {
-            assert(N > 2);
-            points.resize(N);
-            weights.resize(N);
-            this->recalculate(N);
+        Quadrature trapezoid(const Quadrature::size_type N, const Scalar min, const Scalar max) {
+            return Quadrature(trapezoid_gen, N, min, max);
         }
 
-        Scalar Quadrature::integrate(std::function<Scalar(Scalar)> func) const {
-            Scalar eval = 0;
-            for (std::size_t i = 0; i < points.size(); i++) {
-                eval += weights[i] * func(points[i]);
-            }
-            return eval;
+        Quadrature periodicTrapezoid(const Quadrature::size_type N, const Scalar min, const Scalar max) {
+            return Quadrature(periodic_trapezoid_gen, N, min, max);
         }
 
-        cScalar Quadrature::integrateComplex(std::function<cScalar(Scalar)> func) const {
-            cScalar eval = 0;
-            for (std::size_t i = 0; i < points.size(); i++) {
-                eval += weights[i] * func(points[i]);
-            }
-            return eval;
+        Quadrature legendreGaussLobatto(const Quadrature::size_type N, const Scalar min, const Scalar max) {
+            return Quadrature(lgl_gen, N, min, max);
         }
-
-        class TrapezoidQuadrature : public Quadrature {
-        protected:
-            virtual void recalculate(const std::size_t N1) {
-                const std::size_t N = N1 - 1;
-                const Scalar weight = 2.0 / N;
-                for (std::size_t i = 0; i < N1; i++) {
-                    points[i] = (2.0 * i - N) / N;
-                    weights[i] = weight;
-                }
-                weights[0] = 1.0 / N;
-                weights[N - 1] = 1.0 / N;
-            }
-
-        public:
-            TrapezoidQuadrature(const std::size_t N) : Quadrature(N) {}
-            virtual ~TrapezoidQuadrature() {}
-            virtual Quadrature* clone() const {
-                Quadrature* cloned = new TrapezoidQuadrature(1);
-                cloned->points = points;
-                cloned->weights = weights;
-                return cloned;
-            }
-        };
-
-        class PeriodicTrapezoidQuadrature : public Quadrature {
-        protected:
-            /** If you wrap around, where -1 == 1, then this quadrature maintains spacing across the boundary. */
-            virtual void recalculate(const std::size_t N1) {
-                const std::size_t N = N1 - 1;
-                const Scalar weight = 2.0 / N1;
-                for (std::size_t i = 0; i < N1; i++) {
-                    points[i] = (N - 2.0 * N * N + 4.0 * N * i - 2.0 * i) / (2.0 * N * N);
-                    weights[i] = weight;
-                }
-            }
-
-        public:
-            PeriodicTrapezoidQuadrature(const std::size_t N) : Quadrature(N) {}
-            virtual ~PeriodicTrapezoidQuadrature() {}
-            virtual Quadrature* clone() const {
-                Quadrature* cloned = new PeriodicTrapezoidQuadrature(1);
-                cloned->points = points;
-                cloned->weights = weights;
-                return cloned;
-            }
-        };
-
-        class LGLQuadrature : public Quadrature {
-        protected:
-            virtual void recalculate(const std::size_t N1) {
-                const std::size_t N = N1 - 1;
-
-                std::vector<Scalar> x(N1);
-                std::vector<Scalar> xold(N1);
-                boost::multi_array<Scalar, 2> P(boost::extents[N1][N1]);
-
-                for (std::size_t i = 0; i < N1; i++) {
-                    x[i] = cos((PI * i) / N);
-                    xold[i] = 2;
-                    for (std::size_t j = 0; j < N1; j++) {
-                        P[i][j] = 0;
-                    }
-                }
-
-                Scalar maxDiff = 2;
-                while (maxDiff > epsScalar) {
-                    xold = x;
-
-                    for (std::size_t i = 0; i < N1; i++) {
-                        P[i][0] = 1;
-                        P[i][1] = x[i];
-                    }
-
-                    for (std::size_t k = 2; k < N1; k++) {
-                        for (std::size_t i = 0; i < N1; i++) {
-                            P[i][k] = (Scalar(2 * k - 1) * x[i] * P[i][k - 1] - Scalar(k - 1) * P[i][k - 2]) / Scalar(k);
-                        }
-                    }
-
-                    maxDiff = 0;
-                    for (std::size_t i = 0; i < N1; i++) {
-                        Scalar diff = (x[i] * P[i][N] - P[i][N - 1]) / (Scalar(N1) * P[i][N]);
-                        x[i] = xold[i] - diff;
-                        if (abs(diff) > maxDiff) {
-                            maxDiff = abs(diff);
-                        }
-                    }
-                }
-
-                for (std::size_t i = 0; i < N1; i++) {
-                    points[i] = x[N - i];
-                    weights[i] = Scalar(2.0) / (Scalar(N) * Scalar(N1) * P[N - i][N] * P[N - i][N]);
-                }
-            }
-
-        public:
-            LGLQuadrature(const std::size_t N) : Quadrature(N) {}
-            virtual ~LGLQuadrature() {}
-            virtual Quadrature* clone() const {
-                Quadrature* cloned = new LGLQuadrature(1);
-                cloned->points = points;
-                cloned->weights = weights;
-                return cloned;
-            }
-        };
-
-        class CustomQuadrature : public Quadrature {
-            customFunc xFunction;
-            customFunc weightFunction;
-
-        protected:
-            virtual void recalculate(const std::size_t N) {
-                for (std::size_t i = 0; i < N; i++) {
-                    points[i] = xFunction(i, N);
-                    weights[i] = weightFunction(i, N);
-                }
-            }
-
-        public:
-            CustomQuadrature(customFunc xFunction, customFunc weightFunction, const std::size_t N)
-                : Quadrature(N), xFunction(xFunction), weightFunction(weightFunction) {}
-            virtual ~CustomQuadrature() {}
-            virtual Quadrature* clone() const {
-                Quadrature* cloned = new CustomQuadrature(xFunction, weightFunction, 1);
-                cloned->points = points;
-                cloned->weights = weights;
-                return cloned;
-            }
-        };
-
-        Quadrature* trapezoid(const std::size_t N) {
-            Quadrature* q = new TrapezoidQuadrature(N);
-            q->resize(N);
-            return q;
-        }
-
-        Quadrature* periodicTrapezoid(const std::size_t N) {
-            Quadrature* q = new PeriodicTrapezoidQuadrature(N);
-            q->resize(N);
-            return q;
-        }
-
-        Quadrature* legendreGaussLobatto(const std::size_t N) {
-            Quadrature* q = new LGLQuadrature(N);
-            q->resize(N);
-            return q;
-        }
-
-        Quadrature* custom(const std::size_t N, customFunc xFunction, customFunc weightFunction) {
-            Quadrature* q = new CustomQuadrature(xFunction, weightFunction, N);
-            q->resize(N);
-            return q;
-        }
-
-#ifndef EMPIRICAL_NO_OSTREAM_DEFINITIONS
-        std::ostream& operator<<(std::ostream& os, const Quadrature& q) {
-            os << "Quadrature {{ points:";
-            os << std::fixed << std::setw(11) << std::setprecision(6);
-            for (Scalar val : q.points) {
-                os << val << ", ";
-            }
-            os << "}, { weights:";
-            for (Scalar val : q.weights) {
-                os << val << ", ";
-            }
-            return os << "}}";
-        }
-#endif
     }
 }
