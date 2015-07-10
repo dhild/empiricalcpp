@@ -4,12 +4,6 @@
 #include <empiricalcpp/src/constants.hpp>
 #include <functional>
 #include <vector>
-#include <Eigen/Dense>
-
-#ifndef EMPIRICAL_NO_OSTREAM_DEFINITIONS
-#  include <iostream>
-#  include <iomanip>
-#endif
 
 namespace empirical {
     namespace quadrature {
@@ -53,6 +47,9 @@ namespace empirical {
 
             Scalar operator[](const size_type i) const { return points[i]; }
             Scalar& operator[](const size_type i) { return points[i]; }
+
+            Scalar operator()(const size_type i) const { return points[i]; }
+            Scalar& operator()(const size_type i) { return points[i]; }
 
             void resize(const size_type N, const Scalar min, const Scalar max) {
                 if (points.size() == N && min == minVal && max == maxVal) {

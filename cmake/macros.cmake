@@ -26,6 +26,10 @@ macro(config_compiler_and_linker)
   if (NOT empirical_define_ostream_operators)
     add_definitions(-DEMPIRICAL_NO_OSTREAM_DEFINITIONS)
   endif()
+  
+  if (NOT empirical_use_boost_multi_array_asserts)
+    add_definitions(-DBOOST_DISABLE_ASSERTS)
+  endif()
 
   # Add in compilation flags from the cmake configuration:
   set(cxx_base_flags "${cxx_base_flags} ${empirical_compile_options}")

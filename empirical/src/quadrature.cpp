@@ -1,6 +1,7 @@
 #include <empiricalcpp/src/quadrature.hpp>
 #include <cassert>
 #include <boost/multi_array.hpp>
+#include <Eigen/Dense>
 
 using empirical::Scalar;
 using empirical::epsScalar;

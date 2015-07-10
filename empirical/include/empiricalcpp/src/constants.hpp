@@ -6,6 +6,7 @@
 
 #ifndef EMPIRICAL_NO_OSTREAM_DEFINITIONS
 #  include <iostream>
+#  include <iomanip>
 #endif
 
 #ifndef EMPIRICAL_SCALAR_TYPE

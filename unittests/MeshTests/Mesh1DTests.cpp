@@ -122,7 +122,7 @@ namespace {
         virtual void SetUp() {
             size = 25;
             quad = quadrature::legendreGaussLobatto(25);
-            testMesh = mesh::createMesh(size, mesh::MeshQuadrature(quad, -3.0, 5.0));
+            testMesh = mesh::createMesh(mesh::MeshQuadrature(quad, -3.0, 5.0));
 
             const Quadrature* q = quad;
             const Mesh1D* m = testMesh;
@@ -169,5 +169,18 @@ namespace {
         testMesh->resize(size + 25);
         EXPECT_EQ(size, quad->points.size());
         EXPECT_EQ(size + 25, testMesh->mesh().size());
+
+        std::auto_ptr<Mesh1D> mesh1d;
+        {
+            auto points = std::auto_ptr<Quadrature>(quadrature::trapezoid(25));
+            mesh1d = std::auto_ptr<Mesh1D>(mesh::createMesh(50, mesh::MeshQuadrature(points.get(), -1, 1)));
+            ASSERT_EQ(25, points->points.size());
+            ASSERT_EQ(50, mesh1d->mesh().size());
+            // End of scope for points, destructor is called.
+        }
+
+        ASSERT_EQ(50, mesh1d->mesh().size());
+        mesh1d->resize(75);
+        ASSERT_EQ(75, mesh1d->mesh().size());
     }
 }

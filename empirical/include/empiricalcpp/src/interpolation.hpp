@@ -2,20 +2,14 @@
 #define EMPIRICALCPP_SRC_INTERPOLATION_HPP_
 
 #include <empiricalcpp/src/constants.hpp>
-#include <empiricalcpp/src/quadrature.hpp>
 #include <empiricalcpp/src/mesh.hpp>
+#include <empiricalcpp/src/quadrature.hpp>
 #include <functional>
+#include <limits>
 #include <vector>
-#include <boost/multi_array.hpp>
 
 namespace empirical {
     namespace interpolation {
-        typedef std::function<Scalar(const Scalar)> scalarFunction1;
-        typedef std::function<cScalar(const Scalar)> complexFunction1;
-        typedef std::function<Scalar(const Scalar, const Scalar)> scalarFunction2;
-        typedef std::function<cScalar(const Scalar, const Scalar)> complexFunction2;
-        typedef std::function<Scalar(const Scalar, const Scalar, const Scalar)> scalarFunction3;
-        typedef std::function<cScalar(const Scalar, const Scalar, const Scalar)> complexFunction3;
 
         class Interpolator {
         public:
@@ -35,20 +29,58 @@ namespace empirical {
             virtual Scalar getLastCorrectionScale() const = 0;
         };
 
-        class ScalarInterpolator1D : public Interpolator, public std::enable_shared_from_this<ScalarInterpolator1D> {
+        class ScalarInterpolator1D : public Interpolator {
         public:
+            typedef const std::vector<Scalar> evaluation_type;
+            typedef std::function<Scalar(const Scalar)> interpolation_function;
+
+            /** Calculates the given function for its solution at the exact solution points.
+             * Returns a function to interpolate all other solutions.
+             */
+            virtual interpolation_function operator()(interpolation_function testFunction) const = 0;
+
+            virtual const std::vector<const Scalar>& exactSolutionPoints() const = 0;
+
             virtual ~ScalarInterpolator1D() {}
 
-            /** Calculates N() test points using the given function for the desired solution, then returns a function to interpolate the rest. */
-            virtual scalarFunction1 operator()(scalarFunction1 testFunction) const = 0;
+            virtual Scalar maxError(evaluation_type& evaluation) const = 0;
+            virtual const std::vector<std::weak_ptr<evaluation_type>>& basisEvaluations() const = 0;
+            virtual void addBasis(std::shared_ptr<evaluation_type>& basis) = 0;
+
+            static ScalarInterpolator1D* create(const Mesh1D& points);
         };
 
-        /** Constructs an interpolator, stoping when either of the given limits has been reached. */
-        std::shared_ptr<ScalarInterpolator1D> constructInterpolator(
-            const Mesh1D& points, const Mesh1D& parameters,
-            boost::const_multi_array_ref<Scalar, 2> computedSolutions,
-            const size_t maxBasisSize = 50,
-            const Scalar correctionScaleBound = epsScalar * 4e10);
+        /** Constructs an interpolator, stoping when either of the given limits has been reached.
+         * An internal copy of the given points and a derived version of the given solutions will be stored internally.
+         * Additionally, the evaluations that were used to form the basis will be available from the result.
+         */
+        template<typename ValueType, typename MeshType, typename InterpolatorType, typename SolutionContainer>
+        InterpolatorType* constructInterpolator(const MeshType& points, const SolutionContainer& computedSolutions,
+            const size_t maxBasisSize = 50, const ValueType correctionScaleBound = std::numeric_limits<ValueType>::epsilon() * 4e10) {
+            InterpolatorType* interp = InterpolatorType::create(points);
+            do {
+                ValueType maxError = 0;
+                SolutionContainer::const_iterator maxSolution = std::cbegin(computedSolutions);
+                SolutionContainer::const_iterator it = std::cbegin(computedSolutions);
+                while (it != std::cend(computedSolutions)) {
+                    ValueType error = interp->maxError(*it);
+                    if (error > maxError) {
+                        maxError = error;
+                        maxSolution = it;
+                    }
+                }
+                if (maxError == 0) {
+                    break; // All solutions added; no interpolation available
+                }
+                std::shared_ptr<evaluation_type> maxEval(*maxSolution);
+                interp->addBasis(maxEval);
+            } while (maxBasisSize <= interp->N() && correctionScaleBound <= interp->getLastCorrectionScale());
+            return interp;
+        }
+
+#ifndef EMPIRICAL_NO_OSTREAM_DEFINITIONS
+        std::ostream& operator<<(std::ostream& os, const ScalarInterpolator1D& q);
+#endif
     }
 
     typedef interpolation::Interpolator Interpolator;
