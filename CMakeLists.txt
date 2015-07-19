@@ -20,9 +20,11 @@ cmake_minimum_required(VERSION 3.0)
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
 find_package(Boost 1.55.0 REQUIRED)
-include_directories(Boost_INCLUDE_DIRS)
 find_package(Eigen3 REQUIRED)
-include_directories(EIGEN3_INCLUDE_DIR)
+include_directories(
+  ${Boost_INCLUDE_DIR}
+  ${EIGEN3_INCLUDE_DIR}
+)
 
 include(cmake/macros.cmake)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
